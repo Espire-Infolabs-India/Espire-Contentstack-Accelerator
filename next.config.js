@@ -3,6 +3,10 @@ const withPWA = require("next-pwa")({
 });
 
 const config = {
+  images: {
+    domains: ["www.netgear.com"],
+  },
+
   publicRuntimeConfig: {
     // Will be available on both server and client
     CONTENTSTACK_API_KEY: process.env.CONTENTSTACK_API_KEY,
