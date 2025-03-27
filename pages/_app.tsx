@@ -4,6 +4,13 @@ import Router from 'next/router';
 import NProgress from 'nprogress';
 import Layout from '../components/layout';
 import { getHeaderRes, getFooterRes, getAllEntries } from '../helper';
+
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+
+// for tailwind css
+import '../src/app/globals.css';
+
 import 'nprogress/nprogress.css';
 import '../styles/third-party.css';
 import '../styles/style.css';
@@ -11,6 +18,17 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import '@contentstack/live-preview-utils/dist/main.css';
 import { Props } from "../typescript/pages";
 
+// Create a theme
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+  },
+});
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -65,7 +83,10 @@ function MyApp(props: Props) {
         blogList={blogList}
         entries={entries}
       >
-        <Component {...pageProps} />
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+              <Component {...pageProps} />
+          </ThemeProvider>    
       </Layout>
     </>
   );
