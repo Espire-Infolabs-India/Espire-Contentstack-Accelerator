@@ -4,7 +4,7 @@ const withPWA = require("next-pwa")({
 
 const config = {
   images: {
-    domains: ["www.netgear.com"],
+    domains: ["www.netgear.com","downloads1.netgear.com"],
   },
 
   publicRuntimeConfig: {
