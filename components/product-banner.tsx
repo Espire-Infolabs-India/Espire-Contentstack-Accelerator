@@ -6,7 +6,7 @@ export default function Banner() {
     <>
       <div className="w-full">
 
-        <Image width={1920} height={768} src={ListingBanner} />
+        <Image width={1920} height={768} src={ListingBanner} alt="" />
         
       </div>
     </>

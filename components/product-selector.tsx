@@ -4,7 +4,7 @@ interface ProductOption {
   id: string;
   title: string;
   description: string;
-  image: JSX.Element;
+  image: string;
   isNew?: boolean;
   specs: {
     coverage: string;

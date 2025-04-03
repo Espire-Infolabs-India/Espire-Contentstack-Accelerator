@@ -1,12 +1,12 @@
 import React from 'react';
 interface FeatureProps {
-    title: JSX.Element;
-    description: JSX.Element;
+    title: string;
+    description: string;
     isNew?: boolean;
   }
   
   interface FeaturesAndBenefitsProps {
-    heading: JSX.Element;
+    heading: string;
     features: FeatureProps[];
   }
 

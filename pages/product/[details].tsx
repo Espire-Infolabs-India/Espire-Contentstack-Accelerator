@@ -10,6 +10,8 @@ export default function Details({ params }: any) {
   const router = useRouter();
   const { details } = router.query;
 
+  
+
   const DetailData = [
     {
       producteyes: "BE19000 WiFi Router (RS700S)",

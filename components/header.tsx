@@ -7,6 +7,8 @@ import { onEntryChange } from '../contentstack-sdk';
 import { getHeaderRes } from '../helper';
 import Skeleton from 'react-loading-skeleton';
 import { HeaderProps, Entry, NavLinks } from "../typescript/layout";
+import Navigation from './navigation';
+// import    Navigation  from './navigation';
 
 export default function Header({ header, entries }: {header: HeaderProps, entries: Entry}) {
 
@@ -52,10 +54,140 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
     }
   }, [header]);
   const headerData = getHeader ? getHeader : undefined;
-  
+  const mockData = {
+    fields: {
+      logo: <img src="https://stagesupport.netgear.com/support/cloudimage/1/11/409" alt="NETGEAR" width="180" />,
+      topBanner: {
+        text: <span>LIMITED TIME OFFERS <span className="text-blue-400">&gt;&gt;</span></span>,
+        prevButton: <span>&lt;</span>,
+        nextButton: <span>&gt;</span>
+      },
+      mainNavLinks: [
+        { text: "HOME SOLUTIONS", url: "/product" },
+        { text: "BUSINESS SOLUTIONS", url: "#" },
+        { text: "AV SOLUTIONS", url: "#" },
+        { text: "SUPPORT", url: "#" },
+        { text: "SHOP OFFERS", url: "#" }
+      ],
+      megaMenus: {
+        "HOME SOLUTIONS": [
+          {
+            title: <span>Home WiFi</span>,
+            links: [
+              <a href="#">Whole Home Mesh WiFi</a>,
+              <a href="#">WiFi Routers</a>,
+              <a href="#">Cable Modems</a>,
+              <a href="#">Cable Modem Routers</a>,
+              <a href="#">WiFi Range Extenders</a>,
+              <a href="#">USB WiFi Adapters</a>,
+              <a href="#">Gaming Routers</a>,
+              <a href="#">Accessories</a>
+            ]
+          },
+          {
+            title: <span>Mobile WiFi</span>,
+            links: [
+              <a href="#">4G/5G Mobile Hotspots</a>,
+              <a href="#">4G/5G Mobile WiFi Routers</a>,
+              <a href="#">4G LTE Modems</a>
+            ]
+          },
+          {
+            title: <span>Digital Frame</span>,
+            links: [
+              <a href="#">Meural Canvas II</a>,
+              <a href="#">Meural WiFi Photo Frame</a>
+            ]
+          },
+          {
+            title: <span>Wired Networking</span>,
+            links: [
+              <a href="#">Switches</a>,
+              <a href="#">Powerline</a>
+            ]
+          }
+        ],
+        "SHOP OFFERS": [
+          {
+            title: <span>SHOP OFFERS</span>,
+            links: [
+              <a href="#">Current Promotions</a>,
+              <a href="#">Clearance Items</a>
+            ]
+          }
+        ],
+        "BUSINESS SOLUTIONS": [
+          {
+            title: <span>Business Networking</span>,
+            links: [
+              <a href="#">Switches</a>,
+              <a href="#">Wireless Access Points</a>,
+              <a href="#">Routers</a>
+            ]
+          }
+        ],
+        "AV SOLUTIONS": [
+          {
+            title: <span>AV Over IP</span>,
+            links: [
+              <a href="#">Switches</a>,
+              <a href="#">Encoders & Decoders</a>
+            ]
+          }
+        ],
+        "SUPPORT": [
+          {
+            title: <span>NETGEAR Armor</span>,
+            links: [
+              <a href="#">NETGEAR Armor</a>
+            ]
+          },
+          {
+            title: <span>NETGEAR ProSupport</span>,
+            links: [
+              <a href="#">NETGEAR ProSupport</a>
+            ]
+          },
+          {
+            title: <span>NETGEAR Smart Parental Controls</span>,
+            links: [
+              <a href="#">NETGEAR Smart Parental Controls</a>
+            ]
+          }
+        ]
+      },
+      countrySelector: <img src="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.11.0/flags/4x3/us.svg" alt="US" width="24" height="16" />,
+      searchButton: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      ),
+      helpButton: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      ),
+      accountButton: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      ),
+      cartButton: (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+      )
+    }
+  }  
   return (
     <header className='header'>
-      <div className='note-div'>
+      <div className='note-div hidden' >
         {headerData?.notification_bar.show_announcement ? (
           typeof headerData.notification_bar.announcement_text === 'string' && (
             <div {...headerData.notification_bar.$?.announcement_text as {}}>
@@ -66,7 +198,10 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           <Skeleton />
         )}
       </div>
-      <div className='max-width header-div'>
+      <Navigation fields={mockData?.fields} />
+      {/* <Navigation /> */}
+      {/* <Navigation /> */}
+      {/* <div className='max-width header-div'>
         <div className='wrapper-logo'>
           {headerData ? (
             (<Link href='/' className='logo-tag' title='Contentstack'>
@@ -119,7 +254,7 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
             </span>
           </Tooltip>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 }
