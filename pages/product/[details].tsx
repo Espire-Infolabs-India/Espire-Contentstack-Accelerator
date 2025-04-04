@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import ProductCrousel from "../../components/product-detial-crousal";
+import ProductCrousel from "../../components/product-detial-carousel";
 import { Button, Box } from "@mui/material";
 import { WidthFull } from "@mui/icons-material";
 import AccordionExpandDefault from "../../components/accordion-expand-default";
@@ -40,70 +40,7 @@ export default function Details({ params }: any) {
   const { title, producteyes, img, dis } = filterData[0];
   console.log("pppp", filterData);
 
-  const mockData = {
-    title: <h2 className="text-2xl font-bold">WHAT'S INCLUDED</h2>,
-    items: [
-      {
-        title: "WHAT'S INCLUDED",
-        isOpen: true,
-        content: {
-          items: [
-            {
-              name: "Orbi Quad-band Router (RBE971B)",
-              quantity: "One (1)",
-            },
-            {
-              name: "Orbi Satellites (RBE970B)",
-              quantity: "Two (2)",
-            },
-            {
-              name: "2m Ethernet cable",
-              quantity: "One (1)",
-            },
-            {
-              name: "19v/3.16A power adapters",
-              quantity: "Three (3)",
-            },
-            {
-              name: "Quick Start Guide",
-              quantity: "One (1)",
-            },
-          ],
-        },
-      },
-      {
-        title: "TECHNICAL DETAILS",
-        content: {
-          items: [
-            {
-              name: "Technical specification 1",
-              quantity: "Value 1",
-            },
-            {
-              name: "Technical specification 2",
-              quantity: "Value 2",
-            },
-          ],
-        },
-      },
-      {
-        title: "NETWORK SECURITY",
-        content: {
-          items: [
-            {
-              name: "Security feature 1",
-              quantity: "Description 1",
-            },
-            {
-              name: "Security feature 2",
-              quantity: "Description 2",
-            },
-          ],
-        },
-      },
-    ],
-    onClose: () => console.log("Close clicked"),
-  };
+  
 
   const featureData = {
     heading: "Features and benefits",

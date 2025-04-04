@@ -14,7 +14,7 @@ export default function AccordionExpandDefault() {
           aria-controls="panel1-content"
           id="panel1-header"
         >
-          <span className='text-[20px]'>WHAT'S INCLUDED</span>
+          <span className='text-[20px]'>WHATS INCLUDED</span>
         </AccordionSummary>
         <AccordionDetails>
           <span>

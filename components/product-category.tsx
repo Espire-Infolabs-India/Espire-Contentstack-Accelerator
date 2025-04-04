@@ -1,8 +1,21 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@mui/material";
 
-export default function ProductCategory({ ProductData }) {
+interface ProductDataProp {
+  producteyes: string;
+  title: string;
+  dis: string;
+  img: string;
+  URL: string;
+}
+
+interface ProductCategoryProps {
+  ProductData: ProductDataProp[];
+}
+
+const ProductCategory: React.FC<ProductCategoryProps> = ({ ProductData }) => {
   return (
     <>
       <div className="w-full mb-5 mt-5">
@@ -11,7 +24,7 @@ export default function ProductCategory({ ProductData }) {
             <>
               <div className="flex align-items-center py-5 border-bottom border-width-1">
                 <div className="list-product-image">
-                  <Image src={item.img} width={400} height={200} />
+                  <Image src={item.img} width={400} height={200} alt="" unoptimized />
                 </div>
                 <div>
                   <p>{item.producteyes}</p>
@@ -31,3 +44,5 @@ export default function ProductCategory({ ProductData }) {
     </>
   );
 }
+
+export default ProductCategory;

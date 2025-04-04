@@ -6,7 +6,7 @@ export default function Product() {
   const paths = [
     { label: "Home", href: "/" },
     { label: "WiFi", href: "/products" },
-    { label: "Mesh", href: null }, // Current page (no href)
+    { label: "Mesh", href: "" }, // Current page (no href)
   ];
 
   const ProductData = [

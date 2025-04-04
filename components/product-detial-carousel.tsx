@@ -5,10 +5,9 @@ import { Box, Button, IconButton } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-// import Hero from "../public/hero_banner.webp";
-// import Hero1 from "../public/hero_banner_1.webp";
-// import Hero2 from "../public/hero_banner_2.webp";
-// import Hero3 from "../public/hero_banner_3.webp";
+
+
+
 
 export default function ProductCrousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,7 +42,7 @@ export default function ProductCrousel() {
       <Box className="block">
         {/* Main Image Slider */}
         <Box className="relative flex items-center" >
-          <Image src={images[activeIndex]} width={400} height={400} />
+          <Image src={images[activeIndex]} width={400} height={400} alt="" unoptimized />
 
           {/* Navigation Buttons */}
           <Button
@@ -77,6 +76,7 @@ export default function ProductCrousel() {
                     ? "border-blue-500 scale-105"
                     : "border-gray-300"
                 }`}
+                unoptimized
               />
             </div>
           ))}

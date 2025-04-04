@@ -74,36 +74,36 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           {
             title: <span>Home WiFi</span>,
             links: [
-              <a href="#">Whole Home Mesh WiFi</a>,
-              <a href="#">WiFi Routers</a>,
-              <a href="#">Cable Modems</a>,
-              <a href="#">Cable Modem Routers</a>,
-              <a href="#">WiFi Range Extenders</a>,
-              <a href="#">USB WiFi Adapters</a>,
-              <a href="#">Gaming Routers</a>,
-              <a href="#">Accessories</a>
+              <a key={'1'} href="#">Whole Home Mesh WiFi</a>,
+              <a key={'2'} href="#">WiFi Routers</a>,
+              <a key={'3'} href="#">Cable Modems</a>,
+              <a key={'4'} href="#">Cable Modem Routers</a>,
+              <a key={'5'} href="#">WiFi Range Extenders</a>,
+              <a key={'6'} href="#">USB WiFi Adapters</a>,
+              <a key={'7'} href="#">Gaming Routers</a>,
+              <a key={'8'} href="#">Accessories</a>
             ]
           },
           {
             title: <span>Mobile WiFi</span>,
             links: [
-              <a href="#">4G/5G Mobile Hotspots</a>,
-              <a href="#">4G/5G Mobile WiFi Routers</a>,
-              <a href="#">4G LTE Modems</a>
+              <a href="#" key={'mw1'}>4G/5G Mobile Hotspots</a>,
+              <a href="#" key={'mw2'}>4G/5G Mobile WiFi Routers</a>,
+              <a href="#" key={'mw3'}>4G LTE Modems</a>
             ]
           },
           {
             title: <span>Digital Frame</span>,
             links: [
-              <a href="#">Meural Canvas II</a>,
-              <a href="#">Meural WiFi Photo Frame</a>
+              <a key={'df1'} href="#">Meural Canvas II</a>,
+              <a key={'df2'} href="#">Meural WiFi Photo Frame</a>
             ]
           },
           {
             title: <span>Wired Networking</span>,
             links: [
-              <a href="#">Switches</a>,
-              <a href="#">Powerline</a>
+              <a key={'wn1'} href="#">Switches</a>,
+              <a key={'wn2'} href="#">Powerline</a>
             ]
           }
         ],
@@ -111,8 +111,8 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           {
             title: <span>SHOP OFFERS</span>,
             links: [
-              <a href="#">Current Promotions</a>,
-              <a href="#">Clearance Items</a>
+              <a key={'sf1'} href="#">Current Promotions</a>,
+              <a key={'sf2'} href="#">Clearance Items</a>
             ]
           }
         ],
@@ -120,9 +120,9 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           {
             title: <span>Business Networking</span>,
             links: [
-              <a href="#">Switches</a>,
-              <a href="#">Wireless Access Points</a>,
-              <a href="#">Routers</a>
+              <a key={'b1'} href="#">Switches</a>,
+              <a key={'b2'} href="#">Wireless Access Points</a>,
+              <a key={'b3'} href="#">Routers</a>
             ]
           }
         ],
@@ -130,8 +130,8 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           {
             title: <span>AV Over IP</span>,
             links: [
-              <a href="#">Switches</a>,
-              <a href="#">Encoders & Decoders</a>
+              <a key={'av1'} href="#">Switches</a>,
+              <a key={'av2'} href="#">Encoders & Decoders</a>
             ]
           }
         ],
@@ -139,19 +139,19 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
           {
             title: <span>NETGEAR Armor</span>,
             links: [
-              <a href="#">NETGEAR Armor</a>
+              <a key={'n1'} href="#">NETGEAR Armor</a>
             ]
           },
           {
             title: <span>NETGEAR ProSupport</span>,
             links: [
-              <a href="#">NETGEAR ProSupport</a>
+              <a key={'ng1'} href="#">NETGEAR ProSupport</a>
             ]
           },
           {
             title: <span>NETGEAR Smart Parental Controls</span>,
             links: [
-              <a href="#">NETGEAR Smart Parental Controls</a>
+              <a key={'ns1'} href="#">NETGEAR Smart Parental Controls</a>
             ]
           }
         ]
@@ -184,7 +184,7 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
         </svg>
       )
     }
-  }  
+  }
   return (
     <header className='header'>
       <div className='note-div hidden' >
