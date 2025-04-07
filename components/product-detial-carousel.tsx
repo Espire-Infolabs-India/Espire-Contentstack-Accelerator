@@ -2,7 +2,7 @@
 import{ useState, useEffect } from "react";
 import Image from "next/image";
 import { Box, Button, IconButton } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
