@@ -4,6 +4,7 @@ const { publicRuntimeConfig } = getConfig();
 const envConfig = process.env.CONTENTSTACK_API_KEY
   ? process.env
   : publicRuntimeConfig;
+
 const {
   CONTENTSTACK_API_KEY,
   CONTENTSTACK_DELIVERY_TOKEN,
