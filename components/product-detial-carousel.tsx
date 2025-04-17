@@ -1,87 +1,240 @@
-"use client";
-import{ useState, useEffect } from "react";
-import Image from "next/image";
-import { Box, Button, IconButton } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import React, { useState, useEffect } from "react";
 
+interface CarouselSlide {
+  image: JSX.Element;
+  title: string;
+  subtitle: string;
+  features: {
+    feature: string;
+    description: string;
+  }[];
+}
 
+interface CarouselImg {
+  image: JSX.Element;
+}
 
+interface ProductCarouselProps {
+  slides: CarouselSlide[];
+  thumbnails: CarouselImg[];
+}
 
-export default function ProductCrousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = [
-    "/images/hero_banner.webp",
-    "/images/hero_banner_1.jpg",
-    "/images/hero_banner_2.webp",
-    "/images/hero_banner_3.jpg",
-  ];
+const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
- 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % images.length);
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
   };
 
- 
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + images.length) % images.length);
+  const goToPrevious = () => {
+    const isFirstSlide = currentIndex === 0;
+    const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    setCurrentIndex(newIndex);
   };
 
- 
-  const handleThumbnailClick = (index: any) => {
-    setActiveIndex(index);
+  const goToNext = () => {
+    const isLastSlide = currentIndex === slides.length - 1;
+    const newIndex = isLastSlide ? 0 : currentIndex + 1;
+    setCurrentIndex(newIndex);
   };
 
-  useEffect(()=>{
-    setActiveIndex(0)
-  },[])
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      goToNext();
+    }
+    if (isRightSwipe) {
+      goToPrevious();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
   return (
-    <>
-      <Box className="block">
-        {/* Main Image Slider */}
-        <Box className="relative flex items-center" >
-          <Image src={images[activeIndex]} width={400} height={400} alt="" unoptimized />
-
-          {/* Navigation Buttons */}
-          <Button
-            onClick={handlePrev}
-            style={{
-                position:"absolute",
+    <div className="relative w-full max-w-lg mx-auto">
+      <div className="flex">
+        {/* Thumbnails sidebar */}
+        <div className="hidden md:flex flex-col items-center justify-start space-y-4 pr-4 w-24">
+          <button
+            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900"
+            onClick={() => {
+              const newIndex =
+                currentIndex === 0 ? thumbnails.length - 1 : currentIndex - 1;
+              setCurrentIndex(newIndex);
             }}
           >
-           <ArrowBackIosIcon />
-          </Button>
-          <Button
-            onClick={handleNext}
-            className="absolute right-10 z-10"
-          >
-          
-          <ArrowForwardIosIcon />
-          </Button>
-        </Box>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
 
-        {/* Thumbnails */}
-        <Grid container spacing={1} justifyContent="center" marginTop={3}>
-          {images.map((img, index) => (
-            <div key={index}>
-              <Image
-                src={img}
-                width={60}
-                height={60}
-                alt={`Thumbnail ${index + 1}`}
-                className={`w-20 h-20 object-cover border-2 rounded-lg cursor-pointer ${
-                  index === activeIndex
-                    ? "border-blue-500 scale-105"
-                    : "border-gray-300"
+          <div className="flex flex-col space-y-3 overflow-hidden">
+            {thumbnails.map((thumbnail, index) => (
+              <div
+                key={index}
+                className={`w-14 h-auto border-2 cursor-pointer transition-all duration-300 ${
+                  index === currentIndex ? "border-blue-500" : "border-gray-200"
                 }`}
-                unoptimized
-              />
-            </div>
-          ))}
-        </Grid>
-      </Box>
-    </>
+                onClick={() => goToSlide(index)}
+              >
+                {thumbnail.image}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="w-8 h-8 flex items-center justify-center text-gray-600 hover:text-gray-900"
+            onClick={() => {
+              const newIndex =
+                currentIndex === thumbnails.length - 1 ? 0 : currentIndex + 1;
+              setCurrentIndex(newIndex);
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        {/* Main carousel */}
+        <div
+          className="relative overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div
+            className="flex transition-transform duration-500 ease-out h-full"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {slides.map((slide, index) => (
+              <div key={index} className="min-w-full h-full">
+                <div className="relative flex flex-col md:flex-rowtext-white rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-center">
+                    {slide.image}
+                  </div>
+                  <div className="w-full md:w-1/2 p-6 md:p-10 flex-col justify-center hidden">
+                    <div className="mb-6">
+                      <div className="text-2xl md:text-4xl font-bold mb-1">
+                        {slide.title}
+                      </div>
+                      <div className="text-sm md:text-base uppercase tracking-wider mb-6">
+                        {slide.subtitle}
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      {slide.features.map((feature, idx) => (
+                        <div key={idx} className="mb-4">
+                          <div className="text-xl md:text-2xl font-semibold">
+                            {feature.feature}
+                          </div>
+                          <div className="text-sm md:text-base text-gray-300">
+                            {feature.description}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Navigation buttons */}
+          <button
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md z-10"
+            onClick={goToPrevious}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <button
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md z-10"
+            onClick={goToNext}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile thumbnails */}
+      <div className="flex justify-center mt-4 space-x-2 md:hidden">
+        {thumbnails.map((_, index) => (
+          <button
+            key={index}
+            className={`w-3 h-3 rounded-full ${
+              index === currentIndex ? "bg-blue-500" : "bg-gray-300"
+            }`}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
+      </div>
+    </div>
   );
-}
+};
+
+export default ProductCarousel;
