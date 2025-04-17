@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
-import ProductCarousel from "../../components/product-detial-carousel";
+import ProductCarousel from "../../components/product-detail-carousel";
 import Breadcrumbspage from "../../components/Breadcrumbs";
 import { Button, Box } from "@mui/material";
 import { WidthFull } from "@mui/icons-material";
