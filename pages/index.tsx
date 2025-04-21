@@ -8,9 +8,10 @@ import OneColImageWithCta from '../components/one-col-image-with-cta';
 import ThumbnailCarousel from '../components/thumbnail-carousel';
 import TwoColImageCtaLogo from '../components/two-col-image-cta-logo';
 import TwoColImageCta from '../components/two-col-image-cta';
+import SwimlaneContentContainer from '../components/swimlane-content-container';
+import ProductBuyInfo from '../components/product-buy-info';
 
 import { Props, Context } from "../typescript/pages";
-import { Description } from '@mui/icons-material';
 
 const slidesData = [
   {
@@ -180,6 +181,21 @@ const slidesData2 = [
   }
 ];
 
+const SwimlaneContentContainerData = {
+  backgroundImage: <img src="https://www.netgear.com/media/fullasset-thin-accesspoints-desktop-20240312_tcm148-157216.webp" alt="Office meeting with people collaborating" className="w-full h-full object-cover" />,
+  headline: "Supercharge your connectivity",
+  description: "Shop NETGEAR WiFi Access Points and get greater coverage and superior speed throughout your business",
+  ctaButton: <a className='text-white' href="#">SHOP WIRELESS SOLUTIONS</a>,
+  productImage: <img src="https://picsum.photos/800/600?random=2" alt="NETGEAR WiFi Access Points" className="w-full h-auto" />
+};
+
+const productBuyData = {
+  title: "Switches Built for Pro AV",
+  subtitle: "Powerful, easy-to-use AV over IP solutions",
+  ctaButton: <a href="#">EXPLORE PRO AV SOLUTIONS</a>,
+  backgroundImage: <img src="https://www.netgear.com/media/fullasset_proav_splash_20231030_tcm148-154250.jpg" alt="Control Room Background" className="object-cover w-full h-full" />
+};
+
 export default function Home(props: Props) {
   const { page, entryUrl } = props;
   const [getEntry, setEntry] = useState(page);
@@ -217,6 +233,10 @@ export default function Home(props: Props) {
       }} />
 
       <ThumbnailCarousel fields={thumbnailCarouselData2} />
+
+      <SwimlaneContentContainer fields={SwimlaneContentContainerData} />
+
+      <ProductBuyInfo fields={productBuyData} />
 
       {/* <RenderComponents
         pageComponents={getEntry.page_components}
