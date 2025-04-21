@@ -76,11 +76,14 @@ const Carousel: React.FC<CarouselProps> = ({ fields }) => {
                     {slide.description}
                   </div>
                   <div className="flex flex-wrap gap-4">
-                    <div className="inline-block">
-                      <button className="bg-white hover:bg-blue-700 text-black font-bold py-3 px-6 rounded-full transition-colors">
-                        {slide.primaryCta}
-                      </button>
-                    </div>
+                    {slide.primaryCta && (
+                      <div className="inline-block">
+                        <button className="bg-white hover:bg-blue-700 text-black font-bold py-3 px-6 rounded-full transition-colors">
+                          {slide.primaryCta}
+                        </button>
+                      </div>
+                    )}
+
                     <div className="inline-block">
                       <button className="bg-blue-900 hover:bg-blue-700 text-white border border-blue-700 font-bold py-3 px-6 rounded-full transition-colors">
                         {slide.secondaryCta}

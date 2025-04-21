@@ -3,6 +3,7 @@ import React, {ReactNode} from 'react';
 interface WifiSolutionItem {
   image: JSX.Element;
   title: ReactNode;
+  description: ReactNode;
   buttonText: ReactNode;
 }
 
@@ -29,6 +30,11 @@ const ThumbnailCarousel: React.FC<ThumbnailCarouselProps> = ({ fields }) => {
             <div className="text-center mb-4">
               <div className="text-xl font-semibold text-gray-800">
                 {solution.title}
+              </div>
+            </div>
+            <div className="text-center mb-4">
+              <div className="text-md font-semibold text-gray-800">
+                {solution.description}
               </div>
             </div>
             <div className="mt-auto">
