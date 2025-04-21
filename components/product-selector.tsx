@@ -42,8 +42,8 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {products.map((product) => (
           <div key={product.id} className="flex flex-col items-center">
-            <div className="relative w-full h-48 sm:h-56 md:h-64 mb-6">
-              <Image src={product.image} width={288} height={288} alt="" unoptimized />
+            <div className="relative w-full h-48 sm:h-56 md:h-64 mb-10 text-center">
+              <Image className="inline-block" src={product.image} width={288} height={288} style={{width:"auto"}} alt="" unoptimized />
               {product.isNew}
             </div>
 

@@ -11,8 +11,7 @@ interface BreadcrumbspageProps {
   paths: PathsProps[];
 }
 
-const Breadcrumbspage: React.FC<BreadcrumbspageProps> = ({ paths }) => {
-  //function Breadcrumbspage({ paths }: {paths : PathsProps}) {
+const Breadcrumbspage = ({ paths }: BreadcrumbspageProps) => {
   return (
     <>
       <h3>
