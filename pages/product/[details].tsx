@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import ProductCarousel from "../../components/product-detail-carousel";
 import Breadcrumbspage from "../../components/Breadcrumbs";
@@ -7,9 +8,45 @@ import { WidthFull } from "@mui/icons-material";
 import AccordionExpandDefault from "../../components/accordion-expand-default";
 import FeaturesAndBenefits from "../../components/features-and-benefits";
 import ProductSelector from "../../components/product-selector";
+import { GetProductDetailData } from "../../helper";
+import { error } from "console";
+import StickyProductNavigation from "../../components/sticky-product-navigation";
+
 export default function Details({ params }: any) {
   const router = useRouter();
   const { details } = router.query;
+
+  const [productdata, setproductdata] = useState(null);
+  const [carouselImage, setcarouselImage] = useState(null);
+
+  async function fetchAPI() {
+    try {
+      const datavalue = await GetProductDetailData(
+        "product",
+        "blte572e97906c3c957"
+      );
+      setproductdata(datavalue);
+
+      const obje = { slides: [], thumbnails: [] };
+      const ImgThumb = datavalue?.image_carrousel.map((item: any) => {
+        return { image: item.image.url };
+      });
+      obje.slides = ImgThumb ?? [];
+      obje.thumbnails = ImgThumb ?? [];
+
+      setcarouselImage(obje);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAPI();
+  }, []);
+
+  useEffect(() => {
+    console.log("######", carouselImage);
+  }, [carouselImage]);
 
   const paths = [
     { label: "Home", href: "/" },
@@ -43,7 +80,7 @@ export default function Details({ params }: any) {
 
   const filterData = DetailData.filter((item) => item.URL == details);
   const { title, producteyes, img, dis } = filterData[0];
-  console.log("pppp", filterData);
+  //console.log("pppp", filterData);
 
   const featureData = {
     heading: "Features and benefits",
@@ -165,108 +202,43 @@ export default function Details({ params }: any) {
     ],
   };
 
-  const CarousalData = {
-    slides: [
-      {
-        image: (
-          <img
-            src="https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp"
-            alt="Orbi WiFi 7 Router"
-          />
-        ),
-        title: "orbi | WiFi 7",
-        subtitle: "QUAD-BAND",
-        features: [
-          {
-            feature: "Up to 27Gbps",
-            description: "Streaming speed",
-          },
-          {
-            feature: "Up to 10,000 ft²",
-            description: "WiFi coverage",
-          },
-          {
-            feature: "10 Gig",
-            description: "internet port",
-          },
-          {
-            feature: "NETGEAR Armor",
-            description: "1-year included",
-          },
-        ],
-      },
-      {
-        image: (
-          <img
-            src="https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp"
-            alt="Orbi WiFi 7 Features"
-          />
-        ),
-        title: "orbi | WiFi 7",
-        subtitle: "QUAD-BAND",
-        features: [
-          {
-            feature: "Ultra-Fast Speeds",
-            description: "Stream 8K content without buffering",
-          },
-          {
-            feature: "Multi-Gigabit Connectivity",
-            description: "Connect 200+ devices simultaneously",
-          },
-          {
-            feature: "Advanced Security",
-            description: "Enterprise-grade protection for your network",
-          },
-          {
-            feature: "Easy Setup",
-            description: "Get connected in minutes with the Orbi app",
-          },
-        ],
-      },
-      {
-        image: (
-          <img
-            src="https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp"
-            alt="Orbi WiFi 7 Design"
-          />
-        ),
-        title: "orbi | WiFi 7",
-        subtitle: "QUAD-BAND",
-        features: [
-          {
-            feature: "Sleek Design",
-            description: "Modern aesthetic that complements any home",
-          },
-          {
-            feature: "Mesh Technology",
-            description: "Seamless roaming throughout your home",
-          },
-          {
-            feature: "Smart Home Ready",
-            description: "Compatible with all IoT devices",
-          },
-          {
-            feature: "Energy Efficient",
-            description: "Optimized power consumption",
-          },
-        ],
-      },
-    ],
-    thumbnails: [{
-     image: <img
-        src="https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp"
-        alt="Orbi Router Thumbnail"
-      />},
-     {image: <img
-        src="https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp"
-        alt="Orbi App Thumbnail"
-      />},
-      {image:<img
-        src="https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp"
-        alt="Orbi Setup Thumbnail"
-      />},
-    ],
+  const stickyproduct = {
+    fields: {
+      productImage: (
+        <img src="https://picsum.photos/200/200?random=1" alt="Product" />
+      ),
+      productTitle: "RBE872 Series",
+      productDescription: "2 Pack: 400 sq. m.",
+      productPrice: "$1,499.00",
+      priceSubtext: "(incl. GST)",
+      ctaButton: <a href="#">ADD TO CART</a>,
+    },
   };
+
+  // old static data const CarousalData = {
+  //   slides: [
+  //     {
+  //       image: "https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp",
+  //     },
+  //     {
+  //       image: "https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp",
+  //     },
+  //     {
+  //       image: "https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp",
+  //     },
+  //   ],
+  //   thumbnails: [
+  //     {
+  //       image: "https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp",
+  //     },
+  //     {
+  //       image: "https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp",
+  //     },
+  //     {
+  //       image: "https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp",
+  //     },
+  //   ],
+  // };
 
   return (
     <>
@@ -277,12 +249,20 @@ export default function Details({ params }: any) {
       </section>
       <div className="flex container">
         <div className="p-4 basis-2/2">
-          <ProductCarousel {...CarousalData} />
+          {/* <ProductCarousel {...CarousalData as any} /> */}
+          {carouselImage != null ? (
+            <ProductCarousel {...(carouselImage as any)} />
+          ) : (
+            ""
+          )}
         </div>
         <div className="p-4 ml-6 basis-2/4">
-          <p>{producteyes}</p>
-          <h2 className="my-3">{title}</h2>
-          <p className="text-2">{dis}</p>
+          <p>{productdata != null ? (productdata as any)?.name : ""}</p>
+          <h2 className="my-3">{(productdata as any)?.product_intro}</h2>
+
+          <p className="text-2">
+            {(productdata as any)?.expandable_description_content}
+          </p>
           <Button
             className="mt-3 w-full p-2 text-2xl text-white"
             style={{ background: "#0044d6" }}
@@ -327,6 +307,7 @@ export default function Details({ params }: any) {
         <h2 className="text-3x1 mb-3">Product specifications</h2>
         <AccordionExpandDefault />
       </div>
+      <StickyProductNavigation {...stickyproduct} />
     </>
   );
 }
