@@ -34,7 +34,7 @@ export default function Details({ params }: any) {
       obje.slides = ImgThumb ?? [];
       obje.thumbnails = ImgThumb ?? [];
 
-      setcarouselImage(obje);
+      setcarouselImage(obje as any);
     } catch (error) {
       console.error(error);
     }
@@ -214,31 +214,6 @@ export default function Details({ params }: any) {
       ctaButton: <a href="#">ADD TO CART</a>,
     },
   };
-
-  // old static data const CarousalData = {
-  //   slides: [
-  //     {
-  //       image: "https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp",
-  //     },
-  //     {
-  //       image: "https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp",
-  //     },
-  //     {
-  //       image: "https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp",
-  //     },
-  //   ],
-  //   thumbnails: [
-  //     {
-  //       image: "https://www.netgear.com/media/_hero_banner_15052024_tcm148-152227.webp",
-  //     },
-  //     {
-  //       image: "https://www.netgear.com/media/wifi_7_hero_2_tcm148-152228.webp",
-  //     },
-  //     {
-  //       image: "https://www.netgear.com/media/wifi_7_hero_3_tcm148-152229.webp",
-  //     },
-  //   ],
-  // };
 
   return (
     <>

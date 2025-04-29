@@ -16,14 +16,14 @@ const config = {
     CONTENTSTACK_ENVIRONMENT: process.env.CONTENTSTACK_ENVIRONMENT,
     CONTENTSTACK_PREVIEW_TOKEN: process.env.CONTENTSTACK_PREVIEW_TOKEN,
     CONTENTSTACK_PREVIEW_HOST:
-      process.env.CONTENTSTACK_PREVIEW_HOST || "rest-preview.contentstack.com",
+    process.env.CONTENTSTACK_PREVIEW_HOST || "rest-preview.contentstack.com",
     CONTENTSTACK_API_HOST:
-      process.env.CONTENTSTACK_API_HOST || "api.contentstack.io",
+    process.env.CONTENTSTACK_API_HOST || "api.contentstack.io",
     CONTENTSTACK_APP_HOST:
-      process.env.CONTENTSTACK_APP_HOST || "app.contentstack.com",
+    process.env.CONTENTSTACK_APP_HOST || "app.contentstack.com",
     CONTENTSTACK_LIVE_PREVIEW: process.env.CONTENTSTACK_LIVE_PREVIEW || "true",
     CONTENTSTACK_LIVE_EDIT_TAGS:
-      process.env.CONTENTSTACK_LIVE_EDIT_TAGS || "false",
+    process.env.CONTENTSTACK_LIVE_EDIT_TAGS || "false",
     NEXT_PUBLIC_CONTENT_KEY: process.env.NEXT_PUBLIC_CONTENT_KEY,
     NEXT_PUBLIC_ACCESS_TOKEN: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
   },
