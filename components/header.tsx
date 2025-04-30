@@ -4,56 +4,49 @@ import { useRouter } from 'next/router';
 import parse from 'html-react-parser';
 import Tooltip from './tool-tip';
 import { onEntryChange } from '../contentstack-sdk';
-import { getHeaderRes } from '../helper';
+import { getHeaderRes, getHeaderResponse } from '../helper';
 import Skeleton from 'react-loading-skeleton';
 import { HeaderProps, Entry, NavLinks } from "../typescript/layout";
-import Navigation from './navigation';
+import Navigation from '../components/navigation';
 // import    Navigation  from './navigation';
+import { HeaderEntryResponse } from '../typescript/header'
 
-export default function Header({ header, entries }: {header: HeaderProps, entries: Entry}) {
 
-  const router = useRouter();
-  const [getHeader, setHeader] = useState(header);
+export default function Header() {
 
-  function buildNavigation(ent: Entry, hd: HeaderProps) {
-    let newHeader={...hd};
-    if (ent.length!== newHeader.navigation_menu.length) {
-          ent.forEach((entry) => {
-            const hFound = newHeader?.navigation_menu.find(
-              (navLink: NavLinks) => navLink.label === entry.title
-            );
-            if (!hFound) {
-              newHeader.navigation_menu?.push({
-                label: entry.title,
-                page_reference: [
-                  { title: entry.title, url: entry.url, $: entry.$ },
-                ],
-                $:{}
-              });
-            }
-          });
-    }
-    return newHeader
-  }
-
-  async function fetchData() {
+  const [headerData, setHeaderData] = useState<HeaderEntryResponse | null>(null);
+  
+  async function fetchAPI() {
     try {
-      if (header && entries) {
-      const headerRes = await getHeaderRes();
-      const newHeader = buildNavigation(entries,headerRes)
-      setHeader(newHeader);
-    }
+      const datavalue = await getHeaderResponse(
+        "header",
+        "bltdbd2b20d108091fb"
+      );
+      setHeaderData(datavalue);
+      console.log('header',datavalue)
     } catch (error) {
       console.error(error);
     }
   }
 
   useEffect(() => {
-    if (header && entries) {
-      onEntryChange(() => fetchData());
-    }
-  }, [header]);
-  const headerData = getHeader ? getHeader : undefined;
+    fetchAPI();
+  }, []);
+
+  useEffect(() => {
+    // fetchAPI();
+    console.log('dom', headerData)
+  }, [headerData]);
+
+  // useEffect(() => {
+  //   const unsubscribe = onEntryChange((entry: Entry) => {
+  //     if (entry?.content_type_uid === 'header') {
+  //       setHeaderData(entry);
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+
   const mockData = {
     fields: {
       logo: <img src="https://stagesupport.netgear.com/support/cloudimage/1/11/409" alt="NETGEAR" width="180" />,
@@ -187,7 +180,7 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
   }
   return (
     <header className='header'>
-      <div className='note-div hidden' >
+      {/* <div className='note-div hidden' >
         {headerData?.notification_bar.show_announcement ? (
           typeof headerData.notification_bar.announcement_text === 'string' && (
             <div {...headerData.notification_bar.$?.announcement_text as {}}>
@@ -197,8 +190,8 @@ export default function Header({ header, entries }: {header: HeaderProps, entrie
         ) : (
           <Skeleton />
         )}
-      </div>
-      <Navigation fields={mockData?.fields} />
+      </div> */}
+    {headerData && <Navigation {...headerData} /> }
       {/* <Navigation /> */}
       {/* <Navigation /> */}
       {/* <div className='max-width header-div'>

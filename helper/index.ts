@@ -88,16 +88,17 @@ const urlcontent = {
 };
 
 const headers: Record<string, string> = {};
-if(process.env.NEXT_PUBLIC_CONTENT_KEY){
-headers["api_key"] = process.env.NEXT_PUBLIC_CONTENT_KEY;
-
+if (process.env.NEXT_PUBLIC_CONTENT_KEY) {
+  headers["api_key"] = process.env.NEXT_PUBLIC_CONTENT_KEY;
 }
-if(process.env.NEXT_PUBLIC_ACCESS_TOKEN){
+if (process.env.NEXT_PUBLIC_ACCESS_TOKEN) {
   headers["access_token"] = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 }
 
-
-export const GetProductDetailData = async (content_type_uid: string, entry_uid: string) => {
+export const GetProductDetailData = async (
+  content_type_uid: string,
+  entry_uid: string
+) => {
   let ApiData = await fetch(
     `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text`,
     {
@@ -107,4 +108,36 @@ export const GetProductDetailData = async (content_type_uid: string, entry_uid: 
   );
   let ApiData_ = await ApiData.json();
   return ApiData_.entry;
+};
+
+const {
+  HEADER_API_KEY,
+  CONTENTSTACK_APP_HOST,
+  HEADER_ACCESS_TOKEN,
+} = envConfig;
+
+export const getHeaderResponse = async (contentTypeUid: string, entryUid: string) => {
+  try {
+      const response = await fetch(
+          `https://${CONTENTSTACK_APP_HOST}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=development`,
+          {
+              method: 'GET',
+              headers: {
+                  api_key: HEADER_API_KEY as string,
+                  access_token: HEADER_ACCESS_TOKEN as string,
+              },
+          }
+      );
+
+      if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log(data)
+      return data.entry;
+  } catch (error) {
+      console.error('Error fetching footer data:', error);
+      return null; // or throw, based on your needs
+  }
 };

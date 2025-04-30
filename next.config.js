@@ -4,7 +4,7 @@ const withPWA = require("next-pwa")({
 
 const config = {
   images: {
-    domains: ["www.netgear.com", "downloads1.netgear.com"],
+    domains: ["www.netgear.com", "downloads1.netgear.com", "images.contentstack.io"],
   },
 
   publicRuntimeConfig: {
@@ -26,6 +26,8 @@ const config = {
     process.env.CONTENTSTACK_LIVE_EDIT_TAGS || "false",
     NEXT_PUBLIC_CONTENT_KEY: process.env.NEXT_PUBLIC_CONTENT_KEY,
     NEXT_PUBLIC_ACCESS_TOKEN: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
+    HEADER_API_KEY: process.env.HEADER_API_KEY,
+    HEADER_ACCESS_TOKEN: process.env.HEADER_ACCESS_TOKEN,
   },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
