@@ -87,13 +87,15 @@ const urlcontent = {
   base_url: "cdn.contentstack.io",
 };
 
-const headers: Record<string, string> = {};
-if (process.env.NEXT_PUBLIC_CONTENT_KEY) {
-  headers["api_key"] = process.env.NEXT_PUBLIC_CONTENT_KEY;
-}
-if (process.env.NEXT_PUBLIC_ACCESS_TOKEN) {
-  headers["access_token"] = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
-}
+const {
+  HEADER_API_KEY,
+  CONTENTSTACK_APP_HOST,
+  HEADER_ACCESS_TOKEN,
+  NEXT_PUBLIC_CONTENT_KEY,
+  NEXT_PUBLIC_ACCESS_TOKEN
+} = envConfig;
+
+
 
 export const GetProductDetailData = async (
   content_type_uid: string,
@@ -103,18 +105,17 @@ export const GetProductDetailData = async (
     `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text`,
     {
       method: "GET",
-      headers: headers,
+      headers: {
+        api_key: NEXT_PUBLIC_CONTENT_KEY,
+        access_token: NEXT_PUBLIC_ACCESS_TOKEN
+      },
     }
   );
   let ApiData_ = await ApiData.json();
   return ApiData_.entry;
 };
 
-const {
-  HEADER_API_KEY,
-  CONTENTSTACK_APP_HOST,
-  HEADER_ACCESS_TOKEN,
-} = envConfig;
+
 
 export const getHeaderResponse = async (contentTypeUid: string, entryUid: string) => {
   try {
