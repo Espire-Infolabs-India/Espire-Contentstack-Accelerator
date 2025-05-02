@@ -87,15 +87,13 @@ const urlcontent = {
   base_url: "cdn.contentstack.io",
 };
 
-const {
-  HEADER_API_KEY,
-  CONTENTSTACK_APP_HOST,
-  HEADER_ACCESS_TOKEN,
-  NEXT_PUBLIC_CONTENT_KEY,
-  NEXT_PUBLIC_ACCESS_TOKEN
-} = envConfig;
-
-
+const headers: Record<string, string> = {};
+if (process.env.NEXT_PUBLIC_CONTENT_KEY) {
+  headers["api_key"] = process.env.NEXT_PUBLIC_CONTENT_KEY;
+}
+if (process.env.NEXT_PUBLIC_ACCESS_TOKEN) {
+  headers["access_token"] = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+}
 
 export const GetProductDetailData = async (
   content_type_uid: string,
@@ -105,40 +103,35 @@ export const GetProductDetailData = async (
     `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text`,
     {
       method: "GET",
-      headers: {
-        api_key: NEXT_PUBLIC_CONTENT_KEY,
-        access_token: NEXT_PUBLIC_ACCESS_TOKEN
-      },
+      headers: headers,
     }
   );
   let ApiData_ = await ApiData.json();
   return ApiData_.entry;
 };
 
-
-
-export const getHeaderResponse = async (contentTypeUid: string, entryUid: string) => {
+export const getHeaderResponse = async (
+  contentTypeUid: string,
+  entryUid: string
+) => {
   try {
-      const response = await fetch(
-          `https://${CONTENTSTACK_APP_HOST}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=development`,
-          {
-              method: 'GET',
-              headers: {
-                  api_key: HEADER_API_KEY as string,
-                  access_token: HEADER_ACCESS_TOKEN as string,
-              },
-          }
-      );
-
-      if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
+    const response = await fetch(
+      `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=dxastaging`,
+      {
+        method: "GET",
+        headers: headers,
       }
+    );
 
-      const data = await response.json();
-      console.log(data)
-      return data.entry;
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data.entry;
   } catch (error) {
-      console.error('Error fetching footer data:', error);
-      return null; // or throw, based on your needs
+    console.error("Error fetching footer data:", error);
+    return null; // or throw, based on your needs
   }
 };

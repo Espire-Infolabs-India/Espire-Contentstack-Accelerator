@@ -11,19 +11,14 @@ import Navigation from '../components/navigation';
 // import    Navigation  from './navigation';
 import { HeaderEntryResponse } from '../typescript/header'
 
-
 export default function Header() {
 
   const [headerData, setHeaderData] = useState<HeaderEntryResponse | null>(null);
   
   async function fetchAPI() {
     try {
-      const datavalue = await getHeaderResponse(
-        "header",
-        "bltdbd2b20d108091fb"
-      );
+      const datavalue = await getHeaderResponse("header-netgear", "blt089202a57be3cd68");
       setHeaderData(datavalue);
-      console.log('header',datavalue)
     } catch (error) {
       console.error(error);
     }
@@ -33,19 +28,7 @@ export default function Header() {
     fetchAPI();
   }, []);
 
-  useEffect(() => {
-    // fetchAPI();
-    console.log('dom', headerData)
-  }, [headerData]);
 
-  // useEffect(() => {
-  //   const unsubscribe = onEntryChange((entry: Entry) => {
-  //     if (entry?.content_type_uid === 'header') {
-  //       setHeaderData(entry);
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
 
   const mockData = {
     fields: {

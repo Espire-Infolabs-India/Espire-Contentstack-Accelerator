@@ -1,44 +1,45 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
-import { HeaderEntryResponse } from '../typescript/header'
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
+import { HeaderEntryResponse } from "../typescript/header";
 interface NavigationProps {
   entry: HeaderEntryResponse | null;
 }
 // export default function Navigation({ entry }: NavigationProps) {
-  const Navigation: React.FC<HeaderEntryResponse> = (entry : HeaderEntryResponse) => {
+const Navigation: React.FC<HeaderEntryResponse> = (
+  entry: HeaderEntryResponse
+) => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
- 
+
   useEffect(() => {
-    console.log('navigarion', entry)
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
- 
+
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
- 
+
   const handleMenuToggle = (menuName: string) => {
     if (isMobile) {
       setActiveMenu(activeMenu === menuName ? null : menuName);
     }
   };
- 
+
   const handleMouseEnter = (menuName: string) => {
     if (!isMobile) {
       setActiveMenu(menuName);
     }
   };
- 
+
   const handleMouseLeave = () => {
     if (!isMobile) {
       setActiveMenu(null);
     }
   };
- 
+
   return (
     <div className="w-full">
       {/* Top Banner */}
@@ -51,31 +52,36 @@ interface NavigationProps {
           {fields.topBanner.nextButton}
         </button>
       </div> */}
- 
+
       {/* Main Navigation */}
+
       <div className="bg-white border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <div className="mr-8">
-             
-              <Link href="/"> <Image width={160}
-                height={50}
-                src={entry?.logo?.url || ''} alt={entry?.logo?.title || ''} /></Link>
+              <Link href={"/product"}>
+                {" "}
+                <Image
+                  height={20}
+                  width={140}
+                  src={entry?.logo?.url || ""}
+                  alt={entry?.logo?.title || ""}
+                />
+              </Link>
             </div>
- 
+
             {/* Main Nav Links */}
             <div className="hidden lg:flex flex-grow">
-              {entry?.navigation_menu.map((link, index) => (
+              {entry?.navigation_links.map((link, index) => (
                 <div
                   key={index}
                   className="relative group mr-8"
                   // onMouseEnter={() => handleMouseEnter(link?.text || '')}
                   onMouseLeave={handleMouseLeave}
                 >
-                 
                   <Link
-                    href={'/product'}
+                    href={link?.link_url}
                     className="font-medium text-gray-800 hover:text-gray-600 pb-5 uppercase"
                     // onClick={(e) => {
                     //   if (isMobile && fields.megaMenus[link.text]) {
@@ -84,23 +90,36 @@ interface NavigationProps {
                     //   }
                     // }}
                   >
-                    {link.label}
+                    {link?.link_text}
                   </Link>
                 </div>
               ))}
             </div>
- 
+
             {/* Mobile Menu Button */}
             <div className="lg:hidden">
-              <button className="text-gray-800" onClick={() => setActiveMenu(activeMenu ? null : 'mobile')}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <button
+                className="text-gray-800"
+                onClick={() => setActiveMenu(activeMenu ? null : "mobile")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <line x1="3" y1="12" x2="21" y2="12"></line>
                   <line x1="3" y1="6" x2="21" y2="6"></line>
                   <line x1="3" y1="18" x2="21" y2="18"></line>
                 </svg>
               </button>
             </div>
- 
+
             {/* Right Side Icons */}
             {/* <div className="flex items-center space-x-4">
               <Link href={''}>{fields.countrySelector}</Link>
@@ -110,24 +129,28 @@ interface NavigationProps {
               <Link href={''}>{fields.cartButton}</Link>
             </div> */}
           </div>
- 
+
           {/* Mobile Navigation */}
-          <div className={`lg:hidden ${activeMenu === 'mobile' ? 'block' : 'hidden'}`}>
+          <div
+            className={`lg:hidden ${
+              activeMenu === "mobile" ? "block" : "hidden"
+            }`}
+          >
             <div className="py-2">
-              {entry?.navigation_menu.map((link, index) => (
+              {entry?.navigation_links.map((link, index) => (
                 <div key={index} className="py-2">
                   <button
                     className="w-full text-left font-medium text-gray-800 flex justify-between items-center"
-                    onClick={() => handleMenuToggle(link.label)}
+                    onClick={() => handleMenuToggle(link.link_text)}
                   >
-                    {link.label}
+                    {link.link_text}
                     {/* {fields.megaMenus[link.text] && (
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${activeMenu === link.text ? 'rotate-180' : ''}`}>
                         <polyline points="6 9 12 15 18 9"></polyline>
                       </svg>
                     )} */}
                   </button>
-                 
+
                   {/* {fields.megaMenus[link.text] && activeMenu === link.text && (
                     <div className="mt-2 pl-4 border-l-2 border-gray-200">
                       {fields.megaMenus[link.text].map((category, catIndex) => (
@@ -150,13 +173,21 @@ interface NavigationProps {
           </div>
         </div>
       </div>
- 
+
       {/* Mega Menu Desktop */}
       <div
-        className={`absolute left-0 w-full bg-gray-100 shadow-lg z-50 transition-all duration-300 ${activeMenu && !isMobile ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
-        onMouseEnter={() => !isMobile && activeMenu && setActiveMenu(activeMenu)}
+        className={`absolute left-0 w-full bg-gray-100 shadow-lg z-50 transition-all duration-300 ${
+          activeMenu && !isMobile
+            ? "opacity-100 visible"
+            : "opacity-0 invisible"
+        }`}
+        onMouseEnter={() =>
+          !isMobile && activeMenu && setActiveMenu(activeMenu)
+        }
         onMouseLeave={() => !isMobile && setActiveMenu(null)}
-      >  dd
+      >
+        {" "}
+        dd
         {/* {activeMenu && fields.megaMenus[activeMenu] && (
           <div className="container mx-auto px-4 py-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -181,5 +212,5 @@ interface NavigationProps {
     </div>
   );
 };
- 
-export default Navigation
+
+export default Navigation;
