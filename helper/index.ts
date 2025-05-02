@@ -19,6 +19,7 @@ export const getHeaderRes = async (): Promise<HeaderProps> => {
   })) as HeaderProps[][];
 
   liveEdit && addEditableTags(response[0][0], "header", true);
+
   return response[0][0];
 };
 
@@ -29,6 +30,7 @@ export const getFooterRes = async (): Promise<FooterProps> => {
     jsonRtePath: ["copyright"],
   })) as FooterProps[][];
   liveEdit && addEditableTags(response[0][0], "footer", true);
+
   return response[0][0];
 };
 
@@ -40,6 +42,7 @@ export const getAllEntries = async (): Promise<Page[]> => {
   })) as Page[][];
   liveEdit &&
     response[0].forEach((entry) => addEditableTags(entry, "page", true));
+
   return response[0];
 };
 
@@ -78,4 +81,57 @@ export const getBlogPostRes = async (entryUrl: string): Promise<BlogPosts> => {
   })) as BlogPosts[];
   liveEdit && addEditableTags(response[0], "blog_post", true);
   return response[0];
+};
+
+const urlcontent = {
+  base_url: "cdn.contentstack.io",
+};
+
+const headers: Record<string, string> = {};
+if (process.env.NEXT_PUBLIC_CONTENT_KEY) {
+  headers["api_key"] = process.env.NEXT_PUBLIC_CONTENT_KEY;
+}
+if (process.env.NEXT_PUBLIC_ACCESS_TOKEN) {
+  headers["access_token"] = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
+}
+
+export const GetProductDetailData = async (
+  content_type_uid: string,
+  entry_uid: string
+) => {
+  let ApiData = await fetch(
+    `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text`,
+    {
+      method: "GET",
+      headers: headers,
+    }
+  );
+  let ApiData_ = await ApiData.json();
+  return ApiData_.entry;
+};
+
+export const getHeaderResponse = async (
+  contentTypeUid: string,
+  entryUid: string
+) => {
+  try {
+    const response = await fetch(
+      `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=dxastaging`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data.entry;
+  } catch (error) {
+    console.error("Error fetching footer data:", error);
+    return null; // or throw, based on your needs
+  }
 };

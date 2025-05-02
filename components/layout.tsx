@@ -61,7 +61,7 @@ export default function Layout({
 
   return (
     <>
-      {header ? <Header header={getLayout.header} entries={entries} /> : ''}
+      {header ? <Header /> : ''}
       <main className='mainClass'>
         <>
         {children}

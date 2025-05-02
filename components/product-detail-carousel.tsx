@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 interface CarouselSlide {
-  image: JSX.Element;
-  title: string;
-  subtitle: string;
-  features: {
-    feature: string;
-    description: string;
-  }[];
+  image: string;
 }
 
 interface CarouselImg {
-  image: JSX.Element;
+  image: string;
 }
 
 interface ProductCarouselProps {
@@ -65,6 +59,10 @@ const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
     setTouchEnd(null);
   };
 
+// useEffect(()=>{
+//   console.log("@@@@@@", slides);
+// }, [])
+
   useEffect(() => {
     const interval = setInterval(() => {
       goToNext();
@@ -109,7 +107,7 @@ const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
                 }`}
                 onClick={() => goToSlide(index)}
               >
-                {thumbnail.image}
+                <img src={thumbnail.image} />
               </div>
             ))}
           </div>
@@ -152,31 +150,9 @@ const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
               <div key={index} className="min-w-full h-full">
                 <div className="relative flex flex-col md:flex-rowtext-white rounded-lg overflow-hidden">
                   <div className="flex items-center justify-center">
-                    {slide.image}
+                    <img src={slide.image} />
                   </div>
-                  <div className="w-full md:w-1/2 p-6 md:p-10 flex-col justify-center hidden">
-                    <div className="mb-6">
-                      <div className="text-2xl md:text-4xl font-bold mb-1">
-                        {slide.title}
-                      </div>
-                      <div className="text-sm md:text-base uppercase tracking-wider mb-6">
-                        {slide.subtitle}
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      {slide.features.map((feature, idx) => (
-                        <div key={idx} className="mb-4">
-                          <div className="text-xl md:text-2xl font-semibold">
-                            {feature.feature}
-                          </div>
-                          <div className="text-sm md:text-base text-gray-300">
-                            {feature.description}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             ))}
