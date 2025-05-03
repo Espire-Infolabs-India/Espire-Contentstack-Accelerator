@@ -29,6 +29,11 @@ const config = {
     HEADER_API_KEY: process.env.HEADER_API_KEY,
     HEADER_ACCESS_TOKEN: process.env.HEADER_ACCESS_TOKEN,
   },
+  i18n: {
+    locales: ['en-us', 'fr-fr','fr','de-de','de','es-ES','es','it-IT','it','ja-JP','ja'],
+    defaultLocale: 'en-us',
+    localeDetection: true,
+  },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
 module.exports =
