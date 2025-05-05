@@ -113,19 +113,10 @@ export const GetProductDetailData = async (
   return ApiData_.entry;
 };
 
-
-const sitename: string = process.env.NEXT_PUBLIC_SITE1_NAME || "default-site-name";
- 
- 
- 
-
 export function getSiteName(): string {
-  if (typeof window !== 'undefined') {
-    console.log('getSiteName-router:',window.location.hostname,sitename);
-    const currentPort = window.location.port;
-    return window.location.hostname === sitename ? 'Site-1' : 'Site-2';
-  }
-  return 'Site-1'; // Default for server-side or fallback
+  console.log("getSiteName:", process.env.NEXT_PUBLIC_SITE_NAME);
+  const sitename = process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
+  return sitename;
 }
 
 

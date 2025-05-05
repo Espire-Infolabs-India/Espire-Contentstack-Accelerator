@@ -4,17 +4,11 @@ import React, { useState, useEffect } from "react";
 import { HeaderEntryResponse } from "../typescript/header";
 interface NavigationProps {
   entry: HeaderEntryResponse | null;
-}
-// export default function Navigation({ entry }: NavigationProps) {
+} 
 
-const sitename: string = process.env.NEXT_PUBLIC_SITE1_NAME || "default-site-name";
 export function getSiteName(): string {
-  if (typeof window !== 'undefined') {
-   // console.log('navigation getSiteName-router:',window.location.hostname,process.env.NEXT_PUBLIC_SITE1_NAME,window.location.hostname === sitename ? 'Site-1' : 'Site-2');
-    const currentPort = window.location.port;
-    return window.location.hostname === sitename ? 'Site-1' : 'Site-2';
-  }
-  return 'Site-1'; // Default for server-side or fallback
+  console.log("navigation getSiteName:", process.env.NEXT_PUBLIC_SITE_NAME);
+   return process.env.NEXT_PUBLIC_SITE_NAME || "Site-1"; // Default for server-side or fallback
 }
 
 const Navigation: React.FC<HeaderEntryResponse> = (
