@@ -97,10 +97,13 @@ if (process.env.NEXT_PUBLIC_ACCESS_TOKEN) {
 
 export const GetProductDetailData = async (
   content_type_uid: string,
-  entry_uid: string
+  entry_uid: string,
+  locale: string | undefined
 ) => {
   let ApiData = await fetch(
-    `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text`,
+
+   // `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
+    `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text&query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
     {
       method: "GET",
       headers: headers,
@@ -111,29 +114,63 @@ export const GetProductDetailData = async (
 };
 
 
-
+const sitename: string = process.env.NEXT_PUBLIC_SITE1_NAME || "default-site-name";
+ 
+ 
+ 
 
 export function getSiteName(): string {
   if (typeof window !== 'undefined') {
-    console.log('getSiteName-router:',window.location.hostname);
+    console.log('getSiteName-router:',window.location.hostname,sitename);
     const currentPort = window.location.port;
-    return window.location.hostname === 'site1.local' ? 'Site-1' : 'Site-2';
+    return window.location.hostname === sitename ? 'Site-1' : 'Site-2';
   }
   return 'Site-1'; // Default for server-side or fallback
 }
+
+
+// export const getHeaderResponse = async (
+//   contentTypeUid: string,
+//   entryUid: string,
+//   locale: string | undefined
+// ) => {
+//   try {
+
+//     console.log('getHeaderResponse:',getSiteName(),locale);
+
+//     const response = await fetch(
+//       //`https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=dxastaging&query={"global_field.site_section":"${getSiteName()}","locale":"${locale}"}`,
+//       `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
+//       {
+//         method: "GET",
+//         headers: headers,
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch data: ${response.statusText}`);
+//     }
+
+//     const data = await response.json();
+//     console.log(data.entries[0]);
+//     return data.entries[0]; // Assuming you want the first entry
+//     ;
+//   } catch (error) {
+//     console.error("Error fetching footer data:", error);
+//     return null; // or throw, based on your needs
+//   }
+// };
 
 
 export const getHeaderResponse = async (
   contentTypeUid: string,
   entryUid: string,
   locale: string | undefined
-) => {
+): Promise<{ entry: any; siteName: string }> => {
   try {
-
-    console.log('getHeaderResponse:',getSiteName(),locale);
+    
 
     const response = await fetch(
-      //`https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=dxastaging&query={"global_field.site_section":"${getSiteName()}","locale":"${locale}"}`,
       `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
       {
         method: "GET",
@@ -147,10 +184,18 @@ export const getHeaderResponse = async (
 
     const data = await response.json();
     console.log(data.entries[0]);
-    return data.entries[0]; // Assuming you want the first entry
-    ;
+
+    return {
+      entry: data.entries[0],
+      siteName: getSiteName()
+    };
   } catch (error) {
-    console.error("Error fetching footer data:", error);
-    return null; // or throw, based on your needs
+    console.error("Error fetching header data:", error);
+
+    return {
+      entry: null,
+      siteName: getSiteName()
+    };
   }
 };
+

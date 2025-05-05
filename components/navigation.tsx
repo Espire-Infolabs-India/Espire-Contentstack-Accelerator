@@ -6,6 +6,17 @@ interface NavigationProps {
   entry: HeaderEntryResponse | null;
 }
 // export default function Navigation({ entry }: NavigationProps) {
+
+const sitename: string = process.env.NEXT_PUBLIC_SITE1_NAME || "default-site-name";
+export function getSiteName(): string {
+  if (typeof window !== 'undefined') {
+   // console.log('navigation getSiteName-router:',window.location.hostname,process.env.NEXT_PUBLIC_SITE1_NAME,window.location.hostname === sitename ? 'Site-1' : 'Site-2');
+    const currentPort = window.location.port;
+    return window.location.hostname === sitename ? 'Site-1' : 'Site-2';
+  }
+  return 'Site-1'; // Default for server-side or fallback
+}
+
 const Navigation: React.FC<HeaderEntryResponse> = (
   entry: HeaderEntryResponse
 ) => {
@@ -129,8 +140,11 @@ const Navigation: React.FC<HeaderEntryResponse> = (
               <Link href={''}>{fields.accountButton}</Link>
               <Link href={''}>{fields.cartButton}</Link>
             </div> */}
+ 
 
-<div className="relative inline-block text-left">
+
+
+{getSiteName() === 'Site-1' ? (null):(<div className="relative inline-block text-left">
   <div>
     <button
       type="button"
@@ -174,9 +188,7 @@ const Navigation: React.FC<HeaderEntryResponse> = (
       </div>
     </div>
   )}
-</div>
-
-
+</div>)}
 
           </div>
 

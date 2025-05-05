@@ -18,10 +18,10 @@ export default function Header() {
   async function fetchAPI() {
     try {
  
-     
       const datavalue = await getHeaderResponse("header-netgear", "blt089202a57be3cd68",router?.locale);
-      console.log("datavalue", datavalue);
-      setHeaderData(datavalue);
+      
+
+      setHeaderData(datavalue.entry);
     } catch (error) {
       console.error(error);
     }
