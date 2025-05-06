@@ -14,11 +14,14 @@ import { HeaderEntryResponse } from '../typescript/header'
 export default function Header() {
 
   const [headerData, setHeaderData] = useState<HeaderEntryResponse | null>(null);
-  
+  const router = useRouter();
   async function fetchAPI() {
     try {
-      const datavalue = await getHeaderResponse("header-netgear", "blt089202a57be3cd68");
-      setHeaderData(datavalue);
+ 
+      const datavalue = await getHeaderResponse("header-netgear", "blt089202a57be3cd68",router?.locale);
+      
+
+      setHeaderData(datavalue.entry);
     } catch (error) {
       console.error(error);
     }

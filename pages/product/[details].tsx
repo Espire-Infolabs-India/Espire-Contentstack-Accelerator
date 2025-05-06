@@ -23,7 +23,7 @@ export default function Details({ params }: any) {
     try {
       const datavalue = await GetProductDetailData(
         "product",
-        "blte572e97906c3c957"
+        "blte572e97906c3c957",router?.locale
       );
       setproductdata(datavalue);
 
@@ -45,7 +45,7 @@ export default function Details({ params }: any) {
   }, []);
 
   useEffect(() => {
-    console.log("######", carouselImage);
+    //console.log("######", carouselImage);
   }, [carouselImage]);
 
   const paths = [
