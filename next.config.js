@@ -27,7 +27,12 @@ const config = {
     NEXT_PUBLIC_CONTENT_KEY: process.env.NEXT_PUBLIC_CONTENT_KEY,
     NEXT_PUBLIC_ACCESS_TOKEN: process.env.NEXT_PUBLIC_ACCESS_TOKEN,
     HEADER_API_KEY: process.env.HEADER_API_KEY,
-    HEADER_ACCESS_TOKEN: process.env.HEADER_ACCESS_TOKEN,
+    HEADER_ACCESS_TOKEN: process.env.HEADER_ACCESS_TOKEN, 
+  },
+  i18n: {
+    locales: ['en-us', 'fr-fr','fr','de-de','de','es-ES','es','it-IT','it','ja-JP','ja'],
+    defaultLocale: 'en-us',
+    localeDetection: true,
   },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
