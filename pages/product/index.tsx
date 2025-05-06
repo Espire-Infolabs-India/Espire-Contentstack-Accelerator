@@ -23,7 +23,6 @@ export default function Product() {
       dis: "Enhanced WiFi performance for the latest devices. The RS600 provides unrivaled WiFi 7 speeds up to 18Gbps for real-time gaming, 4K/8K streaming, UHD video conferencing, and AR/VR entertainment​",
       img: "https://www.netgear.com/media/RS600_G1_779x536_tcm148-161817.webp",
       URL: "/product/RS600",
-      
     },
     {
       producteyes: "BE27000 Mesh WiFi System (RBE973SB) ",

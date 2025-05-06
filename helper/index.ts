@@ -110,6 +110,8 @@ export const GetProductDetailData = async (
   return ApiData_.entry;
 };
 
+
+
 export const getHeaderResponse = async (
   contentTypeUid: string,
   entryUid: string

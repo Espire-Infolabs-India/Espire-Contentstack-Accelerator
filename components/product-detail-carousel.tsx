@@ -107,7 +107,7 @@ const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
                 }`}
                 onClick={() => goToSlide(index)}
               >
-                <img src={thumbnail.image} />
+                <img src={thumbnail.image} alt=""/>
               </div>
             ))}
           </div>
@@ -150,7 +150,7 @@ const ProductCarousel = ({ slides, thumbnails }: ProductCarouselProps) => {
               <div key={index} className="min-w-full h-full">
                 <div className="relative flex flex-col md:flex-rowtext-white rounded-lg overflow-hidden">
                   <div className="flex items-center justify-center">
-                    <img src={slide.image} />
+                    <img src={slide.image} alt="" />
                   </div>
                   
                 </div>
