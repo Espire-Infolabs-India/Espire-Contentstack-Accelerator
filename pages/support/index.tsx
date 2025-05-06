@@ -6,6 +6,7 @@ import Skeleton from "react-loading-skeleton";
 import SupportBanner from "../../components/support-banner";
 import { Props, Context } from "../../typescript/pages";
 import CategorySelector from "../../components/category-selector";
+import { useRouter } from 'next/router';
 
 const slidesData = [
   {
@@ -38,6 +39,7 @@ export default function Support(props: Props) {
   const [getEntry, setEntry] = useState(page);
   const [getCategory, setgetCategory] = useState(null);
   // const [supportBannerData, setSupportBannerData] = useState({html: <></>});
+  const router = useRouter();
 
   async function fetchData() {
     try {
@@ -53,7 +55,8 @@ export default function Support(props: Props) {
     try {
       const datavalue = await GetProductDetailData(
         "support_home_category_main",
-        "blt016d4bce49db7e71"
+        "blt016d4bce49db7e71",
+        router?.locale
       );
     
       const filterdata = datavalue?.global_field?.map((item: any) => {
