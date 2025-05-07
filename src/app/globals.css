@@ -4,3 +4,12 @@ https://v3.tailwindcss.com/docs/guides/nextjs
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+    .welcome-netgear-support .align-items-center{
+        @apply bg-black;
+    }
+    .welcome-netgear-support .align-items-center .col-md-6:last-child{
+        @apply bg-[#f8f8f8];
+    }
+}

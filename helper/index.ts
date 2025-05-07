@@ -101,9 +101,10 @@ export const GetProductDetailData = async (
   locale: string | undefined
 ) => {
   let ApiData = await fetch(
-
-   // `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
-    `https://${urlcontent.base_url}/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text&query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
+    
+    `https://${
+      urlcontent.base_url
+    }/v3/content_types/${content_type_uid}/entries/${entry_uid}?include[]=image_carrousel&include[]=features_icons_with_short_text&query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
     {
       method: "GET",
       headers: headers,
@@ -120,38 +121,6 @@ export function getSiteName(): string {
 }
 
 
-// export const getHeaderResponse = async (
-//   contentTypeUid: string,
-//   entryUid: string,
-//   locale: string | undefined
-// ) => {
-//   try {
-
-//     console.log('getHeaderResponse:',getSiteName(),locale);
-
-//     const response = await fetch(
-//       //`https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?environment=dxastaging&query={"global_field.site_section":"${getSiteName()}","locale":"${locale}"}`,
-//       `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
-//       {
-//         method: "GET",
-//         headers: headers,
-//       }
-//     );
-
-//     if (!response.ok) {
-//       throw new Error(`Failed to fetch data: ${response.statusText}`);
-//     }
-
-//     const data = await response.json();
-//     console.log(data.entries[0]);
-//     return data.entries[0]; // Assuming you want the first entry
-//     ;
-//   } catch (error) {
-//     console.error("Error fetching footer data:", error);
-//     return null; // or throw, based on your needs
-//   }
-// };
-
 
 export const getHeaderResponse = async (
   contentTypeUid: string,
@@ -159,8 +128,8 @@ export const getHeaderResponse = async (
   locale: string | undefined
 ): Promise<{ entry: any; siteName: string }> => {
   try {
-    
-
+   
+ 
     const response = await fetch(
       `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`,
       {
@@ -168,21 +137,21 @@ export const getHeaderResponse = async (
         headers: headers,
       }
     );
-
+ 
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
-
+ 
     const data = await response.json();
     console.log(data.entries[0]);
-
+ 
     return {
       entry: data.entries[0],
       siteName: getSiteName()
     };
   } catch (error) {
     console.error("Error fetching header data:", error);
-
+ 
     return {
       entry: null,
       siteName: getSiteName()
@@ -190,3 +159,37 @@ export const getHeaderResponse = async (
   }
 };
 
+export const getFooteresponse = async (
+  contentTypeUids: string[],
+  entryUids: string[],
+  locale: string | undefined
+) => {
+  if (contentTypeUids.length !== entryUids.length) {
+    console.error("Mismatched contentTypeUids and entryUids length.");
+    return null;
+  }
+
+  try {
+    const fetchPromises = contentTypeUids.map((contentTypeUid, index) => {
+      const entryUid = entryUids[index];
+      const url = `https://${urlcontent.base_url}/v3/content_types/${contentTypeUid}/entries/${entryUid}?query={"global_field.site_section":"${getSiteName()}"}&locale=${locale}&environment=dxastaging`;
+
+      return fetch(url, {
+        method: 'GET',
+        headers: headers
+      }).then(async response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch ${contentTypeUid}/${entryUid}: ${response.statusText}`);
+        }
+        return response.json();
+      });
+    });
+
+    const responses = await Promise.all(fetchPromises);
+    console.log(responses);
+    return responses; // returns an array of response data
+  } catch (error) {
+    console.error('Error fetching footer data:', error);
+    return null;
+  }
+};
