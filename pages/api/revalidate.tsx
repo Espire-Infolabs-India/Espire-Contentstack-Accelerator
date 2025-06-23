@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   try {
     const entryUrl = req.body.data.entry.url;
-    await res.unstable_revalidate(entryUrl);
+    await res.revalidate(entryUrl);
     return res.json({ message: `Generated build for ${entryUrl}` });
   } catch (err) {
     return res.status(500).send('Error revalidating');
