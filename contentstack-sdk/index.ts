@@ -142,3 +142,17 @@ export async function getEntryByUid(contentTypeUid, entryUid) {
     throw error;
   }
 }
+
+export const getAllBlogEntries = async () => {
+  const Query = Stack.ContentType("blog_post").Query();
+  console.log("Query", Query);
+  Query.toJSON().includeCount();
+
+  try {
+    const [entries] = await Query.find();
+    return entries;
+  } catch (err) {
+    console.error("Error fetching blog entries:", err);
+    return [];
+  }
+};
