@@ -1,43 +1,15 @@
-import React, { ReactNode, useState, useEffect } from 'react';
-import { HeaderModel } from '../model/header.model';
-import { FooterModel } from '../model/footer.model';
-
-import Header from './header';
-import Footer from './footer';
-// import DevTools from '../components/devtools';
-import { AllEntries } from '../model/entries.model';
-import { BlogPostModel } from '../model/blogpost.model';
-import { Page } from '../model/page.model';
-import { getAllEntries } from '../helper';
+import React, { ReactNode, useState, useEffect } from "react";
+import { Page } from "../model/page.model";
 
 type Props = {
   children?: ReactNode;
   page: Page;
-  header: HeaderModel;
-  footer: FooterModel;
   entries: Page[];
-  blogList: BlogPostModel[];
-  blogPost: BlogPostModel;
 };
 
-export default function Layout({
-  children,
-  page,
-  header,
-  footer,
-  blogList,
-  blogPost,
-  entries,
-}: Props) {
-  const [getLayout, setLayout] = useState({ header, footer });
-
-  let jsonPreview = {
-    header: header,
-    footer: footer,
-  };
-  if (page) jsonPreview['page'] = page;
-  if (blogList) jsonPreview['blogList'] = blogList;
-  if (blogPost) jsonPreview['blogPost'] = blogPost;
+export default function Layout({ children, page, entries }: Props) {
+  let jsonPreview = {};
+  if (page) jsonPreview["page"] = page;
 
   function buildNavigation(ent, hd, ft) {
     let newHeader = { ...hd };
@@ -71,19 +43,5 @@ export default function Layout({
     return [newHeader, newFooter];
   }
 
-  useEffect(() => {
-    if (footer && header && entries) {
-      const [newHeader, newFooter] = buildNavigation(entries, header, footer);
-      setLayout({ header: newHeader, footer: newFooter });
-    }
-  }, [header, footer]);
-
-  return (
-    <>
-      <Header header={getLayout.header} entries={entries} />
-      {/* <DevTools response={jsonPreview} /> */}
-      {children}
-      <Footer footer={getLayout.footer} entries={entries} />
-    </>
-  );
+  return <>{children}</>;
 }

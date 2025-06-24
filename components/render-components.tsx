@@ -4,7 +4,6 @@ import { ComponentMap } from "../helper/component-factory";
 
 interface RenderProps {
   pageComponents: Page;
-  blogPost?: any;
   entryUid: string;
   contentTypeUid: string;
   locale: string;
@@ -12,7 +11,6 @@ interface RenderProps {
 
 export default function RenderComponents({
   pageComponents,
-  blogPost,
   entryUid,
   contentTypeUid,
   locale,
@@ -38,7 +36,7 @@ export default function RenderComponents({
         }
         return (
           <div key={index} data-component-type={componentType}>
-            {renderComponent(component, blogPost)}
+            {renderComponent(component)}
           </div>
         );
       })}
