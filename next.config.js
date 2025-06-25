@@ -31,6 +31,9 @@ const nextConfig = {
   pwa: {
     dest: "public",
   },
+  images: {
+    domains: ["images.contentstack.io"],
+  },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
 
