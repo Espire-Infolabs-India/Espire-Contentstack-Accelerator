@@ -146,7 +146,6 @@ export async function getEntryByUid(contentTypeUid, entryUid) {
 
 export async function getAllEntriesByContentType(contentTypeUid) {
   const Query = Stack.ContentType(contentTypeUid).Query();
-  console.log("Query", Query);
   Query.toJSON().includeCount();
 
   try {

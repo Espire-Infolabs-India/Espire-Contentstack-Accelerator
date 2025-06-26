@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { GET_ALL_BLOG_POSTS_QUERY } from "../utils/graphql/query";
 import { executeGraphQLQuery } from "../contentstack-sdk";
-import BlogCards, { BlogEntry } from "../components/blogcards";
+import BlogCards, { BlogEntry } from "./blogcards";
 
-export default function GraphQLListing() {
+export default function BlogListing() {
   const [entries, setEntries] = useState<BlogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,15 +17,15 @@ export default function GraphQLListing() {
         const items = response?.data?.all_blog_post?.items || [];
 
         const mappedEntries: BlogEntry[] = items.map((item: any) => ({
-          title: item.title,
-          description: item.description,
-          url: item.url,
+          title: item?.title,
+          description: item?.description,
+          url: item?.url,
           featured_image: {
-            url: item.featured_imageConnection?.edges?.[0]?.node?.url || "",
+            url: item?.featured_imageConnection?.edges?.[0]?.node?.url || "",
           },
-          tags: item.system?.tags || [],
+          tags: item?.system?.tags || [],
           publish_details: {
-            time: item.system?.publish_details?.time || "",
+            time: item?.system?.publish_details?.time || "",
           },
         }));
 

@@ -24,30 +24,30 @@ export default function BlogCards({ blogs }: Props) {
     <>
       <h1 className="blog-heading">All Blog Post</h1>
       <div className="blog-container">
-        {blogs.map((blog, index) => (
-          <div className="blog-card" key={blog.uid || index}>
-            <Link href={blog.url || "#"}>
+        {blogs?.map((blog, index) => (
+          <div className="blog-card" key={blog?.uid || index}>
+            <Link href={blog?.url || "#"}>
               <div className="blog-inner">
-                {blog.featured_image?.url && (
+                {blog?.featured_image?.url && (
                   <div className="blog-card-image">
                     <Image
-                      src={blog.featured_image.url}
-                      alt={blog.title || "Blog Image"}
+                      src={blog?.featured_image?.url}
+                      alt={blog?.title || "Blog Image"}
                       layout="fill"
                       objectFit="cover"
                     />
                   </div>
                 )}
                 <div className="blog-card-body">
-                  <h3 className="blog-title">{blog.title}</h3>
+                  <h3 className="blog-title">{blog?.title}</h3>
                   <p className="blog-description">
-                    {blog.description || "No description available."}
+                    {blog?.description || "No description available."}
                   </p>
                   <div className="blog-meta">
                     <span className="blog-date">
-                      {blog.publish_details?.time
+                      {blog?.publish_details?.time
                         ? new Date(
-                            blog.publish_details.time
+                            blog?.publish_details?.time
                           ).toLocaleDateString("en-US", {
                             year: "numeric",
                             month: "short",
@@ -56,7 +56,7 @@ export default function BlogCards({ blogs }: Props) {
                         : "Invalid Date"}
                     </span>
                     <div className="blog-tags">
-                      {(blog.tags?.length ? blog.tags : ["Technology"]).map(
+                      {(blog?.tags?.length ? blog?.tags : ["Technology"]).map(
                         (tag) => (
                           <span key={tag} className="tag-pill">
                             {tag}

@@ -20,7 +20,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     const [entries] = await Query.find();
 
     const paths = entries.map((entry: any) => {
-      const cleanSlug = entry.url.replace(/^\/blog\//, "");
+      const cleanSlug = entry?.url?.replace(/^\/blog\//, "");
       return {
         params: { slug: cleanSlug },
       };

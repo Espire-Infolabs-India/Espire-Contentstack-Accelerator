@@ -16,7 +16,7 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
   } = blog;
 
   const formattedDate = publish_details?.time
-    ? new Date(publish_details.time).toLocaleDateString("en-US", {
+    ? new Date(publish_details?.time).toLocaleDateString("en-US", {
         year: "numeric",
         month: "short",
         day: "numeric",
