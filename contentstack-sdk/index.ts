@@ -6,6 +6,7 @@ import {
   initializeContentStackSdk,
   isValidCustomHostUrl,
 } from "./utils";
+import axios from "axios";
 
 type GetEntry = {
   contentTypeUid: string;
@@ -143,16 +144,48 @@ export async function getEntryByUid(contentTypeUid, entryUid) {
   }
 }
 
-export const getAllBlogEntries = async () => {
-  const Query = Stack.ContentType("blog_post").Query();
-  console.log("Query", Query);
+export async function getAllEntriesByContentType(contentTypeUid) {
+  const Query = Stack.ContentType(contentTypeUid).Query();
   Query.toJSON().includeCount();
 
   try {
     const [entries] = await Query.find();
     return entries;
   } catch (err) {
-    console.error("Error fetching blog entries:", err);
+    console.error("Error fetching entries:", err);
     return [];
   }
-};
+}
+
+export async function executeGraphQLQuery(graphQLQuery) {
+  const API_KEY = process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY;
+  const DELIVERY_TOKEN = process.env.NEXT_PUBLIC_CONTENTSTACK_DELIVERY_TOKEN;
+  const ENVIRONMENT = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT;
+  if (!API_KEY || !DELIVERY_TOKEN || !ENVIRONMENT) {
+    throw new Error("Missing Contentstack env variables");
+  }
+
+  const graphqlEndpoint = `https://graphql.contentstack.com/stacks/${API_KEY}?environment=${ENVIRONMENT}`;
+
+  const query = graphQLQuery;
+
+  try {
+    const response = await axios.post(
+      graphqlEndpoint,
+      { query },
+      {
+        headers: {
+          access_token: DELIVERY_TOKEN,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    console.error(
+      "GraphQL fetch failed:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+}
