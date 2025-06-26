@@ -5,6 +5,7 @@ import LinkList from "./linklist";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBox from "./searchbox";
+import LanguageSelector from "./languageselector";
 
 type ReferenceEntry = {
   uid: string;
@@ -22,6 +23,7 @@ type NavigationEntry = {
   title: string;
   url: string;
   sub_links?: ReferenceEntry[] | SubLink[];
+  reference?: ReferenceEntry[] | SubLink[];
 };
 
 type HeaderContentType = {
@@ -47,16 +49,17 @@ export default function Header() {
       const headerEntry = entries?.[0] as HeaderContentType | undefined;
       if (!headerEntry) return;
       setHeader(headerEntry);
-      if (headerEntry.primary_navigation?.length) {
+      if (headerEntry?.primary_navigation?.length) {
         const resolvedPrimary = await Promise.all(
-          headerEntry.primary_navigation.map(async (ref: ReferenceEntry) => {
+          headerEntry?.primary_navigation.map(async (ref) => {
             const navItem = (await getEntryByUid(
               ref._content_type_uid,
               ref.uid
             )) as NavigationEntry;
-            if (Array.isArray(navItem.sub_links)) {
+
+            if (Array.isArray(navItem?.sub_links)) {
               navItem.sub_links = await Promise.all(
-                navItem.sub_links.map(async (sub: any) => {
+                navItem?.sub_links.map(async (sub: any) => {
                   if (sub.uid && sub._content_type_uid) {
                     return await getEntryByUid(sub._content_type_uid, sub.uid);
                   }
@@ -71,36 +74,50 @@ export default function Header() {
 
         setPrimaryNavItems(resolvedPrimary.filter(Boolean));
       }
-      if (headerEntry.secondary_navigation?.length) {
+      if (headerEntry?.secondary_navigation?.length) {
         const resolvedSecondary = await Promise.all(
-          headerEntry.secondary_navigation.map(
-            (ref: ReferenceEntry) =>
-              getEntryByUid(
-                ref._content_type_uid,
-                ref.uid
-              ) as Promise<NavigationEntry>
-          )
+          headerEntry?.secondary_navigation.map(async (ref) => {
+            const navItem = (await getEntryByUid(
+              ref._content_type_uid,
+              ref.uid
+            )) as NavigationEntry;
+
+            if (Array.isArray(navItem?.reference)) {
+              navItem.reference = await Promise.all(
+                navItem?.reference.map(async (sub: any) => {
+                  if (sub.uid && sub._content_type_uid) {
+                    return await getEntryByUid(sub._content_type_uid, sub.uid);
+                  }
+                  return sub;
+                })
+              );
+            }
+
+            return navItem;
+          })
         );
+
         setSecondaryNavItems(resolvedSecondary.filter(Boolean));
       }
     }
 
     fetchHeaderAndReferences();
   }, []);
+
   if (!header) return null;
+
   return (
     <div className="bg-blue-900 text-white">
       <header className="container mx-auto px-4 py-3">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
-          {/* Left: Logo + Search */}
           <div className="flex items-center gap-4 w-full lg:w-auto">
-            {header.logo?.url && (
+            {header?.logo?.url && (
               <Link href="/">
                 <Image
                   src={
-                    header.logo.url.startsWith("//")
-                      ? `https:${header.logo.url}`
-                      : header.logo.url
+                    header?.logo?.url.startsWith("//")
+                      ? `https:${header?.logo?.url}`
+                      : header?.logo?.url
                   }
                   width={120}
                   height={60}
@@ -113,27 +130,26 @@ export default function Header() {
               <SearchBox />
             </div>
           </div>
-
-          {/* Right: Secondary Nav + Language Dropdown */}
-          <div className="flex items-center gap-4">
-            <LinkList links={secondaryNavItems} />
-            <select className="bg-white text-black rounded-md px-3 py-1 shadow-sm text-sm">
-              <option value="en">English</option>
-              <option value="de">Deutsch</option>
-            </select>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            {secondaryNavItems?.map((item) => (
+              <LinkList
+                key={item?.uid}
+                title={item?.title}
+                links={item?.reference as SubLink[]}
+              />
+            ))}
+            <LanguageSelector />
           </div>
         </div>
-
-        {/* Bottom: Primary Nav */}
         <nav className="mt-4">
           <ul className="flex gap-6 justify-center text-base font-medium">
-            {primaryNavItems.map((navItem) => (
+            {primaryNavItems?.map((navItem) => (
               <NavigationItem
-                key={navItem.uid}
-                uid={navItem.uid}
-                url={navItem.url}
-                title={navItem.title}
-                sub_links={navItem.sub_links as SubLink[]}
+                key={navItem?.uid}
+                uid={navItem?.uid}
+                url={navItem?.url}
+                title={navItem?.title}
+                sub_links={navItem?.sub_links as SubLink[]}
               />
             ))}
           </ul>
