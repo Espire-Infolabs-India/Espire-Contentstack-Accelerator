@@ -5,16 +5,16 @@ import Header from "./header";
 type Props = {
   children?: ReactNode;
   page: Page;
-  entries: Page[];
+  header;
 };
 
-export default function Layout({ children, page, entries }: Props) {
+export default function Layout({ children, page, header }: Props) {
   let jsonPreview = {};
   if (page) jsonPreview["page"] = page;
 
   return (
     <>
-      <Header />
+      <Header data={header} />
       {children}
     </>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 export interface NavigationItemProps {
@@ -12,29 +13,28 @@ export interface NavigationItemProps {
 }
 
 export default function NavigationItem({
-  uid,
   url,
   title,
   sub_links,
 }: NavigationItemProps) {
   return (
-     <li className="relative group">
-      <a href={url} className="hover:underline">{title}</a>
+    <>
+      <Link href={url}>{title}</Link>
 
       {sub_links?.length ? (
-        <ul className="absolute left-0 top-full mt-2 hidden group-hover:block bg-white text-black shadow-lg py-2 rounded z-50 min-w-[200px]">
+        <ul className="flex flex-col lg:flex-row lg:flex-wrap static lg:absolute z-50 left-0 lg:invisible lg:group-hover:visible rounded-b bg-white shadow-lg px-2 lg:px-0 mt-2 w-full">
           {sub_links.map((sub) => (
-            <li key={sub.uid}>
-              <a
+            <li key={sub.uid} className="last:border-none">
+              <Link
                 href={sub.url}
-                className="block px-4 py-2 hover:bg-blue-100"
+                className="block p-2 text-black lg:px-10 lg:py-4"
               >
                 {sub.title}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
       ) : null}
-    </li>
+    </>
   );
 }
