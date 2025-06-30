@@ -40,9 +40,16 @@ export default function BlogCards({ blogs }: Props) {
                 )}
                 <div className="blog-card-body">
                   <h3 className="blog-title">{blog?.title}</h3>
-                  <p className="blog-description">
-                    {blog?.description || "No description available."}
-                  </p>
+                  {blog?.description && (
+                    <div
+                      className="blog-description"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          blog?.description || "No description available.",
+                      }}
+                    />
+                  )}
+
                   <div className="blog-meta">
                     <span className="blog-date">
                       {blog?.publish_details?.time

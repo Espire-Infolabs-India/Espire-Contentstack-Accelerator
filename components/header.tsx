@@ -4,6 +4,7 @@ import LinkList from "./linklist";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBox from "./searchbox";
+import LanguageSelector from "./languageselector";
 
 type ReferenceEntry = {
   uid: string;
@@ -58,6 +59,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                 title={data?.quick_links?.title as string}
                 links={data?.quick_links?.link_list || []}
               />
+              <LanguageSelector/>
             </div>
           </div>
 
