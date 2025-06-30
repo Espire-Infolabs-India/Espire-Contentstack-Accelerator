@@ -20,12 +20,8 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
 
   async function fetchData() {
     try {
-      console.info("fetching live preview data...");
       const entryRes = await getPageRes(pageUrl);
       const [entries] = await fetchReferencePaths("page");
-      console.log("Onlu filter", entries);
-
-      console.log("Entry Response:", entryRes);
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
