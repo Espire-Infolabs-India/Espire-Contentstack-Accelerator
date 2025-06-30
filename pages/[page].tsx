@@ -4,15 +4,18 @@ import { getAllEntries, getPageRes } from "../helper";
 import RenderComponents from "../components/render-components";
 import { Page } from "../model/page.model";
 import { AllEntries } from "../model/entries.model";
-import { onEntryChange } from "../contentstack-sdk";
+import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
+import Layout from "../components/layout";
 
 interface PageProps {
   page: Page;
   pageUrl: string;
+  header;
+  footer;
 }
 
-const Pages: NextPage<PageProps> = ({ page, pageUrl }) => {
+const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   const [getEntry, setEntry] = useState(page);
 
   async function fetchData() {
@@ -29,15 +32,19 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl }) => {
     onEntryChange(fetchData);
   }, [page]);
 
-  return getEntry ? (
-    <RenderComponents
-      pageComponents={getEntry}
-      entryUid={getEntry?.uid}
-      contentTypeUid="page"
-      locale={getEntry?.locale}
-    />
-  ) : (
-    <Skeleton height={300} count={3} />
+  return (
+    <Layout page={page} header={header} footer={footer} entries={[]}>
+      {getEntry ? (
+        <RenderComponents
+          pageComponents={getEntry}
+          entryUid={getEntry?.uid}
+          contentTypeUid="page"
+          locale={getEntry?.locale}
+        />
+      ) : (
+        <Skeleton height={300} count={3} />
+      )}
+    </Layout>
   );
 };
 
@@ -60,6 +67,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
+    const entries = await getAllEntriesByContentType("header");
+    const header = entries?.[0] || null;
+
+    const footerentries = await getAllEntriesByContentType("footer");
+    const footer = footerentries?.[0] || null;
     if (!params || !params.page) return { props: { page: {}, pageUrl: "" } };
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
@@ -70,6 +82,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       props: {
         page: res,
         pageUrl: paramsPath,
+        header,
+        footer,
       },
       revalidate: 1000,
     };

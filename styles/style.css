@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 /* Blog Listing CSS */
 .blog-container {
   display: flex;
@@ -199,4 +204,119 @@
 .blog-landing-page-body a {
   color: #0070f3;
   text-decoration: underline;
+}
+
+
+/* site1.css */
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --royalblue: #203b72;
+}
+
+* {
+  outline: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --royalblue: #203b72;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer base {
+  h1 {
+    @apply text-6xl font-extrabold;
+  }
+  h2 {
+    @apply text-5xl font-extrabold;
+  }
+  h3 {
+    @apply text-4xl font-bold;
+  }
+  h4,
+  .h4 {
+    @apply text-3xl font-bold;
+  }
+  h5,
+  .h5 {
+    @apply text-2xl font-bold;
+  }
+  main ul {
+    @apply list-disc pl-5;
+  }
+  main ol {
+    @apply list-decimal pl-5;
+  }
+  main p {
+    @apply text-[16px];
+  }
+  main a {
+    @apply text-[var(--royalblue)] hover:underline;
+  }
+  footer {
+    @apply mt-0;
+  }
+}
+
+@layer components {
+  main aside ul,
+  main .ais-Pagination ul {
+    @apply list-none;
+  }
+
+  main aside ul li input {
+    @apply mx-2;
+  }
+
+  main ul:has(.link-list) {
+    @apply list-none p-0;
+  }
+
+  .no-found {
+    @apply bg-white flex items-center justify-center border border-red-100;
+  }
+
+  .cover-not-found {
+    @apply w-4/5 h-auto my-10 md:w-1/2 bg-slate-100 flex flex-col items-center justify-center p-8;
+  }
+
+  .top-menu > ul > li:last-child > a {
+    @apply px-2;
+  }
+
+  main .blue-box a {
+    color: white;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1279px) {
+  .container {
+    max-width: 1068px;
+  }
+
+  .top-menu > ul > li:last-child > a {
+    @apply px-2;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1900px) {
+  .container {
+    max-width: 1536px;
+  }
 }

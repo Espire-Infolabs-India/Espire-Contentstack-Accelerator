@@ -1,11 +1,11 @@
 import Layout from "../components/layout";
 import App from "next/app";
 import Head from "next/head";
-import Router from "next/router";
 import { AllEntries } from "../model/entries.model";
 import { getAllEntries } from "../helper";
-
 import "../styles/style.css";
+import "../styles/global/footer.css";
+import "../styles/global/header.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "@contentstack/live-preview-utils/dist/main.css";
 
@@ -37,7 +37,7 @@ function MyApp(props) {
         <meta name="theme-color" content="#317EFB" />
         <title>Contentstack-Nextjs-SSG-Starter-App</title>
       </Head>
-      <Layout page={page} entries={entries}>
+      <Layout page={page} entries={entries} header={header} footer={footer}>
         <Component {...pageProps} />
       </Layout>
     </>
