@@ -1,3 +1,5 @@
+const secuityHeadersConfig = require("./utils/common/headers");
+
 const withPWA = require("next-pwa")({
   dest: "public",
 });
@@ -33,6 +35,17 @@ const nextConfig = {
   },
   images: {
     domains: ["images.contentstack.io"],
+  },
+  async headers() {
+    return secuityHeadersConfig();
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/robots.txt",
+        destination: "/api/robots",
+      },
+    ];
   },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
