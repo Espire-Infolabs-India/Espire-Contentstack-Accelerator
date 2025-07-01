@@ -27,7 +27,6 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
       console.error(error);
     }
   }
-console.log("Get ENtry", getEntry)
   useEffect(() => {
     onEntryChange(fetchData);
   }, []);

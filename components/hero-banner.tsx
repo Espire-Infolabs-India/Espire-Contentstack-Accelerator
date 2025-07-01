@@ -6,7 +6,6 @@ import CTA from "./cta";
 import { HeroBanner } from "../model/component-props/hero-banner.model";
 
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
-  console.log("Her Nammer", hero_banner);
   return (
     <div
       className="hero-banner"
