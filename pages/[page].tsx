@@ -21,7 +21,7 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
-      const entryRes = await getPageRes(pageUrl);
+      const entryRes = await getPageRes(pageUrl, 'page');
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
       : `/${params?.page}`;
-    const res: Page = await getPageRes(`${paramsPath}`);
+    const res: Page = await getPageRes(`${paramsPath}`,'page');
     if (!res) throw "Error 404";
     return {
       props: {

@@ -1,4 +1,5 @@
 import { Reference } from "react";
+import { HeroBanner } from "./component-props/hero-banner.model";
 
 export interface Img {
   $: any;
@@ -12,13 +13,6 @@ export interface Link {
   title: string;
   href: string;
 }
-export interface HeroBanner {
-  $: any;
-  banner_title: string;
-  banner_image: Img;
-  banner_description: string;
-  cta: Reference;
-}
 
 export interface Page {
   $: any;
@@ -29,7 +23,6 @@ export interface Page {
   page_components: [
     {
       _content_type_uid: string;
-
       hero_banner: HeroBanner;
     }
   ];

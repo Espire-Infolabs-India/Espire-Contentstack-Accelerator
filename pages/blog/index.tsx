@@ -51,7 +51,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const footerentries = await getAllEntriesByContentType("footer");
   const footer = footerentries?.[0] || null;
   const blogs = await getAllEntriesByContentType("blog_post");
-  const res: Page = await getPageRes("/");
+  const res: Page = await getPageRes("/",'page');
 
   if (!res) throw new Error("Not found");
   return {
