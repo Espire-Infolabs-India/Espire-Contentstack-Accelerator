@@ -1,16 +1,31 @@
 import { GetStaticProps, GetStaticPaths } from "next";
 import { initializeContentStackSdk } from "../../contentstack-sdk/utils";
 import BlogDetailPage from "../../components/blogdetailpage";
+import { getAllEntriesByContentType } from "../../contentstack-sdk";
+import Skeleton from "react-loading-skeleton";
+import Layout from "../../components/layout";
 
 const Stack = initializeContentStackSdk();
 
-export default function BlogDetail({ blog }: { blog: any }) {
+export default function BlogDetail({
+  blog,
+  page,
+  pageUrl,
+  header,
+  footer,
+}: {
+  blog: any;
+  page: any;
+  pageUrl: any;
+  header: any;
+  footer: any;
+}) {
   if (!blog)
     return <div className="blog-landing-page-container">Blog Not Found</div>;
   return (
-    <>
-      <BlogDetailPage blog={blog} />;
-    </>
+    <Layout page={page} header={header} footer={footer} entries={[]}>
+      {blog ? <BlogDetailPage blog={blog} /> : <Skeleton />}
+    </Layout>
   );
 }
 
@@ -58,9 +73,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     const [entries] = await Query.find();
     const blog = entries[0] || null;
+    const headerentries = await getAllEntriesByContentType("header");
+    const header = headerentries?.[0] || null;
 
+    const footerentries = await getAllEntriesByContentType("footer");
+    const footer = footerentries?.[0] || null;
     return {
-      props: { blog },
+      props: { blog, header, footer },
       revalidate: 60,
     };
   } catch (error) {
