@@ -15,10 +15,7 @@ interface PageProps {
 }
 
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
-
-  console.log("Page" , page)
   const [getEntry, setEntry] = useState(page);
-
   async function fetchData() {
     try {
       const entryRes = await getPageRes(pageUrl,"page");
