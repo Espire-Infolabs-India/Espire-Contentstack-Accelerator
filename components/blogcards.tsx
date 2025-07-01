@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
+import parse from "html-react-parser";
 export type BlogEntry = {
   title?: string;
   url?: string;
@@ -48,12 +48,9 @@ export default function BlogCards({ blogs }: Props) {
                 </h3>
 
                 {blog?.description && (
-                  <div
-                    className="text-sm text-gray-600 line-clamp-3"
-                    dangerouslySetInnerHTML={{
-                      __html: blog?.description || "No description available.",
-                    }}
-                  />
+                  <div className="text-sm text-gray-600 line-clamp-3">
+                    {parse(blog?.description)}
+                  </div>
                 )}
 
                 <div className="flex justify-between items-center mt-auto pt-2 text-sm text-gray-500">

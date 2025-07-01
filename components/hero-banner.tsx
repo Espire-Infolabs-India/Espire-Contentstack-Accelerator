@@ -2,7 +2,7 @@ import React from "react";
 import CTA from "./cta";
 import { HeroBanner } from "../model/component-props/hero-banner.model";
 import Head from "next/head";
-
+import parse from "html-react-parser";
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
   return (
     <section className="relative w-full bg-black overflow-hidden">
@@ -34,15 +34,11 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
             {hero_banner?.banner_title}
           </h2>
           {hero_banner?.banner_description && (
-            <h3
-              className="mb-6 text-lg sm:text-xl font-semibold px-5"
-              dangerouslySetInnerHTML={{
-                __html:
-                  hero_banner?.banner_description ||
-                  "No description available.",
-              }}
-            />
+            <div className="mb-6 text-lg sm:text-xl font-semibold px-5">
+              {parse(hero_banner?.banner_description)}
+            </div>
           )}
+
           <CTA cta={hero_banner?.call_to_action} />
         </div>
       </div>

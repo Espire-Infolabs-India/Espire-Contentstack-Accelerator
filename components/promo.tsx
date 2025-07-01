@@ -9,7 +9,9 @@ export default function Promo(data: PromoProps) {
 
   const renderTitleAndDescription = () => (
     <>
-      <h2 className="text-3xl font-semibold mb-4 font-poppins">{data?.title}</h2>
+      <h2 className="text-3xl font-semibold mb-4 font-poppins">
+        {data?.title}
+      </h2>
       {data?.description && (
         <div
           className="mt-4 text-base font-poppins"
@@ -31,7 +33,14 @@ export default function Promo(data: PromoProps) {
           }`}
         >
           {imageUrl && (
-            <Image src={imageUrl} width={600} height={400} alt={altText} />
+            <Image
+              src={imageUrl}
+              width={600}
+              height={400}
+              alt={altText}
+              style={{ width: "auto", height: "auto" }}
+              priority
+            />
           )}
         </div>
 
@@ -57,6 +66,8 @@ export default function Promo(data: PromoProps) {
               width={400}
               height={101}
               alt={altText}
+              style={{ width: "auto", height: "auto" }}
+              priority
             />
           )}
           <h2 className="text-2xl sm:text-5xl mb-4 font-poppin">

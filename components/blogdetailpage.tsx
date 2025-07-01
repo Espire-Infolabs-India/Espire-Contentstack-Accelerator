@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import parse from "html-react-parser";
 export default function BlogDetailPage({ blog }: { blog: any }) {
   if (!blog) {
     return (
@@ -49,12 +49,9 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20">
         <div className="bg-white p-8 shadow-xl rounded-lg relative z-10">
           {summary && (
-            <div
-              className="text-lg text-gray-600 mb-6 leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html: summary,
-              }}
-            />
+            <div className="text-lg text-gray-600 mb-6 leading-relaxed">
+              {parse(summary)}
+            </div>
           )}
 
           {title && (
@@ -64,9 +61,9 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
           )}
 
           {description && (
-            <p className="text-base text-gray-700 leading-7 whitespace-pre-line">
-              {description}
-            </p>
+            <div className="text-base text-gray-700 leading-7 whitespace-pre-line">
+              {parse(description)}
+            </div>
           )}
 
           <div className="mt-8 flex flex-wrap gap-3">

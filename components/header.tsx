@@ -45,6 +45,8 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                   height={70}
                   alt="Logo"
                   className="mr-4"
+                  style={{ width: "auto", height: "auto" }}
+                  priority // Only if it's in the header or above-the-fold
                 />
               </Link>
             )}
