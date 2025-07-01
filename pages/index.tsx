@@ -5,7 +5,6 @@ import RenderComponents from "../components/render-components";
 import { Page } from "../model/page.model";
 import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
-import { fetchReferencePaths } from "../contentstack-sdk/generateReferences";
 import Layout from "../components/layout";
 
 interface PageProps {
@@ -16,12 +15,12 @@ interface PageProps {
 }
 
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
+
   const [getEntry, setEntry] = useState(page);
 
   async function fetchData() {
     try {
       const entryRes = await getPageRes(pageUrl);
-      const [entries] = await fetchReferencePaths("page");
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -54,6 +53,8 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const entries = await getAllEntriesByContentType("header");
     const header = entries?.[0] || null;
+
+  
 
     const footerentries = await getAllEntriesByContentType("footer");
     const footer = footerentries?.[0] || null;

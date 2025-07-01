@@ -1,46 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import LinkList from "../components/linklist";
-import SocialMedia from "../components/socialmedia";
+import LinkList from "./link-list";
 import Separator from "./seperator";
-
-type ReferenceEntry = {
-  uid: string;
-  _content_type_uid: string;
-};
-
-type LinkListBlock = {
-  links: {
-    title: string;
-    page_reference: ReferenceEntry[];
-    open_in_new_tab: boolean;
-  };
-};
-
-type SocialMediaShare = {
-  icon: {
-    url: string;
-  };
-  title: string;
-  url: {
-    href: string;
-  };
-};
-
-type FooterContentType = {
-  uid: string;
-  title?: string;
-  logo?: { url: string };
-  address?: string;
-  copyright_text?: string;
-  quick_links?: {
-    title: string;
-    link_list: LinkListBlock[];
-  };
-  social_media?: {
-    social_media_share: SocialMediaShare[];
-  };
-};
+import SocialMediaShare from "./social-media-share";
+import { FooterContentType } from "../model/component-props/footer.model";
 
 export default function Footer({ data }: { data?: FooterContentType }) {
   if (!data) return null;
@@ -82,9 +45,8 @@ export default function Footer({ data }: { data?: FooterContentType }) {
               className="text-sm text-white text-center lg:text-left mb-5 lg:mb-0"
               dangerouslySetInnerHTML={{ __html: data.address }}
             />
-
             <div className="flex flex-col gap-12 mb-5 lg:mb-0">
-              <SocialMedia
+              <SocialMediaShare
                 items={data?.social_media?.social_media_share || []}
               />
             </div>

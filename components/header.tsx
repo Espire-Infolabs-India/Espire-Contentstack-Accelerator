@@ -1,48 +1,15 @@
 import { useEffect, useState } from "react";
-import NavigationItem from "../components/navigationitem";
-import LinkList from "./linklist";
+import NavigationItem from "./navigation";
+import LinkList from "./link-list";
 import Link from "next/link";
 import Image from "next/image";
 import SearchBox from "./searchbox";
 import LanguageSelector from "./languageselector";
-
-type ReferenceEntry = {
-  uid: string;
-  _content_type_uid: string;
-};
-
-type LinkListBlock = {
-  links: {
-    title: string;
-    page_reference: ReferenceEntry[];
-    open_in_new_tab: boolean;
-  };
-};
-
-type Navigation = {
-  navigation: {
-    title: string;
-    navigation_link: ReferenceEntry[];
-    sub_navigation: ReferenceEntry[];
-  };
-};
-
-type HeaderContentType = {
-  uid: string;
-  title?: string;
-  logo?: {
-    url: string;
-  };
-  quick_links?: {
-    title: string;
-    link_list: LinkListBlock[];
-  };
-  navigation_menu: Navigation[];
-};
+import { HeaderContentType } from "../model/component-props/header.model";
+import Navigation from "./navigation";
 
 export default function Header({ data }: { data?: HeaderContentType }) {
   const [ActiveValue, setActiveValue] = useState(false);
-
   const HumbargarOpen = () => setActiveValue(true);
   const HumbargarClose = () => setActiveValue(false);
 
@@ -59,7 +26,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                 title={data?.quick_links?.title as string}
                 links={data?.quick_links?.link_list || []}
               />
-              <LanguageSelector/>
+              <LanguageSelector />
             </div>
           </div>
 
@@ -81,19 +48,14 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                 />
               </Link>
             )}
-
             {/* Search + Navigation */}
             <div className="flex items-center justify-evenly gap-8">
               <SearchBox />
-
               <nav className="hidden relative lg:block header-menu-font-size top-menu">
                 <ul className="flex [&_a]:px-6">
-                  {data.navigation_menu?.map((nav, index) => (
-                    <NavigationItem key={index} navigation_menu={[nav]} />
-                  ))}
+                  <Navigation navigation_menu={data?.navigation_menu} />
                 </ul>
               </nav>
-
               {/* Mobile menu placeholder (not active) */}
               <div className="flex lg:hidden relative">
                 {/* Add hamburger toggle logic here later if needed */}

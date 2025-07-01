@@ -144,19 +144,6 @@ export async function getEntryByUid(contentTypeUid, entryUid) {
   }
 }
 
-export async function getAllEntriesByContentType(contentTypeUid) {
-  const Query = Stack.ContentType(contentTypeUid).Query();
-  Query.toJSON().includeCount();
-
-  try {
-    const [entries] = await Query.find();
-    return entries;
-  } catch (err) {
-    console.error("Error fetching entries:", err);
-    return [];
-  }
-}
-
 export async function executeGraphQLQuery(graphQLQuery) {
   const API_KEY = process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY;
   const DELIVERY_TOKEN = process.env.NEXT_PUBLIC_CONTENTSTACK_DELIVERY_TOKEN;
@@ -187,5 +174,52 @@ export async function executeGraphQLQuery(graphQLQuery) {
       error.response?.data || error.message
     );
     throw error;
+  }
+}
+
+export async function resolveNestedEntry(entry: any): Promise<any> {
+  async function resolveDeep(obj: any): Promise<any> {
+    if (Array.isArray(obj)) {
+      return Promise.all(obj.map(resolveDeep));
+    }
+    if (obj && typeof obj === "object") {
+      if (obj.uid && obj._content_type_uid) {
+        try {
+          const resolved = await Stack.ContentType(obj._content_type_uid)
+            .Entry(obj.uid)
+            .toJSON()
+            .fetch();
+          return resolveDeep(resolved);
+        } catch (err) {
+          console.error(
+            `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
+            err
+          );
+          return obj;
+        }
+      }
+      const resolvedObj: any = {};
+      for (const key of Object.keys(obj)) {
+        resolvedObj[key] = await resolveDeep(obj[key]);
+      }
+      return resolvedObj;
+    }
+    return obj;
+  }
+  return await resolveDeep(entry);
+}
+
+export async function getAllEntriesByContentType(contentTypeUid) {
+  const Query = Stack.ContentType(contentTypeUid).Query();
+  Query.toJSON().includeCount();
+  try {
+    const [entries] = await Query.find();
+    const resolvedEntries = await Promise.all(
+      entries.map((entry) => resolveNestedEntry(entry))
+    );
+    return resolvedEntries;
+  } catch (err) {
+    console.error("❌ Error fetching entries:", err);
+    return [];
   }
 }
