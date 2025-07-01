@@ -1,22 +1,9 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SocialMediaProps } from "../model/component-props/social-media-share.model";
 
-type SocialMediaShare = {
-  icon: {
-    url: string;
-  };
-  title: string;
-  url: {
-    href: string;
-  };
-};
-
-interface SocialMediaProps {
-  items: SocialMediaShare[];
-}
-
-const SocialMedia = ({ items }: SocialMediaProps) => {
+const SocialMediaShare = ({ items }: SocialMediaProps) => {
   if (!Array.isArray(items) || !items.length) {
     console.error("Expected 'items' to be an array but got:", items);
     return null;
@@ -58,4 +45,4 @@ const SocialMedia = ({ items }: SocialMediaProps) => {
   );
 };
 
-export default SocialMedia;
+export default SocialMediaShare;
