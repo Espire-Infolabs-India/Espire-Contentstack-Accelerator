@@ -1,29 +1,24 @@
 import React from "react";
 import Link from "next/link";
-import type { CTA } from "../model/page.model";
-import Skeleton from "react-loading-skeleton";
+import { CTAProps } from "../model/component-props/cta-model";
 
-interface CTAProps {
-  cta: CTA;
-}
+export default function CTA({ cta }: { cta: CTAProps }) {
+  const page = cta?.page_reference?.[0]; // take the first entry
+  const url = page?.url;
+  const title = cta?.cta_title || "Learn More";
 
-export default function CTA({ cta }: CTAProps) {
-  const reference = cta?.cta_url?.[0];
+  if (!url) return null;
 
   return (
-    <></>
-    // <div className="p-4 border rounded-lg shadow-md bg-white">
-    //   {linkedEntry ? (
-    //     <div className="mt-2">
-    //       {linkedEntry.url && (
-    //         <Link href={linkedEntry?.url}>
-    //           <span className="text-blue-600 underline">{cta?.cta_title}</span>
-    //         </Link>
-    //       )}
-    //     </div>
-    //   ) : (
-    //     <Skeleton width={300} />
-    //   )}
-    // </div>
+    <div className="container my-10 m-auto px-5 md:px-0">
+      <Link
+        href={url}
+        rel={cta.open_in_new_tab ? "noopener noreferrer" : undefined}
+        target={cta.open_in_new_tab ? "_blank" : "_self"}
+        className="rounded border-2 border-neutral-50 px-7 pb-[8px] pt-[10px] text-sm font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:border-neutral-100 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-100 focus:border-neutral-100 focus:text-neutral-100 focus:outline-none focus:ring-0 active:border-neutral-200 active:text-neutral-200"
+      >
+        {title}
+      </Link>
+    </div>
   );
 }

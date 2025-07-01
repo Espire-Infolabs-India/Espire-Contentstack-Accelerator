@@ -1,42 +1,52 @@
 import React from "react";
-import Link from "next/link";
-import parse from "html-react-parser";
-
 import CTA from "./cta";
 import { HeroBanner } from "../model/component-props/hero-banner.model";
+import Head from "next/head";
 
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
+  console.log("data hero_banner", hero_banner);
   return (
-    <div
-      className="hero-banner"
-      style={{
-        background: hero_banner?.background_color
-          ? hero_banner.background_color
-          : "",
-      }}
-    >
-      <div
-        className="home-content"
-        style={{ color: hero_banner?.text_color || "#222222" }}
-      >
-        {hero_banner?.banner_title && (
-          <h1 className="hero-title">{hero_banner.banner_title}</h1>
-        )}
-        {hero_banner?.banner_description && (
-          <div
-            className="hero-description"
-            style={{ color: hero_banner.text_color || "#222222" }}
-          >
-            {parse(hero_banner?.banner_description)}
-          </div>
-        )}
-      </div>
+    <section className="relative w-full bg-black overflow-hidden">
+      {hero_banner?.banner_image && (
+        <Head>
+          <link
+            rel="preload"
+            as="image"
+            href={hero_banner?.banner_image.url}
+            type="image/webp"
+          />
+        </Head>
+      )}
+
       {hero_banner?.banner_image && (
         <img
-          alt={hero_banner.banner_image.filename}
-          src={hero_banner.banner_image.url}
+          src={hero_banner?.banner_image?.url}
+          alt={hero_banner?.banner_image?.title}
+          className="object-cover w-full h-96"
+          width={1920}
+          height={720}
+          loading="eager"
         />
       )}
-    </div>
+
+      <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center px-4 md:px-0 text-center">
+        <div className="text-white z-10 max-w-3xl">
+          <h2 className="mb-4 text-2xl sm:text-4xl font-semibold">
+            {hero_banner?.banner_title}
+          </h2>
+          {hero_banner?.banner_description && (
+            <h3
+              className="mb-6 text-lg sm:text-xl font-semibold px-5"
+              dangerouslySetInnerHTML={{
+                __html:
+                  hero_banner?.banner_description ||
+                  "No description available.",
+              }}
+            />
+          )}
+          <CTA cta={hero_banner?.call_to_action} />
+        </div>
+      </div>
+    </section>
   );
 }
