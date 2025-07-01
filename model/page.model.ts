@@ -1,4 +1,3 @@
-import { Reference } from "react";
 import { HeroBanner } from "./component-props/hero-banner.model";
 
 export interface Img {
@@ -28,13 +27,3 @@ export interface Page {
   ];
 }
 
-export interface CTA {
-  $: any;
-  cta_title: string;
-  target: string;
-  banner_image: Img;
-  text_color: string;
-  call_to_action: Link;
-  banner_description: string;
-  cta_url: Reference;
-}
