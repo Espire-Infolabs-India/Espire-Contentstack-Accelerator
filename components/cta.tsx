@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CTAProps } from "../model/component-props/cta-model";
 
 export default function CTA({ cta }: { cta: CTAProps }) {
-  const page = cta?.page_reference?.[0]; // take the first entry
+  const page = cta?.page_reference?.[0];
   const url = page?.url;
   const title = cta?.cta_title || "Learn More";
 

@@ -4,7 +4,6 @@ import { HeroBanner } from "../model/component-props/hero-banner.model";
 import Head from "next/head";
 
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
-  console.log("data hero_banner", hero_banner);
   return (
     <section className="relative w-full bg-black overflow-hidden">
       {hero_banner?.banner_image && (
