@@ -16,17 +16,18 @@ interface PageProps {
 
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
 
+  console.log("Page" , page)
   const [getEntry, setEntry] = useState(page);
 
   async function fetchData() {
     try {
-      const entryRes = await getPageRes(pageUrl);
+      const entryRes = await getPageRes(pageUrl,"page");
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
     }
   }
-
+console.log("Get ENtry", getEntry)
   useEffect(() => {
     onEntryChange(fetchData);
   }, []);
@@ -51,15 +52,14 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
+
     const entries = await getAllEntriesByContentType("header");
     const header = entries?.[0] || null;
-
-  
 
     const footerentries = await getAllEntriesByContentType("footer");
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/");
+    const res: Page = await getPageRes("/" , "page");
 
     if (!res) throw new Error("Not found");
 

@@ -1,56 +1,43 @@
 import React from "react";
 import Link from "next/link";
-import { HeroBanner } from "../model/page.model";
 import parse from "html-react-parser";
-import { useReferenceEntry } from "../helper/getReferenceEntry";
+
 import CTA from "./cta";
-interface HeroProps {
-  hero_banner: HeroBanner;
-}
+import { HeroBanner } from "../model/component-props/hero-banner.model";
 
-export default function HeroBannerComponent({ hero_banner }: HeroProps) {
-  console.log("hero_banner", hero_banner);
-  const referenceEntry = hero_banner?.cta[0];
-  const {
-    entry: linkedEntry,
-    loading,
-    error,
-  } = useReferenceEntry(referenceEntry?._content_type_uid, referenceEntry?.uid);
-
+export default function HeroBannerComponent(hero_banner: HeroBanner) {
+  console.log("Her Nammer", hero_banner);
   return (
-    <div className="hero-banner1">
-      <div className="home-content1">
-        {hero_banner.banner_title && (
-          <h1 className="hero-title" {...hero_banner?.$?.banner_title}>
-            {hero_banner.banner_title}
-          </h1>
+    <div
+      className="hero-banner"
+      style={{
+        background: hero_banner?.background_color
+          ? hero_banner.background_color
+          : "",
+      }}
+    >
+      <div
+        className="home-content"
+        style={{ color: hero_banner?.text_color || "#222222" }}
+      >
+        {hero_banner?.banner_title && (
+          <h1 className="hero-title">{hero_banner.banner_title}</h1>
         )}
-        {hero_banner.banner_description ? (
+        {hero_banner?.banner_description && (
           <div
             className="hero-description"
-            style={{ color: "#222222" }}
-            {...hero_banner.$?.banner_description}
+            style={{ color: hero_banner.text_color || "#222222" }}
           >
             {parse(hero_banner?.banner_description)}
           </div>
-        ) : (
-          ""
         )}
       </div>
-      {hero_banner.banner_image ? (
-        <div>
-          <img
-            alt={hero_banner.banner_image.filename}
-            src={hero_banner.banner_image.url}
-            {...hero_banner.banner_image.$?.url}
-          />
-        </div>
-      ) : (
-        ""
+      {hero_banner?.banner_image && (
+        <img
+          alt={hero_banner.banner_image.filename}
+          src={hero_banner.banner_image.url}
+        />
       )}
-      <div>
-        <CTA cta={linkedEntry} />
-      </div>
     </div>
   );
 }

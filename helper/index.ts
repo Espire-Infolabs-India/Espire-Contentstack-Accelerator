@@ -1,4 +1,4 @@
-import Stack from "../contentstack-sdk/index";
+import Stack, { resolveNestedEntry } from "../contentstack-sdk/index";
 import { addEditableTags } from "@contentstack/utils";
 import { AllEntries } from "../model/entries.model";
 import { Page } from "../model/page.model";
@@ -22,21 +22,22 @@ export const getAllEntries = async (): Promise<AllEntries> => {
   return response[0] as AllEntries;
 };
 
-export const getPageRes = async (entryUrl: string): Promise<Page> => {
+export const getPageRes = async (
+  entryUrl: string,
+  contentTypeUid: string
+): Promise<Page> => {
   const response: Page[] = (await Stack.getEntryByUrl({
-    contentTypeUid: "page",
+    contentTypeUid,
     entryUrl,
-    referenceFieldPath: [
-      "page_components",
-      "page_components.cta",
-      "page_components.cta.cta_url",
-    ],
-    // jsonRtePath: [
-    //     'page_components.from_blog.featured_blogs.body',
-    //     'page_components.section_with_buckets.buckets.description',
-    //     'page_components.section_with_html_code.description',
-    // ],
+    referenceFieldPath: [],
   })) as Page[];
-  liveEdit && addEditableTags(response[0], "page", true);
-  return response[0] as Page;
+  if (!response?.length) throw new Error("Page not found");
+
+  const resolved = await resolveNestedEntry(response[0]);
+
+  if (liveEdit) {
+    addEditableTags(resolved, "page", true);
+  }
+
+  return resolved as Page;
 };
