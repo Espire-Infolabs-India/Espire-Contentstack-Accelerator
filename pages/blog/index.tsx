@@ -1,6 +1,10 @@
 import { GetStaticProps } from "next";
 import { getAllEntriesByContentType } from "../../contentstack-sdk/index";
 import BlogCards from "../../components/blogcards";
+import Skeleton from "react-loading-skeleton";
+import Layout from "../../components/layout";
+import { getPageRes } from "../../helper";
+import { Page } from "../../model/page.model";
 
 type BlogEntry = {
   title: string;
@@ -18,21 +22,45 @@ type BlogEntry = {
 
 type Props = {
   blogs: BlogEntry[];
+  page: Page;
+  pageUrl: string;
+  header;
+  footer;
 };
 
-export default function BlogListing({ blogs }: Props) {
+export default function BlogListing({
+  page,
+  pageUrl,
+  header,
+  footer,
+  blogs,
+}: Props) {
   return (
     <>
-      <BlogCards blogs={blogs} />;
+      <Layout page={page} header={header} footer={footer} entries={[]}>
+        {blogs ? <BlogCards blogs={blogs} /> : <Skeleton />}
+      </Layout>
     </>
   );
 }
 
 export const getStaticProps: GetStaticProps = async () => {
+  const entries = await getAllEntriesByContentType("header");
+  const header = entries?.[0] || null;
+
+  const footerentries = await getAllEntriesByContentType("footer");
+  const footer = footerentries?.[0] || null;
   const blogs = await getAllEntriesByContentType("blog_post");
+  const res: Page = await getPageRes("/");
+
+  if (!res) throw new Error("Not found");
   return {
     props: {
+      page: res,
+      pageUrl: "/blog",
       blogs,
+      header,
+      footer,
     },
     revalidate: 60,
   };

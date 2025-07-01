@@ -9,6 +9,7 @@ interface HeroProps {
 }
 
 export default function HeroBannerComponent({ hero_banner }: HeroProps) {
+  console.log("hero_banner", hero_banner);
   const referenceEntry = hero_banner?.cta[0];
   const {
     entry: linkedEntry,

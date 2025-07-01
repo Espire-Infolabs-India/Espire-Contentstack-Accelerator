@@ -41,7 +41,15 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
         {shorttitle && (
           <h2 className="blog-landing-page-title">{shorttitle}</h2>
         )}
-        {summary && <p className="blog-landing-page-summary">{summary}</p>}
+
+        {summary && (
+          <div
+            className="blog-landing-page-summary"
+            dangerouslySetInnerHTML={{
+              __html: summary || "No summary available.",
+            }}
+          />
+        )}
         <p className="blog-landing-page-date">{formattedDate}</p>
       </div>
 
