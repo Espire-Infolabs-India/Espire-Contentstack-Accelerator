@@ -4,7 +4,7 @@ import BlogDetailPage from "../../components/blogdetailpage";
 import { getAllEntriesByContentType } from "../../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../../components/layout";
-
+import { useRouter } from 'next/router';
 const Stack = initializeContentStackSdk();
 
 export default function BlogDetail({
@@ -31,6 +31,7 @@ export default function BlogDetail({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
+  
     const Query = Stack.ContentType("blog_post").Query().toJSON();
     const [entries] = await Query.find();
 
@@ -54,8 +55,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
+
+     
+
     const slug = params?.slug as string;
 
     if (!slug) {
@@ -67,16 +71,16 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const fullPath = `/blog/${slug}`;
 
     const Query = Stack.ContentType("blog_post")
-      .Query()
+      .Query().language(locale?.toLowerCase() || "en-us")
       .where("url", fullPath)
       .toJSON();
 
     const [entries] = await Query.find();
     const blog = entries[0] || null;
-    const headerentries = await getAllEntriesByContentType("header");
+    const headerentries = await getAllEntriesByContentType("header",locale);
     const header = headerentries?.[0] || null;
 
-    const footerentries = await getAllEntriesByContentType("footer");
+    const footerentries = await getAllEntriesByContentType("footer",locale);
     const footer = footerentries?.[0] || null;
     return {
       props: { blog, header, footer },

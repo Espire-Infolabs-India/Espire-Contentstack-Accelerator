@@ -47,6 +47,10 @@ const nextConfig = {
       },
     ];
   },
+  i18n: {
+    locales: ["en-US", "fr-US", "zh-CN"],
+    defaultLocale: "en-US",
+  },
   experimental: { largePageDataBytes: 128 * 100000 },
 };
 
