@@ -52,7 +52,7 @@ export default Pages;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries();
+  const entryPaths: AllEntries[] = await getAllEntries("page");
   const paths: { params: { page: string } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry.url !== "/blog" && entry.url !== "/")
