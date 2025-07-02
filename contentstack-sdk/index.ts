@@ -251,3 +251,15 @@ export async function getLocals() {
     throw new Error('Failed to load locales');
   }
 }
+
+export async function getAllContentTypes() {
+  try {
+    const contentTypes = await Stack.getContentTypes({
+      include_global_field_schema: true,
+    });
+    return contentTypes;
+  } catch (error) {
+    console.error("Error fetching content types:", error);
+    throw error;
+  }
+}

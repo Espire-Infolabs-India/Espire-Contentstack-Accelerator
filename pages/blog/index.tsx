@@ -53,7 +53,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const footerentries = await getAllEntriesByContentType("footer",locale?.toLowerCase() || "en-us");
   const footer = footerentries?.[0] || null;
   const blogs = await getAllEntriesByContentType("blog_post",locale?.toLowerCase() || "en-us");
-  const res: Page = await getPageRes("/");
+  const res: Page = await getPageRes("/",'page');
 
   if (!res) throw new Error("Not found");
   return {
