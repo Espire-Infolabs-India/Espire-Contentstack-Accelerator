@@ -1,4 +1,7 @@
-import Stack, { resolveNestedEntry } from "../contentstack-sdk/index";
+import Stack, {
+  getAllContentTypes,
+  resolveNestedEntry,
+} from "../contentstack-sdk/index";
 import { addEditableTags } from "@contentstack/utils";
 import { AllEntries } from "../model/entries.model";
 import { Page } from "../model/page.model";
@@ -11,9 +14,9 @@ const envConfig = process.env.CONTENTSTACK_API_KEY
 
 const liveEdit = envConfig.CONTENTSTACK_LIVE_EDIT_TAGS === "true";
 
-export const getAllEntries = async (): Promise<AllEntries> => {
+export const getAllEntries = async (content_type : string): Promise<AllEntries> => {
   const response: AllEntries = (await Stack.getEntry({
-    contentTypeUid: "page",
+    contentTypeUid: content_type,
     referenceFieldPath: undefined,
     jsonRtePath: undefined,
   })) as AllEntries;
@@ -41,3 +44,13 @@ export const getPageRes = async (
 
   return resolved as Page;
 };
+
+export const isPage = async (): Promise<string[]> => {
+  const response = await getAllContentTypes();
+  return (
+    response?.content_types
+      ?.filter((content_type) => content_type?.options?.is_page === true)
+      .map((content_type) => content_type?.uid)
+  );
+};
+
