@@ -65,22 +65,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
-    const entries = await getAllEntriesByContentType("header");
+    
+    const entries = await getAllEntriesByContentType("header",locale);
     const header = entries?.[0] || null;
 
-    const footerentries = await getAllEntriesByContentType("footer");
+    const footerentries = await getAllEntriesByContentType("footer",locale);
     const footer = footerentries?.[0] || null;
     if (!params || !params.page) return { props: { page: {}, pageUrl: "" } };
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
       : `/${params?.page}`;
-    const res: Page = await getPageRes(`${paramsPath}`,'page');
-    if (!res) throw "Error 404";
+      const res: Page = await getPageRes(`${paramsPath}`,'page');
+     if (!res) throw "Error 404";
     return {
       props: {
-        page: res,
+        // page: res,
         pageUrl: paramsPath,
         header,
         footer,

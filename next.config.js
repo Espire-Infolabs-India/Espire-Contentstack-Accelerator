@@ -47,7 +47,11 @@ const nextConfig = {
       },
     ];
   },
-  experimental: { largePageDataBytes: 128 * 100000 },
+  i18n: {
+    locales: ["en-us", "fr-us", "zh-cn"],
+    defaultLocale: "en-us",
+  },
+  experimental: { largePageDataBytes: 128 * 100000 } 
 };
 
 module.exports =

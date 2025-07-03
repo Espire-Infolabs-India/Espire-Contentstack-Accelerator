@@ -44,13 +44,15 @@ export default function BlogListing({
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const entries = await getAllEntriesByContentType("header");
+export const getStaticProps: GetStaticProps = async (context) => {
+
+  const { locale } = context;
+  const entries = await getAllEntriesByContentType("header",locale?.toLowerCase() || "en-us");
   const header = entries?.[0] || null;
 
-  const footerentries = await getAllEntriesByContentType("footer");
+  const footerentries = await getAllEntriesByContentType("footer",locale?.toLowerCase() || "en-us");
   const footer = footerentries?.[0] || null;
-  const blogs = await getAllEntriesByContentType("blog_post");
+  const blogs = await getAllEntriesByContentType("blog_post",locale?.toLowerCase() || "en-us");
   const res: Page = await getPageRes("/",'page');
 
   if (!res) throw new Error("Not found");

@@ -177,7 +177,7 @@ export async function executeGraphQLQuery(graphQLQuery) {
   }
 }
 
-export async function resolveNestedEntry(entry: any): Promise<any> {
+export async function resolveNestedEntry(entry: any, locales?: string): Promise<any> {
   async function resolveDeep(obj: any): Promise<any> {
     if (Array.isArray(obj)) {
       return Promise.all(obj.map(resolveDeep));
@@ -186,7 +186,7 @@ export async function resolveNestedEntry(entry: any): Promise<any> {
       if (obj.uid && obj._content_type_uid) {
         try {
           const resolved = await Stack.ContentType(obj._content_type_uid)
-            .Entry(obj.uid)
+            .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
           return resolveDeep(resolved);
@@ -209,14 +209,14 @@ export async function resolveNestedEntry(entry: any): Promise<any> {
   return await resolveDeep(entry);
 }
 
-export async function getAllEntriesByContentType(contentTypeUid) {
-  const Query = Stack.ContentType(contentTypeUid).Query();
+export async function getAllEntriesByContentType(contentTypeUid,locales?: string) {
+  const Query = Stack.ContentType(contentTypeUid).Query().language(locales?.toLowerCase() || "en-us");
   Query.toJSON().includeCount();
   try {
     const [entries] = await Query.find();
     const resolvedEntries = await Promise.all(
-      entries.map((entry) => resolveNestedEntry(entry))
-    );
+      entries.map((entry) => resolveNestedEntry(entry,locales?.toLowerCase() || "en-us"))
+    ); 
     return resolvedEntries;
   } catch (err) {
     console.error("❌ Error fetching entries:", err);
@@ -224,6 +224,33 @@ export async function getAllEntriesByContentType(contentTypeUid) {
   }
 }
 
+export async function getLocals() {
+  const API_KEY = process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY;
+  const DELIVERY_TOKEN = process.env.NEXT_PUBLIC_CONTENTSTACK_DELIVERY_TOKEN;
+  const ENVIRONMENT = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT;
+
+  if (!API_KEY || !DELIVERY_TOKEN || !ENVIRONMENT) {
+    throw new Error("Missing Contentstack env variables");
+  }
+  try {
+    const response = await fetch('https://cdn.contentstack.io/v3/locales', {
+      headers: {
+        api_key: API_KEY as string,
+        access_token: DELIVERY_TOKEN as string,
+        'Content-Type': 'application/json',
+      },
+    });
+     if (!response.ok) {
+      throw new Error(`Failed to fetch locales: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.locales;
+  } catch (error) {
+    console.error('Error fetching locales:', error);
+    throw new Error('Failed to load locales');
+  }
+}
 
 export async function getAllContentTypes() {
   try {

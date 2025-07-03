@@ -46,13 +46,16 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
 
 export default Home;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
 
-    const entries = await getAllEntriesByContentType("header");
+   
+  const { locale } = context; 
+
+    const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
 
-    const footerentries = await getAllEntriesByContentType("footer");
+    const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
     const res: Page = await getPageRes("/" , "page");
