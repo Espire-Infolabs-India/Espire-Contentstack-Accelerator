@@ -77,8 +77,8 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
       : `/${params?.page}`;
-    // const res: Page = await getPageRes(`${paramsPath}`,'page');
-    // if (!res) throw "Error 404";
+      const res: Page = await getPageRes(`${paramsPath}`,'page');
+     if (!res) throw "Error 404";
     return {
       props: {
         // page: res,

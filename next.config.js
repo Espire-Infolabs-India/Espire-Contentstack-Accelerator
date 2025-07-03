@@ -48,11 +48,10 @@ const nextConfig = {
     ];
   },
   i18n: {
-    locales: ["en-us", "fr-us", "zh-us"],
+    locales: ["en-us", "fr-us", "zh-cn"],
     defaultLocale: "en-us",
   },
-  experimental: { largePageDataBytes: 128 * 100000 },
-  staticPageGenerationTimeout: 120, // increases to 2 minutes
+  experimental: { largePageDataBytes: 128 * 100000 } 
 };
 
 module.exports =
