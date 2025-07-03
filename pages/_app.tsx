@@ -46,7 +46,7 @@ function MyApp(props) {
 
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
-  const entries: AllEntries = await getAllEntries();
+  const entries: AllEntries = await getAllEntries("page");
 
   return { ...appProps, entries };
 };
