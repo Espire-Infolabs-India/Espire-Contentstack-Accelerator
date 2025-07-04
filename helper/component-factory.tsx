@@ -19,3 +19,4 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
     <LinkList title={data?.title as string} links={data?.link_list || []} />
   ),
 };
+
