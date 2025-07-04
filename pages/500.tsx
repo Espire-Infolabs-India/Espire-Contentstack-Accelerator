@@ -43,6 +43,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         headerData,
         footerData,
       },
+      revalidate: 60,
     };
   } catch (error) {
     console.error("500 staticProps error:", error);
@@ -51,6 +52,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
         headerData: null,
         footerData: null,
       },
+      revalidate: 60,
     };
   }
 };
