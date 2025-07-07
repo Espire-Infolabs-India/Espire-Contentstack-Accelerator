@@ -3,6 +3,7 @@ import { Page } from "../model/page.model";
 import Header from "./header";
 import Footer from "./footer";
 import Head from "next/head";
+import Script from "next/script";
 
 type Props = {
   children?: ReactNode;
@@ -24,15 +25,16 @@ export default function Layout({
 
   return (
     <>
-      <Head>
-        <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"></script>
-        <script
-          id="usercentrics-cmp"
-          src="https://web.cmp.usercentrics.eu/ui/loader.js"
-          data-settings-id="WsB9MfwJE5J5uE"
-          async
-        ></script>
-      </Head>
+      <Script
+        src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
+        strategy={"beforeInteractive"}
+      ></Script>
+      <Script
+        id="usercentrics-cmp"
+        src="https://web.cmp.usercentrics.eu/ui/loader.js"
+        data-settings-id="WsB9MfwJE5J5uE"
+        strategy={"beforeInteractive"}
+      ></Script>
       <Header data={header} />
       {children}
       <Footer data={footer} />
