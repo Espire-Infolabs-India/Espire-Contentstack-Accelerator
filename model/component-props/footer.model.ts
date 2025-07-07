@@ -5,7 +5,7 @@ export type FooterContentType = {
   uid: string;
   title?: string;
   logo?: { url: string };
-  address?: string;
+  address: string;
   copyright_text?: string;
   quick_links?: {
     title: string;
@@ -14,4 +14,5 @@ export type FooterContentType = {
   social_media?: {
     social_media_share: SocialMediaShare[];
   };
+  contact: string;
 };
