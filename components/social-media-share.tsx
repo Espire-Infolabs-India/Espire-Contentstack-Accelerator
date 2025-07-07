@@ -13,7 +13,9 @@ const SocialMediaShare = (items: SocialMediaProps) => {
   }
 
   return (
-    <div className="flex items-center justify-center w-full">
+    
+
+    <div className="flex items-center justify-center sm:justify-start pl-0 w-full">
       {items?.social_media_share.map((item, index) => {
         const imageUrl = item?.icon?.url;
         const altText = item?.title || "Social Media";
@@ -28,15 +30,15 @@ const SocialMediaShare = (items: SocialMediaProps) => {
             : `https://${item?.url?.href}`;
 
         return (
-          <div className="px-4 socialmedia" key={index}>
-            <Link href={linkHref} target="_blank" title={item?.url?.href}>
+          <div className="socialmedia" key={index}>
+            <Link href={linkHref} target="_blank" title={item.url?.href}>
               {resolvedUrl ? (
                 <Image
                   src={resolvedUrl}
                   alt={altText}
-                  width={24}
-                  height={24}
-                  className="h-6 w-6"
+                  width={40}
+                  height={40}
+                 
                 />
               ) : (
                 <span className="text-white text-sm">{item?.title}</span>
