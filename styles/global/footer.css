@@ -37,6 +37,10 @@
     @apply pl-0;
   }
 
+  .contact-box {
+    @apply text-center sm:text-left;
+  }
+
   .contact-box p {
     @apply mb-2 text-[14px];
   }
