@@ -34,7 +34,7 @@ export default function Footer({ data }: { data?: FooterContentType }) {
           <div className="flex flex-col lg:flex-row items-center gap-12 text-[16px]">
             <LinkList
               title={data?.quick_links?.title as string}
-              links={data.quick_links?.link_list || []}
+              link_list={data?.quick_links?.link_list || []}
             />
           </div>
         </div>
@@ -47,7 +47,9 @@ export default function Footer({ data }: { data?: FooterContentType }) {
             />
             <div className="flex flex-col gap-12 mb-5 lg:mb-0">
               <SocialMediaShare
-                items={data?.social_media?.social_media_share || []}
+                social_media_share={
+                  data?.social_media?.social_media_share || []
+                }
               />
             </div>
           </div>

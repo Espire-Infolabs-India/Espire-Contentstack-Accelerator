@@ -12,10 +12,6 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   cta: (data) => <CTA {...data} />,
   blog_listing: () => <BlogListing />,
   seperator: () => <Seperator />,
-  social_media_share: (data) => (
-    <SocialMediaShare items={data?.social_media_share || []} />
-  ),
-  link_list: (data) => (
-    <LinkList title={data?.title as string} links={data?.link_list || []} />
-  ),
+  social_media_share: (data) => <SocialMediaShare {...data} />,
+  link_list: (data) => <LinkList {...data} />,
 };
