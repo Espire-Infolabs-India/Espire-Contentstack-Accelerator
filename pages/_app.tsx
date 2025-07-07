@@ -9,7 +9,7 @@ import "../styles/global/header.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "@contentstack/live-preview-utils/dist/main.css";
 import HeadScriptComponent from "../components/headscript";
-import { fetchHeadScript } from "../utils/common/fetchHeadScript";
+import { fetchHeadScript } from "../utils/data-loader/fetchHeadScript";
 import { HeadScriptProps } from "../model/component-props/headscript.model";
 
 type Seo = {
