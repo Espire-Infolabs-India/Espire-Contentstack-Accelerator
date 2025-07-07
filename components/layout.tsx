@@ -2,6 +2,7 @@ import React, { ReactNode, useState, useEffect } from "react";
 import { Page } from "../model/page.model";
 import Header from "./header";
 import Footer from "./footer";
+import Script from "next/script";
 
 import { Poppins } from "next/font/google";
 export const PoppinFont = Poppins({
@@ -10,8 +11,6 @@ export const PoppinFont = Poppins({
   display: "swap",
   variable: "--font-Poppins",
 });
-import Head from "next/head";
-import Script from "next/script";
 
 type Props = {
   children?: ReactNode;
@@ -33,11 +32,6 @@ export default function Layout({
 
   return (
     <>
-      <div className={`${PoppinFont.variable} font-poppin`}>
-        <Header data={header} />
-        {children}
-        <Footer data={footer} />
-      </div>
       <Script
         src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
         strategy={"beforeInteractive"}
@@ -48,9 +42,11 @@ export default function Layout({
         data-settings-id="WsB9MfwJE5J5uE"
         strategy={"beforeInteractive"}
       ></Script>
+       <div className={`${PoppinFont.variable} font-poppin`}>
       <Header data={header} />
       {children}
       <Footer data={footer} />
+      </div>
     </>
   );
 }
