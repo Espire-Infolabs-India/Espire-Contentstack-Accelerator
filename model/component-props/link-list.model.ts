@@ -10,5 +10,5 @@ export type LinkListItem = {
 
 export type LinkListProps = {
   title: string;
-  links: LinkListItem[];
+  link_list: LinkListItem[];
 };
