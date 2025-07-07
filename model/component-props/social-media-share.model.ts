@@ -9,5 +9,5 @@ export type SocialMediaShare = {
 };
 
 export interface SocialMediaProps {
-  items: SocialMediaShare[];
+  social_media_share: SocialMediaShare[];
 }

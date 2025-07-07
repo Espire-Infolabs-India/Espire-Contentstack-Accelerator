@@ -12,6 +12,8 @@ export default function Footer({ data }: { data?: FooterContentType }) {
     <footer className="bg-[var(--royalblue)] text-white pt-[30px] pb-[0]">
       <div className="container mx-auto px-2">
         
+
+
         {data.address && (
           <div className="flex flex-col sm:flex-row justify-between sm:text-left mb-6">
             <div className="text-sm text-white text-center sm:text-left mb-5 lg:mb-0 sm:w-1/2">
@@ -39,10 +41,12 @@ export default function Footer({ data }: { data?: FooterContentType }) {
             <div className="flex flex-col gap-y-8 mb-5 lg:mb-0 sm:w-1/2">
               <LinkList
                 title={data?.quick_links?.title as string}
-                links={data.quick_links?.link_list || []}
+                link_list={data.quick_links?.link_list || []}
               />
               <SocialMediaShare
-                items={data?.social_media?.social_media_share || []}
+                social_media_share={
+                  data?.social_media?.social_media_share || []
+                }
               />
 
               <div className="contact-box">

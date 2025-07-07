@@ -25,7 +25,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
             <div className="flex items-center gap-x-8 header-menu-font-size">
               <LinkList
                 title={data?.quick_links?.title as string}
-                links={data?.quick_links?.link_list || []}
+                link_list={data?.quick_links?.link_list || []}
               />
               <LanguageSelector />
             </div>
