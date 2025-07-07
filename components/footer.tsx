@@ -8,12 +8,10 @@ import parse from "html-react-parser";
 
 export default function Footer({ data }: { data?: FooterContentType }) {
   if (!data) return null;
+
   return (
     <footer className="bg-[var(--royalblue)] text-white pt-[30px] pb-[0]">
       <div className="container mx-auto px-2">
-        
-
-
         {data.address && (
           <div className="flex flex-col sm:flex-row justify-between sm:text-left mb-6">
             <div className="text-sm text-white text-center sm:text-left mb-5 lg:mb-0 sm:w-1/2">
@@ -50,13 +48,12 @@ export default function Footer({ data }: { data?: FooterContentType }) {
               />
 
               <div className="contact-box">
-                {parse(data?.contact)}
-                </div>
-              
-             
+                <div dangerouslySetInnerHTML={{ __html: data?.contact }} />
+              </div>
             </div>
           </div>
         )}
+
         <Separator />
         {data.copyright_text && (
           <p className="text-center lg:text-left text-sm py-4">
