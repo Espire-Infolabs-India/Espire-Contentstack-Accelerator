@@ -8,6 +8,9 @@ import "../styles/global/footer.css";
 import "../styles/global/header.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import "@contentstack/live-preview-utils/dist/main.css";
+import HeadScriptComponent from "../components/headscript";
+import { fetchHeadScript } from "../utils/data-loader/fetchHeadScript";
+import { HeadScriptProps } from "../model/component-props/headscript.model";
 
 type Seo = {
   meta_title: string;
@@ -17,7 +20,7 @@ type Seo = {
 };
 
 function MyApp(props) {
-  const { Component, pageProps, header, footer, entries } = props;
+  const { Component, pageProps, header, footer, entries, headscripts } = props;
   const { page, post, archivePost, blogPost } = pageProps;
 
   const blogList = post?.concat(archivePost);
@@ -37,6 +40,11 @@ function MyApp(props) {
         <meta name="theme-color" content="#317EFB" />
         <title>Contentstack-Nextjs-SSG-Starter-App</title>
       </Head>
+
+      {headscripts?.length > 0 &&
+        headscripts.map((script) => (
+          <HeadScriptComponent key={script.script_id} data={script} />
+        ))}
       <Layout page={page} entries={entries} header={header} footer={footer}>
         <Component {...pageProps} />
       </Layout>
@@ -47,8 +55,8 @@ function MyApp(props) {
 MyApp.getInitialProps = async (appContext) => {
   const appProps = await App.getInitialProps(appContext);
   const entries: AllEntries = await getAllEntries("page");
-
-  return { ...appProps, entries };
+  const headscripts: HeadScriptProps[] = await fetchHeadScript();
+  return { ...appProps, entries, headscripts };
 };
 
 export default MyApp;
