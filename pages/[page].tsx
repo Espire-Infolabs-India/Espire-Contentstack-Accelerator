@@ -7,21 +7,22 @@ import { AllEntries } from "../model/entries.model";
 import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
-
+import { useRouter } from "next/router";
 interface PageProps {
   page: Page;
   pageUrl: string;
   header;
-  footer;
+  footer;  
+  locale?: string;
 }
 
-const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
+const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
   const [getEntry, setEntry] = useState(page);
-
+  const { locale: activeLocale } = useRouter();
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
-      const entryRes = await getPageRes(pageUrl, 'page');
+      const entryRes = await getPageRes(pageUrl, 'page',activeLocale);
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -30,7 +31,7 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
 
   useEffect(() => {
     onEntryChange(fetchData);
-  }, [page]);
+  }, [page,activeLocale]);
 
   return (
     <Layout page={page} header={header} footer={footer} entries={[]}>
@@ -77,7 +78,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
       : `/${params?.page}`;
-      const res: Page = await getPageRes(`${paramsPath}`,'page');
+      const res: Page = await getPageRes(`${paramsPath}`,'page',locale);
      if (!res) throw "Error 404";
     return {
       props: {
