@@ -18,7 +18,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   const [getEntry, setEntry] = useState(page);
   async function fetchData() {
     try {
-      const entryRes = await getPageRes(pageUrl,"page");
+      const entryRes = await getPageRes(pageUrl, "page");
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -27,7 +27,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   useEffect(() => {
     onEntryChange(fetchData);
   }, []);
-
+  console.log("getEntry: ", getEntry);
   return (
     <Layout page={page} header={header} footer={footer} entries={[]}>
       {getEntry ? (
@@ -48,9 +48,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-
-   
-  const { locale } = context; 
+    const { locale } = context;
 
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
@@ -58,7 +56,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/" , "page");
+    const res: Page = await getPageRes("/", "page");
 
     if (!res) throw new Error("Not found");
 
