@@ -1,6 +1,8 @@
 import * as Utils from "@contentstack/utils";
+import { algoliasearch } from "algoliasearch";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 import getConfig from "next/config";
+import striptags from 'striptags';
 import {
   customHostUrl,
   initializeContentStackSdk,
@@ -54,6 +56,9 @@ const renderOption = {
   span: (node: any, next: any) => next(node.children),
 };
 
+
+const algoliaClient = algoliasearch('VBADC1HNV4', 'c0a7fa4bee10218f222ca97685bc5b2f');
+export const indexName = 'EspireContentStack';
 export default {
   /**
    *
@@ -264,4 +269,35 @@ export async function getAllContentTypes() {
     console.error("Error fetching content types:", error);
     throw error;
   }
+}
+
+
+export async function indexEntries() 
+{
+ try {
+    const query = Stack.ContentType('blog_post').Query();
+    const [entries] = await query.includeCount().toJSON().find();
+
+    const objects = entries.map(entry => ({
+      objectID: entry.uid,
+      title: entry.title,
+      description: striptags(entry.summary || ''),  // <-- Cleaned RTE HTML
+    }));
+    const movies = entries.map(entry => ({
+      objectID: entry.uid,
+      title: entry.title,
+      description: striptags(entry.summary || ''),  // <-- Cleaned RTE HTML
+      url: entry.url,
+      image: entry.featured_image ? entry.featured_image.url : null,
+      tags: entry.tags || [],
+      created_at: entry.created_at,
+      updated_at: entry.updated_at,
+    }));
+
+    const response = await algoliaClient.saveObjects({ indexName: 'EspireContentStack', objects: movies });
+    console.log('Entries indexed in Algolia', response);
+  } catch (error) {
+    console.error('Error indexing entries:', error);
+  }
+
 }

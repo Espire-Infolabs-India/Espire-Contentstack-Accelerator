@@ -7,6 +7,7 @@ import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
 import { useRouter } from "next/router";
+import { indexEntries } from "../contentstack-sdk";
 interface PageProps {
   page: Page;
   pageUrl: string;
@@ -53,6 +54,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
    
   const { locale } = context; 
+
+
+   //const responseIndex = await indexEntries();
 
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
