@@ -50,9 +50,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-
-   
-  const { locale } = context; 
+    const { locale } = context;
 
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;

@@ -10,3 +10,10 @@ export interface ImageProps {
   title: string;
   filename: string;
 }
+
+export interface ImageComponentProps {
+  file: {
+    title: string;
+    url: string;
+  };
+}
