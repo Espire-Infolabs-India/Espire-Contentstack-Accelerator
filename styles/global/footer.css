@@ -29,6 +29,22 @@
     @apply text-center md:text-left;
   }
 
+  footer .socialmedia {
+    @apply px-4;
+  }
+
+  footer .socialmedia:first-child {
+    @apply pl-0;
+  }
+
+  .contact-box {
+    @apply text-center sm:text-left;
+  }
+
+  .contact-box p {
+    @apply mb-2 text-[14px];
+  }
+
   footer h4 {
     @apply text-[16px] font-semibold;
   }

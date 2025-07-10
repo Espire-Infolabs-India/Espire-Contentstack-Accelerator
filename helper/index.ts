@@ -27,12 +27,14 @@ export const getAllEntries = async (content_type : string): Promise<AllEntries> 
 
 export const getPageRes = async (
   entryUrl: string,
-  contentTypeUid: string
+  contentTypeUid: string,
+  locale: string = "en-us"
 ): Promise<Page> => {
   const response: Page[] = (await Stack.getEntryByUrl({
     contentTypeUid,
     entryUrl,
     referenceFieldPath: [],
+    locale
   })) as Page[];
   if (!response?.length) throw new Error("Page not found");
 

@@ -26,10 +26,12 @@ export default function Promo(data: PromoProps) {
   if (variant === "left" || variant === "right") {
     const isRight = variant === "right";
     return (
-      <div className="flex flex-col md:flex-row items-center py-2 md:pt-6 md:pb-2 px-0 md:px-4 bg-gray-100">
+
+      <div className="bg-gray-100">
+      <div className="container m-auto flex flex-col md:flex-row items-center py-2 md:pt-6 md:pb-2 px-0 md:px-4 ">
         <div
           className={`md:w-1/2 flex justify-center ${
-            isRight ? "order-2 md:order-1" : ""
+            isRight ? "order-2" : "order-1"
           }`}
         >
           {imageUrl && (
@@ -46,17 +48,18 @@ export default function Promo(data: PromoProps) {
 
         <div
           className={`md:w-1/2 p-4 md:p-6 ${
-            isRight ? "order-1 md:order-2" : ""
+             isRight ? "order-1" : "order-2"
           }`}
         >
           {renderTitleAndDescription()}
         </div>
       </div>
+      </div>
     );
   }
 
   return (
-    <div className="py-10 font-sans">
+    <div className="py-10 font-poppin">
       <div className="container mx-auto px-4 md:px-0 flex flex-col md:flex-row justify-between items-center gap-x-6 gap-y-8">
         <div className="md:w-full">
           {imageUrl && (

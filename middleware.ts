@@ -32,5 +32,6 @@ export async function middleware(request: NextRequest) {
 
  
 export const config = {
-  matcher: ['/:path*'],  
+  matcher: ['/:path*'], 
+  runtime: 'nodejs',  
 };

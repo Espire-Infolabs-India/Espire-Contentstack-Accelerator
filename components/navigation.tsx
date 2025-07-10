@@ -15,27 +15,30 @@ export default function Navigation({ navigation_menu }: NavigationProps) {
   if (!resolvedMenu.length) return null;
 
   return (
-    <nav className="bg-[#1d3973] px-4 py-2">
-      <ul className="flex justify-end gap-6 items-center text-white text-sm font-medium">
-        {resolvedMenu.map((nav, index) => (
-          <li key={index} className="relative group">
+    <>
+      {resolvedMenu.map((nav, index) => {
+        const dropdownActiveBg = nav?.childMenu?.length > 0 ? "md:hover:bg-white" : "";
+        const dropdownActiveText = nav?.childMenu?.length > 0 ? "md:group-hover:text-black" : "md:group-hover:text-white";
+
+        return (
+          <li
+            key={index}
+            className={`group cursor-pointer py-2 rounded-t-[5px] text-white ${dropdownActiveBg}`}
+          >
             {nav.menu && (
-              <Link
-                href={nav.menu.url}
-                className="px-3 py-2 block group-hover:bg-white group-hover:text-black rounded-md transition-all duration-150"
-              >
+              <Link href={nav.menu.url} className={`${dropdownActiveText}`}>
                 {nav.menu.title}
               </Link>
             )}
 
             {/* Dropdown menu */}
             {nav.childMenu?.length > 0 && (
-              <ul className="absolute left-0 mt-2 hidden group-hover:block bg-white text-black shadow-lg rounded-md py-2 min-w-[180px] z-50">
+              <ul className="flex flex-col lg:flex-row lg:flex-wrap static lg:absolute z-50 left-0 lg:invisible lg:group-hover:visible rounded-b bg-white shadow-lg px-2 lg:px-0 mt-2 w-full">
                 {nav.childMenu.map((subItem, idx) => (
-                  <li key={idx}>
+                  <li key={idx} className="last:border-none">
                     <Link
                       href={subItem.url}
-                      className="block px-4 py-2 hover:bg-gray-100 text-sm whitespace-nowrap"
+                      className="block text-black lg:px-10 py-2 lg:py-4"
                     >
                       {subItem.title}
                     </Link>
@@ -44,8 +47,8 @@ export default function Navigation({ navigation_menu }: NavigationProps) {
               </ul>
             )}
           </li>
-        ))}
-      </ul>
-    </nav>
+        );
+      })}
+    </>
   );
 }
