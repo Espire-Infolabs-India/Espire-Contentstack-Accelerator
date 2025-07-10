@@ -27,7 +27,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   useEffect(() => {
     onEntryChange(fetchData);
   }, []);
-  console.log("getEntry: ", getEntry);
+
   return (
     <Layout page={page} header={header} footer={footer} entries={[]}>
       {getEntry ? (
