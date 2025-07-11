@@ -4,6 +4,7 @@ import BlogDetailPage from "../../components/blogdetailpage";
 import { getAllEntriesByContentType } from "../../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../../components/layout";
+import { SEOProps } from "../../model/common.model";
 const Stack = initializeContentStackSdk();
 
 export default function BlogDetail({
@@ -18,9 +19,10 @@ export default function BlogDetail({
   pageUrl: any;
   header: any;
   footer: any;
+  seo : SEOProps
 }) {
   return (
-    <Layout page={page} header={header} footer={footer} entries={[]}>
+    <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {blog ? <BlogDetailPage blog={blog} /> : <Skeleton />}
     </Layout>
   );
