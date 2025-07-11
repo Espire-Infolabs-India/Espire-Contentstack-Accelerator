@@ -55,10 +55,6 @@ export const { onEntryChange } = ContentstackLivePreview;
 const renderOption = {
   span: (node: any, next: any) => next(node.children),
 };
-
-
-const algoliaClient = algoliasearch('VBADC1HNV4', 'c0a7fa4bee10218f222ca97685bc5b2f');
-export const indexName = 'EspireContentStack';
 export default {
   /**
    *
@@ -273,8 +269,12 @@ export async function getAllContentTypes() {
 }
 
 
+
 export async function indexEntries(entry: any)
 {
+const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+
  try {
     const blog = [{
       objectID: entry.uid + entry.locale,
@@ -287,9 +287,12 @@ export async function indexEntries(entry: any)
       updated_at: entry.updated_at,
       language: entry.locale || 'en-us',
       content_type: "blog_post",
+      introduction: striptags(entry.introduction || ''),
+      shorttitle: entry.shorttitle || '',
+      topic: entry.topic || 'Technology',
     }];
 
-    const response = await algoliaClient.saveObjects({ indexName: 'EspireContentStack', objects: blog });
+    const response = await algoliaClient.saveObjects({ indexName: indexName, objects: blog });
     console.log('Entries indexed in Algolia', response);
   } catch (error) {
     console.error('Error indexing entries:', error);

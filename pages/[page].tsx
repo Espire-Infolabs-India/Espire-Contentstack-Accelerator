@@ -36,6 +36,7 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =
   }, [page,activeLocale]);
 
   return (
+    
     <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
         <RenderComponents

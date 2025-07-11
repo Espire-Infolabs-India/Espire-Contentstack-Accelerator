@@ -1,5 +1,7 @@
 // components/Search.tsx
 import { algoliasearch } from "algoliasearch";
+
+import { locale } from "moment";
 import { useRouter } from 'next/router';
 import {
   InstantSearch,
@@ -11,39 +13,42 @@ import {
   RefinementList 
 } from 'react-instantsearch';
 
-///const searchClient = algoliasearch('YourAppID', 'YourSearchOnlyAPIKey');
-const searchClient = algoliasearch('VBADC1HNV4', 'c0a7fa4bee10218f222ca97685bc5b2f');
-const indexName = 'EspireContentStack';
-const Hit = ({ hit }: any) => (
-  <div className="border rounded-lg p-4 shadow hover:shadow-md transition flex gap-4">
-    {/* Image */}
-    {hit.image && (
-      <img
-        src={hit.image}
-        alt={hit.title}
-        className="w-32 h-20 object-cover rounded-md flex-shrink-0"
-      />
-    )}
+ 
+const searchClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
 
-    {/* Text */}
-    <div className="flex flex-col justify-center">
-      {/* Title as Link */}
-      <a
-        href={hit.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-lg font-semibold text-blue-600 hover:underline"
-      >
-        <Highlight attribute="title" hit={hit} />
-      </a>
+const Hit = ({ hit }: any) => {
+  const { locale, defaultLocale } = useRouter();
+  const localizedUrl =
+    locale === defaultLocale ? hit.url : `/${locale}${hit.url}`;
 
-      {/* Description */}
-      <p className="text-gray-600 text-sm mt-1">
-        <Highlight attribute="description" hit={hit} />
-      </p>
+  return (
+    <div className="border rounded-lg p-4 shadow hover:shadow-md transition flex gap-4">
+      {hit.image && (
+        <img
+          src={hit.image}
+          alt={hit.title}
+          className="w-32 h-20 object-cover rounded-md flex-shrink-0"
+        />
+      )}
+
+      <div className="p-5 flex flex-col flex-grow">
+        <a
+          href={localizedUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-lg font-semibold text-blue-600 hover:underline"
+        >
+          <Highlight attribute="title" hit={hit} />
+        </a>
+
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+          <Highlight attribute="introduction" hit={hit} />
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function Search() {
     const { locale } = useRouter();
@@ -54,23 +59,13 @@ export default function Search() {
       <InstantSearch searchClient={searchClient} indexName={indexName}>
         <div className="mb-4">
             <Configure query="" filters={`language:"${locale}"`} hitsPerPage={5} />
-            
-
-
-
-                <aside className="space-y-6 p-4 border-r w-64">
-       
-
-      <div>
+            <aside className="space-y-6 p-4 border-r w-64">
+        <div>
         <h4 className="font-semibold text-gray-700 mb-2">Tags</h4>
         <RefinementList attribute="topic"  />
       </div>
-
-      
-    </aside>
-
-
- <SearchBox
+       </aside>
+       <SearchBox
             classNames={{
               root: 'w-full',
               form: 'flex',
@@ -83,9 +78,7 @@ export default function Search() {
           <div className="grid gap-4">
           <Hits hitComponent={Hit} />
         </div>
-
-
-         <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8">
           <Pagination
             classNames={{
               root: 'flex gap-2',
@@ -95,15 +88,8 @@ export default function Search() {
             }}
           />
         </div>
-
-
-            
-         
         </div>
-        
-
-       
-      </InstantSearch>
+        </InstantSearch>
     </div>
   );
 }
