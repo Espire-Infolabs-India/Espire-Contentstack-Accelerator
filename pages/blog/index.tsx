@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import Layout from "../../components/layout";
 import { getPageRes } from "../../helper";
 import { Page } from "../../model/page.model";
+import { SEOProps } from "../../model/common.model";
 
 type BlogEntry = {
   title: string;
@@ -26,6 +27,7 @@ type Props = {
   pageUrl: string;
   header;
   footer;
+  seo : SEOProps
 };
 
 export default function BlogListing({
@@ -37,7 +39,7 @@ export default function BlogListing({
 }: Props) {
   return (
     <>
-      <Layout page={page} header={header} footer={footer} entries={[]}>
+      <Layout page={page} header={header} footer={footer} seo={page?.seo}>
         {blogs ? <BlogCards blogs={blogs} /> : <Skeleton />}
       </Layout>
     </>
