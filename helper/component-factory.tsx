@@ -6,6 +6,7 @@ import Carousel from "../components/carousel";
 import Seperator from "../components/seperator";
 import SocialMediaShare from "../components/social-media-share";
 import LinkList from "../components/link-list";
+import ImageComponent from "../components/ImageComponent";
 import ExternalApiResults from "../components/externalapi";
 
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
@@ -17,5 +18,6 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   seperator: () => <Seperator />,
   social_media_share: (data) => <SocialMediaShare {...data} />,
   link_list: (data) => <LinkList {...data} />,
+  image_component: (data) => <ImageComponent {...data} />,
   external_api: (data) => <ExternalApiResults {...data} />,
 };
