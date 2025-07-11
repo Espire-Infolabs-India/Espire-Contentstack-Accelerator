@@ -6,14 +6,16 @@ import { Page } from "../model/page.model";
 import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
-import { useRouter } from "next/router";
-import { indexEntries } from "../contentstack-sdk";
+import { useRouter } from "next/router";  
+import { SEOProps } from "../model/common.model";
+ 
 interface PageProps {
   page: Page;
   pageUrl: string;
   header;
   footer;
   locale?: string;
+  seo : SEOProps
 }
 
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
@@ -32,7 +34,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
   }, [activeLocale, pageUrl]);
 
   return (
-    <Layout page={page} header={header} footer={footer} entries={[]}>
+    <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
         <RenderComponents
           pageComponents={getEntry}
@@ -51,9 +53,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-
-   
-  const { locale } = context; 
+    const { locale } = context;
 
 
    //const responseIndex = await indexEntries();
