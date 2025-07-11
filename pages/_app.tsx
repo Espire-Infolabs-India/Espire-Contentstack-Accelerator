@@ -12,13 +12,6 @@ import HeadScriptComponent from "../components/headscript";
 import { fetchHeadScript } from "../utils/data-loader/fetchHeadScript";
 import { HeadScriptProps } from "../model/component-props/headscript.model";
 
-type Seo = {
-  meta_title: string;
-  meta_description: string;
-  keywords: string;
-  enable_search_indexing: boolean;
-};
-
 function MyApp(props) {
   const { Component, pageProps, header, footer, entries, headscripts } = props;
   const { page, post, archivePost, blogPost } = pageProps;
@@ -45,7 +38,7 @@ function MyApp(props) {
         headscripts.map((script) => (
           <HeadScriptComponent key={script.script_id} data={script} />
         ))}
-      <Layout page={page} entries={entries} header={header} footer={footer}>
+      <Layout page={page} entries={entries} header={header} footer={footer} seo={page?.seo}>
         <Component {...pageProps} />
       </Layout>
     </>
