@@ -135,10 +135,11 @@ export default {
   },
 };
 
-export async function getEntryByUid(contentTypeUid, entryUid) {
+export async function getEntryByUid(contentTypeUid, entryUid, locales?: string) {
   try {
     const entry = await Stack.ContentType(contentTypeUid)
       .Entry(entryUid)
+      .language(locales?.toLowerCase() || "en-us")
       .toJSON()
       .fetch();
     return entry;
@@ -272,29 +273,23 @@ export async function getAllContentTypes() {
 }
 
 
-export async function indexEntries() 
+export async function indexEntries(entry: any)
 {
  try {
-    const query = Stack.ContentType('blog_post').Query();
-    const [entries] = await query.includeCount().toJSON().find();
-
-    const objects = entries.map(entry => ({
-      objectID: entry.uid,
+    const blog = [{
+      objectID: entry.uid + entry.locale,
       title: entry.title,
-      description: striptags(entry.summary || ''),  // <-- Cleaned RTE HTML
-    }));
-    const movies = entries.map(entry => ({
-      objectID: entry.uid,
-      title: entry.title,
-      description: striptags(entry.summary || ''),  // <-- Cleaned RTE HTML
+      description: striptags(entry.summary || ''),
       url: entry.url,
       image: entry.featured_image ? entry.featured_image.url : null,
       tags: entry.tags || [],
       created_at: entry.created_at,
       updated_at: entry.updated_at,
-    }));
+      language: entry.locale || 'en-us',
+      content_type: "blog_post",
+    }];
 
-    const response = await algoliaClient.saveObjects({ indexName: 'EspireContentStack', objects: movies });
+    const response = await algoliaClient.saveObjects({ indexName: 'EspireContentStack', objects: blog });
     console.log('Entries indexed in Algolia', response);
   } catch (error) {
     console.error('Error indexing entries:', error);
