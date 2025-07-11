@@ -1,3 +1,4 @@
+import { SEOProps } from "./common.model";
 import { HeroBanner } from "./component-props/hero-banner.model";
 
 export interface Img {
@@ -19,6 +20,7 @@ export interface Page {
   url: string;
   uid: string;
   locale: string;
+  seo :SEOProps
   page_components: [
     {
       _content_type_uid: string;
