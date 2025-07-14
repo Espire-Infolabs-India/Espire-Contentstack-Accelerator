@@ -35,5 +35,5 @@ This project is a frontend application built with RTEda (React, Tailwind, etc.).
 
 5. **Frontend URL**
 
-    **Production/staging frontend is available at:**
+    **Production/staging frontend is available at VERCEL:**
     https://espire-contentstack-starterkit.vercel.app/
