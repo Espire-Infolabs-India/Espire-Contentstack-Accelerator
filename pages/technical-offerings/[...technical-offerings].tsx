@@ -25,7 +25,7 @@ interface PageProps {
   seo: SEOProps;
 }
 
-const CaseStudyPage: NextPage<PageProps> = ({
+const TechnicalOfferingsPage: NextPage<PageProps> = ({
   page,
   pageUrl,
   header,
@@ -38,7 +38,11 @@ const CaseStudyPage: NextPage<PageProps> = ({
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
-      const entryRes = await getPageRes(pageUrl, "_case_study", activeLocale);
+      const entryRes = await getPageRes(
+        pageUrl,
+        "_technical_solution",
+        activeLocale
+      );
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -55,7 +59,7 @@ const CaseStudyPage: NextPage<PageProps> = ({
         <RenderComponents
           pageComponents={getEntry}
           entryUid={getEntry?.uid}
-          contentTypeUid="_case_study"
+          contentTypeUid="_technical_solution"
           locale={getEntry?.locale}
         />
       ) : (
@@ -65,27 +69,25 @@ const CaseStudyPage: NextPage<PageProps> = ({
   );
 };
 
-export default CaseStudyPage;
+export default TechnicalOfferingsPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("_case_study");
-  const paths: { params: { "case-study": string } }[] = [];
+  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution");
+  const paths: { params: { "technical-offerings": string[] } }[] = [];
 
   entryPaths.forEach((entry) => {
-    if (entry.url && entry.url.startsWith("/case-study/")) {
-      const slug = entry.url.replace("/case-study/", "").replace("/", "");
+    if (entry.url && entry.url.startsWith("/technical_offerings/")) {
+      const slug = entry.url.replace("/technical_offerings/", "");
       if (slug) {
         paths.push({
           params: {
-            "case-study": slug,
+            "technical-offerings": slug.split("/"),
           },
         });
       }
     }
   });
-
-  console.log("paths:", paths);
 
   return {
     paths,
@@ -101,14 +103,16 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     const footerEntries = await getAllEntriesByContentType("footer", locale);
     const footer = footerEntries?.[0] || null;
 
-    if (!params || !params["case-study"]) {
+    if (!params || !params["technical-offerings"]) {
       return { notFound: true };
     }
 
-    const slug = params["case-study"];
-    const pageUrl = `/case-study/${slug}`;
+    const slugParts = params["technical-offerings"];
+    const pageUrl = `/technical-offerings/${
+      Array.isArray(slugParts) ? slugParts.join("/") : slugParts
+    }`;
 
-    const res: Page = await getPageRes(pageUrl, "_case_study", locale);
+    const res: Page = await getPageRes(pageUrl, "_technical_solution", locale);
     if (!res) throw "Page not found";
 
     return {
@@ -122,7 +126,6 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       revalidate: 60,
     };
   } catch (error) {
-    console.error("getStaticProps error:", error);
     return {
       notFound: true,
     };

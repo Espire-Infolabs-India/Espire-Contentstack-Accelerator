@@ -55,7 +55,7 @@ const CaseStudyPage: NextPage<PageProps> = ({
         <RenderComponents
           pageComponents={getEntry}
           entryUid={getEntry?.uid}
-          contentTypeUid="_technical_solution"
+          contentTypeUid="_case_study"
           locale={getEntry?.locale}
         />
       ) : (
@@ -69,25 +69,23 @@ export default CaseStudyPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution");
-  const paths: { params: { "technical-offerings": string } }[] = [];
+  const entryPaths: AllEntries[] = await getAllEntries("_case_study");
+  const paths: { params: { "case-study": string[] } }[] = [];
 
   entryPaths.forEach((entry) => {
-    if (entry.url && entry.url.startsWith("/technical_offerings/")) {
+    if (entry.url && entry.url.startsWith("/case-study/")) {
       const slug = entry.url
-        .replace("/technical_offerings/", "")
-        .replace("/", "");
+        .replace("/case-study/", "")
+        .replace(/^\/+|\/+$/g, "");
       if (slug) {
         paths.push({
           params: {
-            "technical-offerings": slug,
+            "case-study": slug.split("/"),
           },
         });
       }
     }
   });
-
-  console.log("paths:", paths);
 
   return {
     paths,
@@ -103,14 +101,12 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     const footerEntries = await getAllEntriesByContentType("footer", locale);
     const footer = footerEntries?.[0] || null;
 
-    if (!params || !params["technical-offerings"]) {
-      return { notFound: true };
-    }
+    const slugParts = params?.["case-study"] || [];
+    const pageUrl = `/case-study/${
+      Array.isArray(slugParts) ? slugParts.join("/") : slugParts
+    }`;
 
-    const slug = params["technical-offerings"];
-    const pageUrl = `/technical-offerings/${slug}`;
-
-    const res: Page = await getPageRes(pageUrl, "_technical_solution", locale);
+    const res: Page = await getPageRes(pageUrl, "_case_study", locale);
     if (!res) throw "Page not found";
 
     return {
@@ -124,7 +120,6 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       revalidate: 60,
     };
   } catch (error) {
-    console.error("getStaticProps error:", error);
     return {
       notFound: true,
     };
