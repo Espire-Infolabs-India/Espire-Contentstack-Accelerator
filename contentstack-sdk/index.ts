@@ -270,13 +270,13 @@ export async function getAllContentTypes() {
 
 
 
-export async function indexEntries(entry: any)
+export async function indexEntries(entry: any,contenttype: string)
 {
-const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
-const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
-
  try {
-    const blog = [{
+    const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+    const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+
+    const movies = [{
       objectID: entry.uid + entry.locale,
       title: entry.title,
       description: striptags(entry.summary || ''),
@@ -286,14 +286,15 @@ const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
       created_at: entry.created_at,
       updated_at: entry.updated_at,
       language: entry.locale || 'en-us',
-      content_type: "blog_post",
+      content_type: contenttype,
       introduction: striptags(entry.introduction || ''),
       shorttitle: entry.shorttitle || '',
       topic: entry.topic || 'Technology',
+     ...entry, // Include full entry if needed
     }];
 
-    const response = await algoliaClient.saveObjects({ indexName: indexName, objects: blog });
-    console.log('Entries indexed in Algolia', response);
+    const response = await algoliaClient.saveObjects({ indexName: indexName, objects: movies });
+    return response;
   } catch (error) {
     console.error('Error indexing entries:', error);
   }
