@@ -1,9 +1,11 @@
 import { ImageProps } from "../common.model";
+import { CloudinaryAsset } from "./cloudinaryassest.model";
 import { CTAProps } from "./cta-model";
 
 export interface HeroBanner {
   banner_title: string;
   banner_image: ImageProps;
+  images: CloudinaryAsset;
   background_color: string;
   text_color: string;
   banner_description: string;
