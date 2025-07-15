@@ -9,6 +9,7 @@ import LinkList from "../components/link-list";
 import ImageComponent from "../components/ImageComponent";
 import ExternalApiResults from "../components/externalapi";
 import Search from "../components/Search";
+import FeatureHighlightComponent from "../components/featurehighlights";
 
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   hero_banner: (data) => <HeroBanner {...data} />,
@@ -22,4 +23,5 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   image_component: (data) => <ImageComponent {...data} />,
   external_api: (data) => <ExternalApiResults {...data} />,
   search: (data) => <Search {...data} />,
+  feature_highlights: (data) => <FeatureHighlightComponent {...data} />,
 };
