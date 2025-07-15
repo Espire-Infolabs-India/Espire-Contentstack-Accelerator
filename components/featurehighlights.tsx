@@ -15,17 +15,17 @@ const FeatureHighlightComponent = (data: FeatureHighlights) => {
         <div className="max-w-2xl mx-auto">
           <div className="rounded-lg shadow-md p-6 bg-blue-900 text-white">
             <h3 className="text-xl font-semibold mb-2">
-              {data?.featured_post[0].title || "Untitled"}
+              {data?.featured_post[0]?.title || "Untitled"}
             </h3>
             <p className="text-sm">
-              {data?.featured_post[0].description ||
+              {data?.featured_post[0]?.description ||
                 "No description available."}
             </p>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data?.featured_post.map((post, index) => (
+          {data?.featured_post?.map((post, index) => (
             <div
               key={index}
               className={`rounded-lg shadow-md p-6 transition-transform duration-200 ${
@@ -35,10 +35,10 @@ const FeatureHighlightComponent = (data: FeatureHighlights) => {
               }`}
             >
               <h3 className="text-xl font-semibold mb-2">
-                {post.title || "Untitled"}
+                {post?.title || "Untitled"}
               </h3>
               <p className="text-sm">
-                {post.description || "No description available."}
+                {post?.description || "No description available."}
               </p>
             </div>
           ))}
