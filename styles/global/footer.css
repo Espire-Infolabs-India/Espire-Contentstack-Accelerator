@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
   footer .sub-menu {
     @apply relative inline-block text-white;
@@ -51,5 +50,11 @@
 
   footer p {
     @apply text-[14px] font-normal;
+  }
+
+  footer .seperator {
+    border-color: white;
+    margin-left: 0;
+    margin-right: 0;
   }
 }

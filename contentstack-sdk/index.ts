@@ -1,6 +1,8 @@
 import * as Utils from "@contentstack/utils";
+import { algoliasearch } from "algoliasearch";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 import getConfig from "next/config";
+import striptags from 'striptags';
 import {
   customHostUrl,
   initializeContentStackSdk,
@@ -53,7 +55,6 @@ export const { onEntryChange } = ContentstackLivePreview;
 const renderOption = {
   span: (node: any, next: any) => next(node.children),
 };
-
 export default {
   /**
    *
@@ -130,10 +131,11 @@ export default {
   },
 };
 
-export async function getEntryByUid(contentTypeUid, entryUid) {
+export async function getEntryByUid(contentTypeUid, entryUid, locales?: string) {
   try {
     const entry = await Stack.ContentType(contentTypeUid)
       .Entry(entryUid)
+      .language(locales?.toLowerCase() || "en-us")
       .toJSON()
       .fetch();
     return entry;
@@ -264,4 +266,37 @@ export async function getAllContentTypes() {
     console.error("Error fetching content types:", error);
     throw error;
   }
+}
+
+
+
+export async function indexEntries(entry: any,contenttype: string)
+{
+ try {
+    const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+    const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+
+    const movies = [{
+      objectID: entry.uid + entry.locale,
+      title: entry.title,
+      description: striptags(entry.summary || ''),
+      url: entry.url,
+      image: entry.featured_image ? entry.featured_image.url : null,
+      tags: entry.tags || [],
+      created_at: entry.created_at,
+      updated_at: entry.updated_at,
+      language: entry.locale || 'en-us',
+      content_type: contenttype,
+      introduction: striptags(entry.introduction || ''),
+      shorttitle: entry.shorttitle || '',
+      topic: entry.topic || 'Technology',
+     ...entry, // Include full entry if needed
+    }];
+
+    const response = await algoliaClient.saveObjects({ indexName: indexName, objects: movies });
+    return response;
+  } catch (error) {
+    console.error('Error indexing entries:', error);
+  }
+
 }
