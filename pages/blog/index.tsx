@@ -1,71 +1,78 @@
-import { GetStaticProps } from "next";
-import { getAllEntriesByContentType } from "../../contentstack-sdk/index";
-import BlogCards from "../../components/blogcards";
+import React, { useState, useEffect } from "react";
+import type { GetStaticProps, NextPage } from "next";
+import { getPageRes } from "../../helper";
+import RenderComponents from "../../components/render-components";
+import { Page } from "../../model/page.model";
+import { getAllEntriesByContentType, onEntryChange } from "../../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../../components/layout";
-import { getPageRes } from "../../helper";
-import { Page } from "../../model/page.model";
+import { useRouter } from "next/router";  
 import { SEOProps } from "../../model/common.model";
-
-type BlogEntry = {
-  title: string;
-  url: string;
-  publish_details?: {
-    time: string;
-  };
-  uid: string;
-  description?: string;
-  featured_image?: {
-    url: string;
-  };
-  tags?: string[];
-};
-
-type Props = {
-  blogs: BlogEntry[];
+ 
+interface PageProps {
   page: Page;
   pageUrl: string;
   header;
   footer;
+  locale?: string;
   seo : SEOProps
-};
-
-export default function BlogListing({
-  page,
-  pageUrl,
-  header,
-  footer,
-  blogs,
-}: Props) {
-  return (
-    <>
-      <Layout page={page} header={header} footer={footer} seo={page?.seo}>
-        {blogs ? <BlogCards blogs={blogs} /> : <Skeleton />}
-      </Layout>
-    </>
-  );
 }
 
+const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
+  const [getEntry, setEntry] = useState(page);
+  const { locale: activeLocale } = useRouter();
+  async function fetchData() {
+    try {
+      const entryRes = await getPageRes(pageUrl,"page",activeLocale);
+      setEntry(entryRes);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    onEntryChange(fetchData);
+  }, [activeLocale, pageUrl]);
+
+  return (
+    <Layout page={page} header={header} footer={footer} seo={page?.seo}>
+      {getEntry ? (
+        <RenderComponents
+          pageComponents={getEntry}
+          entryUid={getEntry?.uid}
+          contentTypeUid="page"
+          locale={getEntry?.locale}
+        />
+      ) : (
+        <Skeleton />
+      )}
+    </Layout>
+  );
+};
+
+export default Home;
+
 export const getStaticProps: GetStaticProps = async (context) => {
+  try {
+    const { locale } = context;
 
-  const { locale } = context;
-  const entries = await getAllEntriesByContentType("header",locale?.toLowerCase() || "en-us");
-  const header = entries?.[0] || null;
+    const entries = await getAllEntriesByContentType("header", locale);
+    const header = entries?.[0] || null;
 
-  const footerentries = await getAllEntriesByContentType("footer",locale?.toLowerCase() || "en-us");
-  const footer = footerentries?.[0] || null;
-  const blogs = await getAllEntriesByContentType("blog_post",locale?.toLowerCase() || "en-us");
-  const res: Page = await getPageRes("/",'page');
+    const footerentries = await getAllEntriesByContentType("footer", locale);
+    const footer = footerentries?.[0] || null;
 
-  if (!res) throw new Error("Not found");
-  return {
-    props: {
-      page: res,
-      pageUrl: "/blog",
-      blogs,
-      header,
-      footer,
-    },
-    revalidate: 60,
-  };
+    const res: Page = await getPageRes("/blog" , "page",locale);
+
+    if (!res) throw new Error("Not found");
+
+    return {
+      props: { page: res, pageUrl: "/blog", header, footer, locale },
+      revalidate: 1000,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
 };

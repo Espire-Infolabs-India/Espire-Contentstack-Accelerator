@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Highlight } from 'react-instantsearch';
 
 export const SearchHit = ({ hit }: any) => {
+
   const { locale, defaultLocale } = useRouter();
   const localizedUrl = locale === defaultLocale ? hit.url : `/${locale}${hit.url}`;
 
@@ -19,13 +20,13 @@ export const SearchHit = ({ hit }: any) => {
   return (
     <div className="grid gap-4">
     <div className="border rounded-xl p-4 shadow-sm hover:shadow-md transition flex gap-4 bg-white">
-      {hit.image && (
-        <img
-          src={hit.image}
-          alt={hit.title}
-          className="w-32 h-20 object-cover rounded-md flex-shrink-0"
-        />
-      )}
+     {(hit.image || hit.featured_image) && (
+  <img
+    src={hit.content_type === "blog_post" ? hit.featured_image?.url : hit.image?.url}
+    alt={hit.title}
+    className="w-32 h-20 object-cover rounded-md flex-shrink-0"
+  />
+)}
 
       <div className="flex flex-col justify-between flex-grow">
         <a

@@ -1,7 +1,21 @@
-const SearchBox = () => {
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
+
+export default function SearchBox() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (searchTerm.trim()) {
+      router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
+  };
   return (
     <>
-      <form className="search-bar-default">
+      <form className="search-bar-default" onSubmit={handleSubmit}>
         <div className="search-bar flex items-center overflow-hidden">
           <button
             type="submit"
@@ -29,6 +43,7 @@ const SearchBox = () => {
               type="text"
               placeholder="Type to search"
               aria-label="search bar"
+              onChange={(e) => setSearchTerm(e.target.value)}
               className={`w-[150px] focus:outline-none placeholder-white sm:w-[150px] text-[14px] lg:w-[335px] p-[7px] bg-[var(--royalblue)]  text-white`}
             />
           </div>
@@ -38,4 +53,4 @@ const SearchBox = () => {
   );
 };
 
-export default SearchBox;
+//export default SearchBox;
