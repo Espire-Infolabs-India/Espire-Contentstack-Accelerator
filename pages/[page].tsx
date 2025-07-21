@@ -21,6 +21,9 @@ interface PageProps {
 const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
   const [getEntry, setEntry] = useState(page);
   const { locale: activeLocale } = useRouter();
+  const router = useRouter();
+  const { q } = router.query;
+
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
@@ -34,6 +37,12 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =
   useEffect(() => {
     onEntryChange(fetchData);
   }, [page,activeLocale]);
+
+  useEffect(() => {
+  if (q) {
+    fetchData(); // Trigger data fetch when search query changes
+  }
+}, [q]);
 
   return (
     

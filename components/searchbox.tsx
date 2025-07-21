@@ -9,9 +9,20 @@ export default function SearchBox() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (searchTerm.trim()) {
-      router.push(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-    }
+    const currentUrl = `${router.asPath.split('?')[0]}`; 
+
+     if(currentUrl  === "/" || currentUrl === "/search") { 
+        router.push({
+          pathname: '/search',
+          query: { q: searchTerm.trim() },
+        });
+     }
+     else{
+        router.push({
+          pathname: currentUrl,
+          query: { q: searchTerm.trim() },
+        }); 
+     }
   };
   return (
     <>
