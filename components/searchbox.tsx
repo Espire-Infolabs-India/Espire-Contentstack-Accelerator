@@ -1,28 +1,20 @@
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function SearchBox() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const currentUrl = `${router.asPath.split('?')[0]}`; 
+    const currentUrl = `${router.asPath.split("?")[0]}`;
+    console.log("Current URL:", currentUrl);
 
-     if(currentUrl  === "/" || currentUrl === "/search") { 
-        router.push({
-          pathname: '/search',
-          query: { q: searchTerm.trim() },
-        });
-     }
-     else{
-        router.push({
-          pathname: currentUrl,
-          query: { q: searchTerm.trim() },
-        }); 
-     }
+     router.push({
+        pathname: (currentUrl === "/technical-offerings" || currentUrl === "/case-study") ? currentUrl : "/search",
+        query: { q: searchTerm.trim() },
+      });
   };
   return (
     <>
@@ -62,6 +54,6 @@ export default function SearchBox() {
       </form>
     </>
   );
-};
+}
 
 //export default SearchBox;

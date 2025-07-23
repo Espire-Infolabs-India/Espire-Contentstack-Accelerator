@@ -95,7 +95,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
      if (!res) throw "Error 404";
     return {
       props: {
-        // page: res,
+        page: res,
         pageUrl: paramsPath,
         header,
         footer,
