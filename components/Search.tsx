@@ -60,7 +60,7 @@ const Search = (data: SearchContentType) => {
          <Facets/>
          <div className="md:col-span-3 space-y-6">
             
-            <SearchBoxIcon/>
+            {/* <SearchBoxIcon/> */}
             <ResultsCount />
             <Hits hitComponent={SearchHit} />
             <SearchPagination/>
