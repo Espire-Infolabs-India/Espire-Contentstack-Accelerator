@@ -44,7 +44,7 @@ export default function Layout({
       ></Script>
        <div className={`${PoppinFont.variable} font-poppin`}>
       <Header data={header} />
-      {children}
+        {children}
       <Footer data={footer} />
       </div>
     </>

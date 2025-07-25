@@ -1,5 +1,5 @@
 import React from "react";
 const Separator = () => (
-  <p className="border-t border-white mt-4 pt-2"></p>
+  <hr className="border-t separator" />
 );
 export default Separator;

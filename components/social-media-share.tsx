@@ -15,7 +15,7 @@ const SocialMediaShare = (items: SocialMediaProps) => {
   return (
     
 
-    <div className="flex items-center justify-center sm:justify-start pl-0 w-full">
+    <div className="flex social-media-cover pl-0 w-full">
       {items?.social_media_share.map((item, index) => {
         const imageUrl = item?.icon?.url;
         const altText = item?.title || "Social Media";
@@ -38,7 +38,7 @@ const SocialMediaShare = (items: SocialMediaProps) => {
                   alt={altText}
                   width={40}
                   height={40}
-                 
+                 style={{ width: "auto", height: "auto" }}
                 />
               ) : (
                 <span className="text-white text-sm">{item?.title}</span>

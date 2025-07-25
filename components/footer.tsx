@@ -29,6 +29,7 @@ export default function Footer({ data }: { data?: FooterContentType }) {
                       width={100}
                       height={70}
                       loading="lazy"
+                      style={{ width: "auto", height: "auto" }}
                     />
                   </Link>
                 </div>

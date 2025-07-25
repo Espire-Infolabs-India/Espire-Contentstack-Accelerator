@@ -1,7 +1,4 @@
-@tailwind base;
 @tailwind components;
-@tailwind utilities;
-
 
 @layer components {
   footer .sub-menu {
@@ -25,8 +22,16 @@
     opacity: 0.95;
   }
 
+  footer .link-list-link{
+    @apply flex-col sm:flex-row flex-wrap justify-center sm:justify-start gap-x-10 mx-5 md:mx-0 mb-0;
+  }
+
   footer .link-list {
     @apply text-center md:text-left;
+  }
+
+  footer .social-media-cover{
+    @apply items-center justify-center sm:justify-start;
   }
 
   footer .socialmedia {
@@ -52,4 +57,9 @@
   footer p {
     @apply text-[14px] font-normal;
   }
+
+  footer .separator {
+    @apply border-white mt-4 mb-0;
+  }
+  
 }

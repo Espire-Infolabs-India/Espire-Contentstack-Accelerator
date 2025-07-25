@@ -7,6 +7,11 @@ import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
 
+import Globalcards from "../components/globalcards";
+import ContactUsForm from "../components/contactusform";
+import FeaturesTabs from "../components/featuresTabs";
+import MissionVision from "../components/missionvision";
+
 interface PageProps {
   page: Page;
   pageUrl: string;
@@ -18,7 +23,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   const [getEntry, setEntry] = useState(page);
   async function fetchData() {
     try {
-      const entryRes = await getPageRes(pageUrl,"page");
+      const entryRes = await getPageRes(pageUrl, "page");
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -31,12 +36,20 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   return (
     <Layout page={page} header={header} footer={footer} entries={[]}>
       {getEntry ? (
-        <RenderComponents
-          pageComponents={getEntry}
-          entryUid={getEntry?.uid}
-          contentTypeUid="page"
-          locale={getEntry?.locale}
-        />
+        <main>
+          <RenderComponents
+            pageComponents={getEntry}
+            entryUid={getEntry?.uid}
+            contentTypeUid="page"
+            locale={getEntry?.locale}
+          />
+
+          <Globalcards />
+          <ContactUsForm />
+          <FeaturesTabs />
+          <MissionVision />
+          
+        </main>
       ) : (
         <Skeleton />
       )}
@@ -48,9 +61,7 @@ export default Home;
 
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
-
-   
-  const { locale } = context; 
+    const { locale } = context;
 
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
@@ -58,7 +69,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/" , "page");
+    const res: Page = await getPageRes("/", "page");
 
     if (!res) throw new Error("Not found");
 

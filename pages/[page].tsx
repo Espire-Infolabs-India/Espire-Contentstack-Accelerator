@@ -35,12 +35,12 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer }) => {
   return (
     <Layout page={page} header={header} footer={footer} entries={[]}>
       {getEntry ? (
-        <RenderComponents
+        <main><RenderComponents
           pageComponents={getEntry}
           entryUid={getEntry?.uid}
           contentTypeUid="page"
           locale={getEntry?.locale}
-        />
+        /></main>
       ) : (
         <Skeleton height={300} count={3} />
       )}

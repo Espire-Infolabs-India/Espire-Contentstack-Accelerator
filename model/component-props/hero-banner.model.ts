@@ -11,4 +11,5 @@ export interface HeroBanner {
   banner_image_alignment: boolean;
   content_alignment: string;
   call_to_action: CTAProps;
+  // key: number;
 }
