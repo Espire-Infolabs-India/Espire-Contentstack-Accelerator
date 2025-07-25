@@ -32,7 +32,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
   useEffect(() => {
     onEntryChange(fetchData);
   }, [activeLocale, pageUrl]);
-
+  console.log("Page components: ", getEntry)
   return (
     <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
