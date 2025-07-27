@@ -23,7 +23,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
   const { locale: activeLocale } = useRouter();
   async function fetchData() {
     try {
-      const entryRes = await getPageRes(pageUrl,"page",activeLocale);
+      const entryRes = await getPageRes(pageUrl,"page",activeLocale,getSiteName());
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -50,7 +50,10 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
 };
 
 export default Home;
-
+export function getSiteName(): string {
+  console.log('blog getSiteName:',process.env.NEXT_PUBLIC_SITE_NAME);
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const { locale } = context;
@@ -61,7 +64,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/blog" , "page",locale);
+    const res: Page = await getPageRes("/blog" , "page",locale,getSiteName());
 
     if (!res) throw new Error("Not found");
 

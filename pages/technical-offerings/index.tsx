@@ -17,8 +17,12 @@ interface PageProps {
   locale?: string;
   seo : SEOProps
 }
-
+export function getSiteName(): string {
+  console.log('getSiteName:',process.env.NEXT_PUBLIC_SITE_NAME);
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
+  getSiteName();
   const [getEntry, setEntry] = useState(page);
   const { locale: activeLocale } = useRouter();
   async function fetchData() {

@@ -35,8 +35,14 @@ const NotFound = ({ headerData, footerData }: Props): JSX.Element => (
 
 export default NotFound;
 
+export function getSiteName(): string {
+  console.log('getSiteName 404:',process.env.NEXT_PUBLIC_SITE_NAME);
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
+
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   try {
+     getSiteName();
     const headerEntries = await getAllEntriesByContentType("header", locale);
     const footerEntries = await getAllEntriesByContentType("footer", locale);
     const headerData = headerEntries?.[0] || null;

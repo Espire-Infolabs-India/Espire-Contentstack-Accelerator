@@ -27,7 +27,7 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
-      const entryRes = await getPageRes(pageUrl, 'page',activeLocale);
+      const entryRes = await getPageRes(pageUrl, 'page',activeLocale,getSiteName());
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -65,7 +65,9 @@ export default Pages;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("page");
+  
+  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName());
+   console.log('getSiteName a33:',process.env.NEXT_PUBLIC_SITE_NAME);
   const paths: { params: { page: string } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry.url !== "/blog" && entry.url !== "/")
@@ -77,10 +79,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: "blocking",
   };
 };
-
+export function getSiteName(): string {
+  console.log('getSiteName 33:',process.env.NEXT_PUBLIC_SITE_NAME);
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
-    
+     getSiteName();
     const entries = await getAllEntriesByContentType("header",locale);
     const header = entries?.[0] || null;
 
@@ -91,7 +96,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       ? `${params.page}`
       : `/${params?.page}`;
  
-      const res: Page = await getPageRes(`${paramsPath}`,'page',locale);
+      const res: Page = await getPageRes(`${paramsPath}`,'page',locale,getSiteName());
      if (!res) throw "Error 404";
     return {
       props: {
