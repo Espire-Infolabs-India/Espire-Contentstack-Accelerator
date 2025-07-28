@@ -12,6 +12,7 @@ import PlainHtmlComponent from "../components/plainhtml";
 import Search from "../components/Search";
 import FeatureHighlightComponent from "../components/featurehighlights";
 import Map from "../components/map";
+import RichTextComponent from "../components/richtext";
 
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   hero_banner: (data) => <HeroBanner {...data} />,
@@ -28,4 +29,5 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   search: (data) => <Search {...data} />,
   feature_highlights: (data) => <FeatureHighlightComponent {...data} />,
   google_map: (data) => <Map {...data} />
+  rich_text: (data) => <RichTextComponent {...data} />,
 };
