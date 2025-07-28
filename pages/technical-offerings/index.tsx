@@ -55,18 +55,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const { locale } = context;
 
+
+   //const responseIndex = await indexEntries();
+
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
 
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/blog" , "page",locale);
+    const res: Page = await getPageRes("/technical-offerings" , "page",locale);
 
     if (!res) throw new Error("Not found");
 
     return {
-      props: { page: res, pageUrl: "/blog", header, footer, locale },
+      props: { page: res, pageUrl: "/technical-offerings", header, footer, locale },
       revalidate: 1000,
     };
   } catch (error) {

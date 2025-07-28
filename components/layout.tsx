@@ -5,6 +5,8 @@ import Footer from "./footer";
 import Script from "next/script";
 
 import { Poppins } from "next/font/google";
+import { SEOProps } from "../model/common.model";
+import SEO from "./seo";
 export const PoppinFont = Poppins({
   weight: "400",
   subsets: ["latin"],
@@ -17,21 +19,14 @@ type Props = {
   page: Page;
   header;
   footer;
-  entries: Page[];
+  entries?: Page[];
+  seo: SEOProps;
 };
 
-export default function Layout({
-  children,
-  page,
-  header,
-  footer,
-  entries,
-}: Props) {
-  let jsonPreview = {};
-  if (page) jsonPreview["page"] = page;
-
+export default function Layout({ children, page, header, footer, seo }: Props) {
   return (
     <>
+      <SEO data={seo} />
       <Script
         src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"
         strategy={"beforeInteractive"}
@@ -42,10 +37,10 @@ export default function Layout({
         data-settings-id="WsB9MfwJE5J5uE"
         strategy={"beforeInteractive"}
       ></Script>
-       <div className={`${PoppinFont.variable} font-poppin`}>
-      <Header data={header} />
+      <div className={`${PoppinFont.variable} font-poppin`}>
+        <Header data={header} />
         {children}
-      <Footer data={footer} />
+        <Footer data={footer} />
       </div>
     </>
   );

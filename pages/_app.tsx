@@ -12,24 +12,16 @@ import HeadScriptComponent from "../components/headscript";
 import { fetchHeadScript } from "../utils/data-loader/fetchHeadScript";
 import { HeadScriptProps } from "../model/component-props/headscript.model";
 
-type Seo = {
-  meta_title: string;
-  meta_description: string;
-  keywords: string;
-  enable_search_indexing: boolean;
-};
-
 function MyApp(props) {
   const { Component, pageProps, header, footer, entries, headscripts } = props;
   const { page, post, archivePost, blogPost } = pageProps;
-
   const blogList = post?.concat(archivePost);
   return (
     <>
       <Head>
         <meta
           name="application-name"
-          content="Contentstack-Nextjs-Starter-App"
+          content="Espire Contentstack Accelerator"
         />
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -38,14 +30,20 @@ function MyApp(props) {
           content="width=device-width,initial-scale=1,minimum-scale=1"
         />
         <meta name="theme-color" content="#317EFB" />
-        <title>Contentstack-Nextjs-SSG-Starter-App</title>
+        <title>Espire Contentstack Accelerator</title>
       </Head>
 
       {headscripts?.length > 0 &&
         headscripts.map((script) => (
           <HeadScriptComponent key={script.script_id} data={script} />
         ))}
-      <Layout page={page} entries={entries} header={header} footer={footer}>
+      <Layout
+        page={page}
+        entries={entries}
+        header={header}
+        footer={footer}
+        seo={page?.seo}
+      >
         <Component {...pageProps} />
       </Layout>
     </>

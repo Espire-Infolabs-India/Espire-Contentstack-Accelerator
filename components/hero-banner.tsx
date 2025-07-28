@@ -17,29 +17,33 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
     }
   }, [hero_banner?.content_alignment]);
 
+  const cloudinaryImage =
+    Array.isArray(hero_banner?.images) && hero_banner?.images?.length > 0
+      ? hero_banner?.images[0]
+      : !Array.isArray(hero_banner?.images) && hero_banner?.images?.secure_url
+      ? hero_banner?.images
+      : null;
+
+  const finalImageUrl =
+    cloudinaryImage?.secure_url || hero_banner?.banner_image?.url;
+  const finalImageAlt =
+    cloudinaryImage?.public_id ||
+    hero_banner?.banner_image?.title ||
+    "Hero Banner";
   return (
     <section className="relative w-full bg-black overflow-hidden">
-      {hero_banner?.banner_image && (
-        <Head>
-          <link
-            rel="preload"
-            as="image"
-            href={hero_banner?.banner_image.url}
-            type="image/webp"
-          />
-        </Head>
-      )}
+      <Head>
+        <link rel="preload" as="image" href={finalImageUrl} type="image/webp" />
+      </Head>
 
-      {hero_banner?.banner_image && (
-        <img
-          src={hero_banner?.banner_image?.url}
-          alt={hero_banner?.banner_image?.title}
-          className="object-cover w-full h-96"
-          width={1920}
-          height={720}
-          loading="eager"
-        />
-      )}
+      <img
+        src={finalImageUrl}
+        alt={finalImageAlt}
+        className="object-cover w-full h-96"
+        width={1920}
+        height={720}
+        loading="eager"
+      />
 
       <div
         className={`absolute inset-0 bg-black bg-opacity-60 flex items-center px-4 md:px-0 z-10`}

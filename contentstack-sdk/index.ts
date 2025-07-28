@@ -1,6 +1,8 @@
 import * as Utils from "@contentstack/utils";
+import { algoliasearch } from "algoliasearch";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 import getConfig from "next/config";
+import striptags from 'striptags';
 import {
   customHostUrl,
   initializeContentStackSdk,
@@ -18,6 +20,7 @@ type GetEntryByUrl = {
   entryUrl: string | undefined;
   contentTypeUid: string;
   referenceFieldPath: string[] | undefined;
+  locale?: string;
   // jsonRtePath: string[] | undefined;
 };
 
@@ -52,7 +55,6 @@ export const { onEntryChange } = ContentstackLivePreview;
 const renderOption = {
   span: (node: any, next: any) => next(node.children),
 };
-
 export default {
   /**
    *
@@ -102,10 +104,11 @@ export default {
     contentTypeUid,
     entryUrl,
     referenceFieldPath,
+    locale = "en-us",
   }: // jsonRtePath,
   GetEntryByUrl) {
     return new Promise((resolve, reject) => {
-      const blogQuery = Stack.ContentType(contentTypeUid).Query();
+      const blogQuery = Stack.ContentType(contentTypeUid).Query().language(locale.toLowerCase() || "en-us");
       if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
       blogQuery.toJSON();
       const data = blogQuery.where("url", `${entryUrl}`)?.find();
@@ -128,10 +131,11 @@ export default {
   },
 };
 
-export async function getEntryByUid(contentTypeUid, entryUid) {
+export async function getEntryByUid(contentTypeUid, entryUid, locales?: string) {
   try {
     const entry = await Stack.ContentType(contentTypeUid)
       .Entry(entryUid)
+      .language(locales?.toLowerCase() || "en-us")
       .toJSON()
       .fetch();
     return entry;
@@ -177,18 +181,63 @@ export async function executeGraphQLQuery(graphQLQuery) {
   }
 }
 
+// export async function resolveNestedEntry(entry: any, locales?: string): Promise<any> {
+//   async function resolveDeep(obj: any): Promise<any> {
+//     if (Array.isArray(obj)) {
+//       return Promise.all(obj.map(resolveDeep));
+//     }
+//     if (obj && typeof obj === "object") {
+//       if (obj.uid && obj._content_type_uid) {
+//         try {
+//           const resolved = await Stack.ContentType(obj._content_type_uid)
+//             .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
+//             .toJSON()
+//             .fetch();
+//           return resolveDeep(resolved);
+//         } catch (err) {
+//           console.error(
+//             `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
+//             err
+//           );
+//           return obj;
+//         }
+//       }
+//       const resolvedObj: any = {};
+//       for (const key of Object.keys(obj)) {
+//         resolvedObj[key] = await resolveDeep(obj[key]);
+//       }
+//       return resolvedObj;
+//     }
+//     return obj;
+//   }
+//   return await resolveDeep(entry);
+// }
+
 export async function resolveNestedEntry(entry: any, locales?: string): Promise<any> {
+  const visited = new Set<string>();
+
   async function resolveDeep(obj: any): Promise<any> {
     if (Array.isArray(obj)) {
       return Promise.all(obj.map(resolveDeep));
     }
+
     if (obj && typeof obj === "object") {
+      // Unique key for each entry (content_type + uid)
       if (obj.uid && obj._content_type_uid) {
+        const key = `${obj._content_type_uid}:${obj.uid}`;
+        if (visited.has(key)) {
+          // Circular reference detected
+          return { ...obj, __circular_ref: true };
+        }
+
+        visited.add(key);
         try {
           const resolved = await Stack.ContentType(obj._content_type_uid)
-            .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
+            .Entry(obj.uid)
+            .language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
+
           return resolveDeep(resolved);
         } catch (err) {
           console.error(
@@ -198,14 +247,17 @@ export async function resolveNestedEntry(entry: any, locales?: string): Promise<
           return obj;
         }
       }
+
       const resolvedObj: any = {};
       for (const key of Object.keys(obj)) {
         resolvedObj[key] = await resolveDeep(obj[key]);
       }
       return resolvedObj;
     }
+
     return obj;
   }
+
   return await resolveDeep(entry);
 }
 
@@ -263,3 +315,233 @@ export async function getAllContentTypes() {
     throw error;
   }
 }
+
+
+
+
+
+
+// import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
+// import striptags from 'striptags';
+
+const MAX_RECORD_BYTES = 9.5 * 1024; // stay safely under 10KB hard limit (Build plan). Adjust per plan.
+
+interface EntryLike {
+  uid: string;
+  locale?: string;
+  url?: string;
+  title?: string;
+  summary?: string;
+  introduction?: string;
+  shorttitle?: string;
+  topic?: string;
+  featured_image?: { url?: string } | null;
+  tags?: string[] | { uid: string; title?: string }[];
+  // plus other raw fields we *won't* index
+  [key: string]: any;
+}
+
+interface AlgoliaRecord {
+  [key: string]: unknown; // Add index signature for compatibility
+  objectID: string;
+  parentID?: string;       // used when chunking
+  section?: string;        // e.g., 'intro', 'body-1'
+  url?: string;
+  title?: string;
+  description?: string;
+  image?: string | null;
+  tags?: any;
+  created_at?: string;
+  updated_at?: string;
+  language?: string;
+  content_type?: string;
+  shorttitle?: string;
+  topic?: string;
+  content?: string;        // chunked text
+}
+
+/**
+ * Strip HTML, collapse whitespace, and (optionally) truncate by characters.
+ */
+function cleanText(html: string | undefined, maxChars = 5000): string {
+  if (!html) return '';
+  const stripped = striptags(html).replace(/\s+/g, ' ').trim();
+  return stripped.length > maxChars ? stripped.slice(0, maxChars) : stripped;
+}
+
+/**
+ * Measure Algolia record size the same way you'll send it.
+ */
+function recordBytes(obj: unknown): number {
+  return Buffer.byteLength(JSON.stringify(obj));
+}
+
+/**
+ * Split long text into as many AlgoliaRecord chunks as needed to stay under size budget.
+ * We pack base fields + a slice of text, re‑measuring JSON size each time.
+ */
+function chunkLongText(
+  base: Omit<AlgoliaRecord, 'objectID' | 'section' | 'content'> & { objectID: string },
+  text: string,
+  maxBytes = MAX_RECORD_BYTES
+): AlgoliaRecord[] {
+  const words = text.split(' ');
+  const chunks: AlgoliaRecord[] = [];
+  let currentWords: string[] = [];
+  let chunkIndex = 0;
+
+  const pushChunk = () => {
+    const candidate: AlgoliaRecord = {
+      ...base,
+      objectID: `${base.objectID}#${chunkIndex}`,
+      parentID: base.objectID,
+      section: chunkIndex === 0 ? 'intro' : `body-${chunkIndex}`,
+      content: currentWords.join(' ')
+    };
+    // Ensure under max (fallback truncate hard if needed)
+    let payload = candidate.content!;
+    while (recordBytes({ ...candidate, content: payload }) > maxBytes && payload.length > 0) {
+      payload = payload.slice(0, Math.floor(payload.length * 0.9));
+    }
+    candidate.content = payload;
+    chunks.push(candidate);
+    chunkIndex++;
+    currentWords = [];
+  };
+
+  for (const w of words) {
+    currentWords.push(w);
+    const candidate: AlgoliaRecord = {
+      ...base,
+      objectID: `${base.objectID}#${chunkIndex}`,
+      parentID: base.objectID,
+      section: chunkIndex === 0 ? 'intro' : `body-${chunkIndex}`,
+      content: currentWords.join(' ')
+    };
+    if (recordBytes(candidate) > maxBytes) {
+      // remove last word from this chunk, push, then start new
+      currentWords.pop();
+      pushChunk();
+      currentWords.push(w); // start new chunk with current word
+    }
+  }
+  if (currentWords.length) pushChunk();
+  return chunks;
+}
+
+/**
+ * Build one or more Algolia records from a CMS entry.
+ * If the combined searchable text fits, return a single record.
+ * Else split into multiple chunked records.
+ */
+export function buildAlgoliaRecords(entry: EntryLike, contentType: string): AlgoliaRecord[] {
+  const language = entry.locale || 'en-us';
+  const baseID = `${entry.uid}_${language}`;
+
+  const base: Omit<AlgoliaRecord, 'objectID' | 'section' | 'content'> & { objectID: string } = {
+    objectID: baseID,
+    url: entry.url,
+    title: entry.title,
+    description: cleanText(entry.summary || entry.introduction, 500), // short snippet
+    image: entry.featured_image?.url ?? null,
+    tags: Array.isArray(entry.tags)
+      ? entry.tags.map((t: any) => (typeof t === 'string' ? t : t.uid ?? t.title)).filter(Boolean)
+      : [],
+    created_at: entry.created_at,
+    updated_at: entry.updated_at,
+    language,
+    content_type: contentType,
+    shorttitle: entry.shorttitle || '',
+    topic: entry.topic || ''
+  };
+
+  // Full text to search inside (intro + maybe body/html field names you use)
+  const fullText = cleanText(
+    entry.introduction || entry.body || entry.content || entry.rich_text || entry.description,
+    50000 // allow large; we'll chunk later
+  );
+
+  const candidateSingle: AlgoliaRecord = { ...base, content: fullText };
+  if (recordBytes(candidateSingle) <= MAX_RECORD_BYTES) {
+    return [candidateSingle];
+  }
+
+  // Too large → chunk
+  return chunkLongText(base, fullText, MAX_RECORD_BYTES);
+}
+
+/**
+ * Index records in Algolia.
+ */
+export async function indexEntries(entry: EntryLike, contentType: string) {
+  try {
+    // const client: SearchClient = algoliasearch(
+    //   process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string,
+    //   process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string
+    // );
+    // const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+    // const index: SearchIndex = client.initIndex(indexName);
+
+
+    const client = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+    const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+
+
+    const records = buildAlgoliaRecords(entry, contentType);
+
+    // Log sizes for diagnostics
+    records.forEach(r => {
+      const size = recordBytes(r);
+      if (size > MAX_RECORD_BYTES) {
+        console.warn(`Record ${r.objectID} still too large at ${size} bytes after chunking.`);
+      }
+    });
+
+    const response = await client.saveObjects({ indexName: indexName, objects: records });
+    //const response = await index.saveObjects(records);
+    return response;
+  } catch (error) {
+    console.error('Error indexing entries:', error);
+    throw error;
+  }
+}
+
+// export async function indexEntries1(entry: any,contenttype: string)
+// {
+//  try {
+//     const algoliaClient = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_APP_ID as string, process.env.NEXT_PUBLIC_ALGOLIA_API_KEY as string);
+//     const indexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME as string;
+
+//     const record = [{
+//       objectID: entry.uid + entry.locale,
+//       title: entry.title,
+//       description: striptags(entry.summary || ''),
+//       url: entry.url,
+//       image: entry.featured_image ? entry.featured_image.url : null,
+//       tags: entry.tags || [],
+//       created_at: entry.created_at,
+//       updated_at: entry.updated_at,
+//       language: entry.locale || 'en-us',
+//       content_type: contenttype,
+//       introduction: striptags(entry.introduction || ''),
+//       shorttitle: entry.shorttitle || '',
+//       topic: entry.topic || 'Technology',
+//      ...entry, // Include full entry if needed
+//     }];
+
+//     const recordSize = Buffer.byteLength(JSON.stringify(record));
+
+//     if(recordSize >10)
+//     {
+//       // Handle large record sizes
+//       console.warn(`Record size exceeds 10KB: ${recordSize} bytes. Consider optimizing the data.`);
+//       return 200; 
+//     }
+
+//     const response = await algoliaClient.saveObjects({ indexName: indexName, objects: record });
+//     return response;
+//   } catch (error) {
+//     console.error('Error indexing entries:', error);
+//   }
+
+// }
