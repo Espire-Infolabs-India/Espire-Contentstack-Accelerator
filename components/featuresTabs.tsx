@@ -154,7 +154,7 @@ export default function FeaturesTabs() {
                 letters and numbers that a website downloads to your computer or
                 device to recognize you as a user when you return to the website
                 using the same computer/device and web browser. Cookies can help
-                a website to arrange content to match users’ preferred interests
+                a website to arrange content to match users&apos; preferred interests
                 more effectively or avoid the need for users to re-enter data
                 when they revisit a website. This can help speed up your login
                 time or customize the layout of pages according to your needs
@@ -164,34 +164,34 @@ export default function FeaturesTabs() {
                 “Non-Essential” cookies help us understand how our services are
                 being used (i.e. analytics) and deliver advertisements
               </p><h4>What are cookies on websites?</h4><p>
-                Cookies are small pieces of data that websites store on a user's
-                device, typically in the user's web browser, when they visit the
+                Cookies are small pieces of data that websites store on a user&apos;s
+                device, typically in the user&rsquo;s web browser, when they visit the
                 site. These data files serve various purposes, and they play a
                 crucial role in enhancing the functionality and user experience
                 of websites. Cookies can be divided into different types based
                 on their functions:
               </p><ol><li><strong>Session Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
                   browser.
                 </li><li><strong>Persistent Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
                   browser.
                 </li><li>
                   <strong>First-Party Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
                   browser.
                 </li><li>
                   <strong>Third-Party Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
@@ -202,7 +202,7 @@ export default function FeaturesTabs() {
               <ul>
                 <li>
                   <strong>Session Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
@@ -210,7 +210,7 @@ export default function FeaturesTabs() {
                 </li>
                 <li>
                   <strong>Persistent Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
@@ -218,7 +218,7 @@ export default function FeaturesTabs() {
                 </li>
                 <li>
                   <strong>First-Party Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
@@ -226,7 +226,7 @@ export default function FeaturesTabs() {
                 </li>
                 <li>
                   <strong>Third-Party Cookies</strong>: These are temporary cookies that are stored
-                  in the browser's memory during a user's visit to a website.
+                  in the browser&rsquo;s memory during a user&rsquo;s visit to a website.
                   They are often used to maintain user sessions, remembering
                   information as a user navigates through the site. Session
                   cookies are typically deleted when the user closes their web
@@ -235,8 +235,8 @@ export default function FeaturesTabs() {
               </ul>
 
               <p>
-                Cookies are small pieces of data that websites store on a user's
-                device, typically in the user's web browser, when they visit the
+                Cookies are small pieces of data that websites store on a user&rsquo;s
+                device, typically in the user&rsquo;s web browser, when they visit the
                 site. These data files serve various purposes, and they play a
                 crucial role in enhancing the functionality and user experience
                 of websites. Cookies can be divided into different types based
