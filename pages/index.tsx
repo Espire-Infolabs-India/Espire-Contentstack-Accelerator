@@ -23,6 +23,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
   const { locale: activeLocale } = useRouter();
   async function fetchData() {
     try {
+      
       const entryRes = await getPageRes(pageUrl,"page",activeLocale,getSiteName());
       setEntry(entryRes);
     } catch (error) {
@@ -58,19 +59,15 @@ export function getSiteName(): string {
 export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const { locale } = context;
-
-   getSiteName();
-
-   //const responseIndex = await indexEntries();
-
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
 
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
+     
     const res: Page = await getPageRes("/" , "page",locale,getSiteName());
-
+ 
     if (!res) throw new Error("Not found");
 
     return {
@@ -78,7 +75,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       revalidate: 1000,
     };
   } catch (error) {
-    console.error(error);
+      console.error(error);
     return {
       notFound: true,
     };

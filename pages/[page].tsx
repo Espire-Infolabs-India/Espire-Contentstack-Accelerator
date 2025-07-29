@@ -65,8 +65,8 @@ export default Pages;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  
-  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName()); 
+  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName());
+  console.info("entryPaths");
   const paths: { params: { page: string } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry.url !== "/blog" && entry.url !== "/")
@@ -78,12 +78,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: "blocking",
   };
 };
-export function getSiteName(): string { 
-  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
-}
+
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
-     getSiteName();
+    
     const entries = await getAllEntriesByContentType("header",locale);
     const header = entries?.[0] || null;
 
@@ -92,8 +90,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     if (!params || !params.page) return { props: { page: {}, pageUrl: "" } };
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
-      : `/${params?.page}`;
- 
+      : `/${params?.page}`; 
       const res: Page = await getPageRes(`${paramsPath}`,'page',locale,getSiteName());
      if (!res) throw "Error 404";
     return {
@@ -112,3 +109,6 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     };
   }
 };
+export function getSiteName(): string {
+  return process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
+}

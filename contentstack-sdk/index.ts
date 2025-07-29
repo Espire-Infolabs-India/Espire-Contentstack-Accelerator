@@ -489,13 +489,19 @@ export function buildAlgoliaRecords(
     objectID: baseID,
     url: entry.url,
     title: entry.title,
-    description: cleanText(entry.summary || entry.introduction, 500), // short snippet
-    image: entry.featured_image?.url ?? null,
-    sitename: entry?.site_configuration?.site_section ? entry?.site_configuration?.site_section : "Site-1",
+    // short snippet
+    image:
+      contentType === "blog"
+      ? entry.featured_image?.url ?? null
+      : entry.image?.url ?? null,
+
+    sitename: entry?.site_configuration?.site_section
+      ? entry?.site_configuration?.site_section
+      : "Site-1",
     tags: Array.isArray(entry.tags)
       ? entry.tags
-          .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
-          .filter(Boolean)
+        .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
+        .filter(Boolean)
       : [],
     created_at: entry.created_at,
     updated_at: entry.updated_at,
