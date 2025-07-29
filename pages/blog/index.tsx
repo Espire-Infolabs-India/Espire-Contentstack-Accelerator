@@ -50,8 +50,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
 };
 
 export default Home;
-export function getSiteName(): string {
-  console.log('blog getSiteName:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 export const getStaticProps: GetStaticProps = async (context) => {

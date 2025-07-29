@@ -19,14 +19,14 @@ export async function middleware(request: NextRequest) {
     if (search.includes('gh_id=')) {
             path = url;
     }
-    const middlewarereredirectresponse= await fetchRedirectEntry(path,request.nextUrl.locale || 'en-us'); 
-    const data = middlewarereredirectresponse;
+    // const middlewarereredirectresponse= await fetchRedirectEntry(path,request.nextUrl.locale || 'en-us'); 
+    // const data = middlewarereredirectresponse;
     
-    if (data && data.title != undefined) {
-      const entry = data;
-      const status = entry.status_code ? 302 : 301; 
-      return NextResponse.redirect(new URL(`${entry.to_url}`, request.url), status);
-    }
+    // if (data && data.title != undefined) {
+    //   const entry = data;
+    //   const status = entry.status_code ? 302 : 301; 
+    //   return NextResponse.redirect(new URL(`${entry.to_url}`, request.url), status);
+    // }
     return NextResponse.next();
 }
 

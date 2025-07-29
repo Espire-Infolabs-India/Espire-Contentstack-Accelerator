@@ -51,8 +51,7 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
 
 export default Home;
 
-export function getSiteName(): string {
-  console.log('getSiteName index:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 

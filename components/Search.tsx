@@ -73,8 +73,7 @@ const Search = (data: SearchContentType) => {
   );
 }
 
-export function getSiteName(): string {
-  console.log('blog getSiteName:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 

@@ -491,7 +491,7 @@ export function buildAlgoliaRecords(
     title: entry.title,
     description: cleanText(entry.summary || entry.introduction, 500), // short snippet
     image: entry.featured_image?.url ?? null,
-    sitename: entry.site_configuration.site_section,
+    sitename: entry?.site_configuration?.site_section ? entry?.site_configuration?.site_section : "Site-1",
     tags: Array.isArray(entry.tags)
       ? entry.tags
           .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
@@ -503,7 +503,7 @@ export function buildAlgoliaRecords(
     content_type: contentType,
     shorttitle: entry.shorttitle || "",
     topic: entry.topic || "",
-    author: entry.author || "", // assuming author is a field in the entry
+    author: entry?.author || "", // assuming author is a field in the entry
   };
 
   // Full text to search inside (intro + maybe body/html field names you use)
@@ -607,3 +607,46 @@ export async function indexEntries(entry: EntryLike, contentType: string) {
 //   }
 
 // }
+
+
+export async function updateQuery(uid:string) {
+  const API_KEY = process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY;
+  const DELIVERY_TOKEN = process.env.NEXT_PUBLIC_CONTENTSTACK_DELIVERY_TOKEN;
+  const ENVIRONMENT = process.env.NEXT_PUBLIC_CONTENTSTACK_ENVIRONMENT;
+  if (!API_KEY || !DELIVERY_TOKEN || !ENVIRONMENT) {
+    throw new Error("Missing Contentstack env variables");
+  }
+
+const myHeaders = new Headers();
+myHeaders.append("api_key", "blta0ff3cef332c7e34");
+myHeaders.append("authtoken", "blt99f75bf81cf3cdfd");
+myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+  "entry": {    
+    "site_configuration": {
+      "site_section": "Site-1"
+    }
+  }
+});
+
+  try {
+     const requestOptions: RequestInit = {
+  method: "PUT",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow" as RequestRedirect
+};
+
+fetch("https://api.contentstack.io/v3/content_types/page/entries/bltf16daa5a6da2f1f6", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+  } catch (error: any) {
+    console.error(
+      "Avinash GraphQL fetch failed:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+}

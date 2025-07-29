@@ -35,8 +35,7 @@ const NotFound = ({ headerData, footerData }: Props): JSX.Element => (
 
 export default NotFound;
 
-export function getSiteName(): string {
-  console.log('getSiteName 404:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 

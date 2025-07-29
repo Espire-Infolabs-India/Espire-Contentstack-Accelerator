@@ -66,8 +66,7 @@ export default Pages;
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
   
-  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName());
-   console.log('getSiteName a33:',process.env.NEXT_PUBLIC_SITE_NAME);
+  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName()); 
   const paths: { params: { page: string } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry.url !== "/blog" && entry.url !== "/")
@@ -79,8 +78,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: "blocking",
   };
 };
-export function getSiteName(): string {
-  console.log('getSiteName 33:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {

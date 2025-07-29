@@ -30,8 +30,7 @@ const ServerError = ({ headerData, footerData }: Props): JSX.Element => (
 );
 
 export default ServerError;
-export function getSiteName(): string {
-  console.log('getSiteName:',process.env.NEXT_PUBLIC_SITE_NAME);
+export function getSiteName(): string { 
   return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
