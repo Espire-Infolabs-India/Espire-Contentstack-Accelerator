@@ -7,11 +7,17 @@ type CTAComponentProps = CTAProps & {
 };
 
 export default function CTA(props: CTAComponentProps) {
+  if (
+    !props?.page_reference ||
+    props.page_reference.length === 0 ||
+    !props.page_reference[0]?.url
+  ) {
+    return null;
+  }
+
   const page = props?.page_reference?.[0];
   const url = page?.url;
   const title = props?.cta_title || "Learn More";
-
-  if (!url) return null;
 
   const variant = props?.variant || "default";
 
