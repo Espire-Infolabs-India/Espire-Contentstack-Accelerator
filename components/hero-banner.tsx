@@ -42,8 +42,9 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
               {parse(hero_banner?.banner_description)}
             </div>
           )}
-
-          <CTA cta={hero_banner?.call_to_action} />
+          {hero_banner?.call_to_action && (
+            <CTA {...hero_banner.call_to_action} />
+          )}
         </div>
       </div>
     </section>
