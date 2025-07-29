@@ -43,7 +43,7 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
             </div>
           )}
           {hero_banner?.call_to_action && (
-            <CTA {...hero_banner.call_to_action} />
+            <CTA {...hero_banner.call_to_action} variant="hero"/>
           )}
         </div>
       </div>
