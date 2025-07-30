@@ -7,7 +7,7 @@ import { Highlight } from 'react-instantsearch';
 export const SearchHit = ({ hit }: any) => {
 
   const { locale, defaultLocale } = useRouter();
-  const localizedUrl = locale === defaultLocale ? hit.url : `/${locale}${hit.url}`;
+  const localizedUrl = locale === defaultLocale ? hit?.url : `/${locale}${hit?.url}`;
 
   const formattedDate = hit.created_at
     ? new Date(hit.created_at).toLocaleDateString(locale, {

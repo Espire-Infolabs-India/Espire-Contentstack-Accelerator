@@ -41,8 +41,8 @@ export const getPageRes = async (
     siteName
   })) as Page[];
   if (!response?.length) throw new Error("Page not found");
-
-  const resolved = await resolveNestedEntry(response[0],siteName);
+ 
+  const resolved = await resolveNestedEntry(response[0],siteName); 
 
   if (liveEdit) {
     addEditableTags(resolved, "page", true);

@@ -41,7 +41,8 @@ const TechnicalOfferingsPage: NextPage<PageProps> = ({
       const entryRes = await getPageRes(
         pageUrl,
         "_technical_solution",
-        activeLocale
+        activeLocale,
+        getSiteName()
       );
       setEntry(entryRes);
     } catch (error) {
@@ -73,12 +74,12 @@ export default TechnicalOfferingsPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution");
-  const paths: { params: { "technical-offerings": string[] } }[] = [];
-
+  
+  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution",getSiteName());
+  const paths: { params: { "technical-offerings": string[] } }[] = []; 
   entryPaths.forEach((entry) => {
-    if (entry.url && entry.url.startsWith("/technical_offerings/")) {
-      const slug = entry.url.replace("/technical_offerings/", "");
+    if (entry?.url && entry?.url.startsWith("/technical_offerings/")) {
+      const slug = entry?.url.replace("/technical_offerings/", "");
       if (slug) {
         paths.push({
           params: {
@@ -99,7 +100,7 @@ export function getSiteName(): string {
 }
 export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   try {
-    getSiteName();
+    
     const headerEntries = await getAllEntriesByContentType("header", locale);
     const header = headerEntries?.[0] || null;
 
@@ -115,7 +116,9 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       Array.isArray(slugParts) ? slugParts.join("/") : slugParts
     }`;
 
-    const res: Page = await getPageRes(pageUrl, "_technical_solution", locale);
+    
+    const res: Page = await getPageRes(pageUrl, "_technical_solution", locale,getSiteName());
+   // console.warn("Page response:", res);
     if (!res) throw "Page not found";
 
     return {

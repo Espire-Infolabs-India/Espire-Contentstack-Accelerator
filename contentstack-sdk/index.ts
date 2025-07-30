@@ -75,7 +75,7 @@ export default {
       const query = Stack.ContentType(contentTypeUid).Query();
       if (referenceFieldPath) query.includeReference(referenceFieldPath);
       query
-        .toJSON()
+        .toJSON().where("site_configuration.site_section", `${siteName}`)
         .find()
         .then(
           (result) => {
@@ -88,6 +88,7 @@ export default {
             resolve(result);
           },
           (error) => {
+            console.error("GetEntry fetching entry:", error);
             reject(error);
           }
         );
@@ -132,7 +133,7 @@ export default {
           resolve(result[0]);
         },
         (error) => {
-          console.error(error);
+           console.error("GetEntryByUrl fetching entry:", error);
           reject(error);
         }
       );
@@ -267,9 +268,9 @@ export async function resolveNestedEntry(
           };
 
           if (error?.error_code === 141 || error?.status === 404) {
-            // console.warn(
-            //   `⚠️ Missing entry: ${obj._content_type_uid}/${obj.uid}. Possibly deleted from Contentstack.`
-            // );
+            console.warn(
+              `⚠️ Missing entry: ${obj._content_type_uid}/${obj.uid}. Possibly deleted from Contentstack.`
+            );
             return { __deleted: true };
           } else {
             console.error(
