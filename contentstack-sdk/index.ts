@@ -3,7 +3,6 @@ import { algoliasearch } from "algoliasearch";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 import getConfig from "next/config";
 import striptags from "striptags";
-import striptags from "striptags";
 import {
   customHostUrl,
   initializeContentStackSdk,
