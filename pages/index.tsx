@@ -51,10 +51,17 @@ const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =>
             locale={getEntry?.locale}
           />
 
-          <Globalcards />
-          <ContactUsForm />
-          <FeaturesTabs />
-          <MissionVision />
+          {/* Our Global location card design as per figma design */}
+          <Globalcards /> 
+
+           {/* Contact us form design as per figma design */}
+          <ContactUsForm /> 
+
+         {/* features section design as per figma design */}
+          <FeaturesTabs /> 
+
+        {/* our Mission section design as per figma design */}
+          <MissionVision /> 
           
         </main>
       ) : (
