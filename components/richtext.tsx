@@ -3,7 +3,6 @@ import { RichTextProps } from "../model/component-props/richtext.model";
 
 import parse from "html-react-parser";
 export default function RichTextComponent(data: RichTextProps) {
-    console.log("rte data",data);
   return (
     <>
       <section className="mt-10">

@@ -14,11 +14,13 @@ const envConfig = process.env.CONTENTSTACK_API_KEY
 
 const liveEdit = envConfig.CONTENTSTACK_LIVE_EDIT_TAGS === "true";
 
-export const getAllEntries = async (content_type : string): Promise<AllEntries> => {
+export const getAllEntries = async (content_type : string,locale: string = "en-us",siteName: string = "Site-1"): Promise<AllEntries> => {
   const response: AllEntries = (await Stack.getEntry({
     contentTypeUid: content_type,
     referenceFieldPath: undefined,
     jsonRtePath: undefined,
+    locale,
+    siteName
   })) as AllEntries;
   liveEdit &&
     response[0].forEach((entry) => addEditableTags(entry, "page", true));
@@ -28,17 +30,19 @@ export const getAllEntries = async (content_type : string): Promise<AllEntries> 
 export const getPageRes = async (
   entryUrl: string,
   contentTypeUid: string,
-  locale: string = "en-us"
+  locale: string = "en-us",
+  siteName: string = "Site-1"
 ): Promise<Page> => {
   const response: Page[] = (await Stack.getEntryByUrl({
     contentTypeUid,
     entryUrl,
     referenceFieldPath: [],
-    locale
+    locale,
+    siteName
   })) as Page[];
   if (!response?.length) throw new Error("Page not found");
-
-  const resolved = await resolveNestedEntry(response[0]);
+ 
+  const resolved = await resolveNestedEntry(response[0],siteName); 
 
   if (liveEdit) {
     addEditableTags(resolved, "page", true);

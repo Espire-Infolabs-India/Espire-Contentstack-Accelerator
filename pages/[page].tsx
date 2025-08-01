@@ -27,7 +27,7 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =
   async function fetchData() {
     try {
       console.info("fetching live preview data...");
-      const entryRes = await getPageRes(pageUrl, 'page',activeLocale);
+      const entryRes = await getPageRes(pageUrl, 'page',activeLocale,getSiteName());
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -65,7 +65,7 @@ export default Pages;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("page");
+  const entryPaths: AllEntries[] = await getAllEntries("page",getSiteName()); 
   const paths: { params: { page: string } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry.url !== "/blog" && entry.url !== "/")
@@ -89,9 +89,8 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     if (!params || !params.page) return { props: { page: {}, pageUrl: "" } };
     const paramsPath = params?.page.includes("/")
       ? `${params.page}`
-      : `/${params?.page}`;
- 
-      const res: Page = await getPageRes(`${paramsPath}`,'page',locale);
+      : `/${params?.page}`; 
+      const res: Page = await getPageRes(`${paramsPath}`,'page',locale,getSiteName());
      if (!res) throw "Error 404";
     return {
       props: {
@@ -109,3 +108,6 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     };
   }
 };
+export function getSiteName(): string {
+  return process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
+}
