@@ -3,33 +3,52 @@ import type { GetStaticProps, NextPage } from "next";
 import { getPageRes } from "../helper";
 import RenderComponents from "../components/render-components";
 import { Page } from "../model/page.model";
-import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
+import {
+  getAllEntriesByContentType,
+  onEntryChange,
+} from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
-import { useRouter } from "next/router";  
+import { useRouter } from "next/router";
 import { SEOProps } from "../model/common.model";
- 
+
 interface PageProps {
   page: Page;
   pageUrl: string;
-  header;
-  footer;
+  header: any;
+  footer: any;
   locale?: string;
-  seo : SEOProps
+  seo: SEOProps;
 }
 
-const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
+const Home: NextPage<PageProps> = ({
+  page,
+  pageUrl,
+  header,
+  footer,
+  locale,
+}) => {
   const [getEntry, setEntry] = useState(page);
   const { locale: activeLocale } = useRouter();
+
   async function fetchData() {
     try {
-      
-      const entryRes = await getPageRes(pageUrl,"page",activeLocale,getSiteName());
+      const personalize_variants =
+        new URLSearchParams(window.location.search).get(
+          "personalize_variants"
+        ) || "0_0";
+
+      const entryRes = await getPageRes("/", "page", activeLocale,getSiteName(), {
+        include_variants: true,
+        personalize_variants,
+      });
+      console.log("🔥 Live Preview Entry:", entryRes);
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
     }
   }
+
   useEffect(() => {
     onEntryChange(fetchData);
   }, [activeLocale, pageUrl]);
@@ -57,22 +76,34 @@ export function getSiteName(): string {
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  try {
+  try { 
     const { locale } = context;
+    console.log("context", context);
+    const personalize_variants = "0_3";
+console.log("personalize_variants value", personalize_variants);
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
 
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-     
-    const res: Page = await getPageRes("/" , "page",locale,getSiteName());
- 
-    if (!res) throw new Error("Not found");
+    const res: Page = await getPageRes("/", "page", locale, getSiteName(), {
+      include_variants: true,
+      personalize_variants,
+    });
+    console.log("static res",res)
+
+    if (!res) throw new Error("Page not found");
 
     return {
-      props: { page: res, pageUrl: "/", header, footer, locale },
-      revalidate: 1000,
+      props: {
+        page: res,
+        pageUrl: "/",
+        header,
+        footer,
+        locale,
+      },
+      revalidate: 1000, // ISR interval
     };
   } catch (error) {
       console.error(error);
