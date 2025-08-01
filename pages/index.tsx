@@ -38,7 +38,7 @@ const Home: NextPage<PageProps> = ({
           "personalize_variants"
         ) || "0_0";
 
-      const entryRes = await getPageRes("/", "page", activeLocale, {
+      const entryRes = await getPageRes("/", "page", activeLocale,getSiteName(), {
         include_variants: true,
         personalize_variants,
       });
@@ -71,6 +71,10 @@ const Home: NextPage<PageProps> = ({
 
 export default Home;
 
+export function getSiteName(): string { 
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
+
 export const getStaticProps: GetStaticProps = async (context) => {
   try { 
     const { locale } = context;
@@ -83,7 +87,7 @@ console.log("personalize_variants value", personalize_variants);
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/", "page", locale, {
+    const res: Page = await getPageRes("/", "page", locale, getSiteName(), {
       include_variants: true,
       personalize_variants,
     });
@@ -102,7 +106,7 @@ console.log("personalize_variants value", personalize_variants);
       revalidate: 1000, // ISR interval
     };
   } catch (error) {
-    console.error("❌ Error in getStaticProps:", error);
+      console.error(error);
     return {
       notFound: true,
     };

@@ -17,13 +17,16 @@ interface PageProps {
   locale?: string;
   seo : SEOProps
 }
-
+export function getSiteName(): string { 
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
 const Home: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) => {
+  getSiteName();
   const [getEntry, setEntry] = useState(page);
   const { locale: activeLocale } = useRouter();
   async function fetchData() {
     try {
-      const entryRes = await getPageRes(pageUrl,"page",activeLocale);
+      const entryRes = await getPageRes(pageUrl,"page",activeLocale, getSiteName());
       setEntry(entryRes);
     } catch (error) {
       console.error(error);
@@ -64,7 +67,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/technical-offerings" , "page",locale);
+    const res: Page = await getPageRes("/technical-offerings" , "page",locale, getSiteName());
 
     if (!res) throw new Error("Not found");
 

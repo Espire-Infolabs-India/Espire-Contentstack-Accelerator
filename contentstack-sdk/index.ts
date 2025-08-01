@@ -3,6 +3,7 @@ import { algoliasearch } from "algoliasearch";
 import ContentstackLivePreview from "@contentstack/live-preview-utils";
 import getConfig from "next/config";
 import striptags from "striptags";
+import striptags from "striptags";
 import {
   customHostUrl,
   initializeContentStackSdk,
@@ -14,6 +15,8 @@ type GetEntry = {
   contentTypeUid: string;
   referenceFieldPath: string[] | undefined;
   jsonRtePath: string[] | undefined;
+  locale?: string;
+  siteName?: string;
 };
 
 type GetEntryByUrl = {
@@ -21,6 +24,7 @@ type GetEntryByUrl = {
   contentTypeUid: string;
   referenceFieldPath: string[] | undefined;
   locale?: string;
+  siteName?: string; // Site name for multi-site support
   params?: {
     include_variants?: boolean;
     personalize_variants?: string;
@@ -69,14 +73,14 @@ export default {
    *
    */
 
-  // Utility to get reference fields from content type schema
+  // Utility to get reference fields from content type schema  
 
-  getEntry({ contentTypeUid, referenceFieldPath, jsonRtePath }: GetEntry) {
+  getEntry({ contentTypeUid, referenceFieldPath, jsonRtePath,locale,siteName }: GetEntry) {
     return new Promise((resolve, reject) => {
       const query = Stack.ContentType(contentTypeUid).Query();
       if (referenceFieldPath) query.includeReference(referenceFieldPath);
       query
-        .toJSON()
+        .toJSON().where("site_configuration.site_section", `${siteName}`)
         .find()
         .then(
           (result) => {
@@ -89,6 +93,7 @@ export default {
             resolve(result);
           },
           (error) => {
+            console.error("GetEntry fetching entry:", error);
             reject(error);
           }
         );
@@ -110,6 +115,7 @@ export default {
     referenceFieldPath,
     locale = "en-us",
     params,
+    siteName = "Site-1",
   }: // jsonRtePath,
   GetEntryByUrl) {
     return new Promise((resolve, reject) => {
@@ -129,7 +135,7 @@ export default {
       if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
       blogQuery.toJSON();
       console.log(" blogQuery.toJSON()",  blogQuery.toJSON());
-      const data = blogQuery.where("url", `${entryUrl}`)?.find();
+      const data = blogQuery.where("url", `${entryUrl}`).where("site_configuration.site_section", `${siteName}`).find();
       console.log(" blogQuery data",  data);
       data.then(
         (result) => {
@@ -139,11 +145,13 @@ export default {
           //     paths: jsonRtePath,
           //     renderOption,
           //   });
+
+        
           resolve(result[0]);
           console.log("resolve12",result[0]);
         },
         (error) => {
-          console.error(error);
+           console.error("GetEntryByUrl fetching entry:", error);
           reject(error);
         }
       );
@@ -239,26 +247,30 @@ export async function executeGraphQLQuery(graphQLQuery) {
 
 export async function resolveNestedEntry(
   entry: any,
-  locales?: string
+  locales?: string,
+  siteName?: string
 ): Promise<any> {
   const visited = new Set<string>();
-
+    
   async function resolveDeep(obj: any): Promise<any> {
     if (Array.isArray(obj)) {
-      return Promise.all(obj.map(resolveDeep));
+      const resolvedItems = await Promise.all(obj.map(resolveDeep));
+      // Remove nulls or deleted entries
+      return resolvedItems.filter(
+        (item) => item && !item.__deleted
+      );
     }
 
     if (obj && typeof obj === "object") {
-      // Unique key for each entry (content_type + uid)
       if (obj.uid && obj._content_type_uid) {
         const key = `${obj._content_type_uid}:${obj.uid}`;
         if (visited.has(key)) {
-          // Circular reference detected
           return { ...obj, __circular_ref: true };
         }
 
         visited.add(key);
         try {
+        
           const resolved = await Stack.ContentType(obj._content_type_uid)
             .Entry(obj.uid)
             .language(locales?.toLowerCase() || "en-us")
@@ -267,11 +279,24 @@ export async function resolveNestedEntry(
 
           return resolveDeep(resolved);
         } catch (err) {
-          console.error(
-            `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
-            err
-          );
-          return obj;
+          const error = err as {
+            error_code?: number;
+            status?: number;
+            message?: string;
+          };
+
+          if (error?.error_code === 141 || error?.status === 404) {
+            console.warn(
+              `⚠️ Missing entry: ${obj._content_type_uid}/${obj.uid}. Possibly deleted from Contentstack.`
+            );
+            return { __deleted: true };
+          } else {
+            console.error(
+              `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
+              err
+            );
+            return obj;
+          }
         }
       }
 
@@ -288,6 +313,7 @@ export async function resolveNestedEntry(
   return await resolveDeep(entry);
 }
 
+
 export async function getAllEntriesByContentType(
   contentTypeUid,
   locales?: string
@@ -297,7 +323,8 @@ export async function getAllEntriesByContentType(
     .language(locales?.toLowerCase() || "en-us");
   Query.toJSON().includeCount();
   try {
-    const [entries] = await Query.find();
+    const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
+    const [entries] = await Query.where("global_field.site_section", `${siteName}`).find();  //"global_field":{"site_section":"Site-2"}    
     const resolvedEntries = await Promise.all(
       entries.map((entry) =>
         resolveNestedEntry(entry, locales?.toLowerCase() || "en-us")
@@ -481,8 +508,15 @@ export function buildAlgoliaRecords(
     objectID: baseID,
     url: entry.url,
     title: entry.title,
-    description: cleanText(entry.summary || entry.introduction, 500), // short snippet
-    image: entry.featured_image?.url ?? null,
+    // short snippet
+    image:
+      contentType === "blog"
+      ? entry.featured_image?.url ?? null
+      : entry.image?.url ?? null,
+
+    sitename: entry?.site_configuration?.site_section
+      ? entry?.site_configuration?.site_section
+      : "Site-1",
     tags: Array.isArray(entry.tags)
       ? entry.tags
           .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
@@ -494,6 +528,7 @@ export function buildAlgoliaRecords(
     content_type: contentType,
     shorttitle: entry.shorttitle || "",
     topic: entry.topic || "",
+    author: entry?.author || "", // assuming author is a field in the entry
   };
 
   // Full text to search inside (intro + maybe body/html field names you use)
@@ -502,7 +537,8 @@ export function buildAlgoliaRecords(
       entry.body ||
       entry.content ||
       entry.rich_text ||
-      entry.description,
+      entry.description ||
+      entry.summary,
     50000 // allow large; we'll chunk later
   );
 
