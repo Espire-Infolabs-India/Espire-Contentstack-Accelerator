@@ -31,13 +31,15 @@ export default function BlogCards({ blogs }: Props) {
             className="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
           >
             <Link href={blog?.url || "#"} className="block h-full">
-              <div className="relative h-48 w-full">
+              <div className="relative h-48 w-full mb-5">
                 {blog?.featured_image?.url && (
                   <Image
                     src={blog.featured_image.url}
                     alt={blog?.title || "Blog Image"}
-                    fill
+                    width={500}
+                    height={208}
                     className="object-cover"
+                    // style={{ width: "auto", height: "auto" }}                  
                   />
                 )}
               </div>

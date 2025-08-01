@@ -48,12 +48,12 @@ const Pages: NextPage<PageProps> = ({ page, pageUrl, header, footer, locale }) =
     
     <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
-        <RenderComponents
+        <main><RenderComponents
           pageComponents={getEntry}
           entryUid={getEntry?.uid}
           contentTypeUid="page"
           locale={getEntry?.locale}
-        />
+        /></main>
       ) : (
         <Skeleton height={300} count={3} />
       )}

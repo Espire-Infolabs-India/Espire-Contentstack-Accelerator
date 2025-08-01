@@ -26,10 +26,11 @@ export default function HeroCarousel(data: CarouselProps) {
     setCurrentSlide((prev) => (prev + 1) % slides?.length);
     setIsAutoPlaying(false);
   };
+
   return (
     <>
       <div className="w-full py-5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="container mx-auto px-4 sm:px-6 md:px-0 py-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">
             {data?.title}
           </h1>

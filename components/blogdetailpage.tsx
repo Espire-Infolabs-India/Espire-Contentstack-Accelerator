@@ -32,10 +32,9 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
           <Image
             src={featured_image.url}
             alt={title}
-            layout="fill"
-            objectFit="cover"
-            className="brightness-75"
-            priority
+            width={1600}
+            height={200} 
+            className="brightness-75 w-full h-auto"
           />
         )}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
