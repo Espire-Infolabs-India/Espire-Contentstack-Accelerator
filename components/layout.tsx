@@ -40,7 +40,7 @@ export default function Layout({ children, page, header, footer, seo }: Props) {
       ></Script>
 
       <div className={`${PoppinFont.variable} font-poppin`}>
-        {/* <Header data={header} /> */}
+       <Header data={header} />
       <PersonalizeProvider> 
         {children}
         </PersonalizeProvider> 
