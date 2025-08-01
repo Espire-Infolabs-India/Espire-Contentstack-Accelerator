@@ -5,15 +5,18 @@ import Head from "next/head";
 import parse from "html-react-parser";
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
   const [alignmentPosition, setAlignmentPosition] = useState("");
- 
+
+  const alignmentMap = {
+    Left: "justify-start text-left",
+    Right: "justify-end text-right",
+    Center: "justify-center text-center",
+  };
+
   // const numberslides = hero_banner?.key > 0 ? 'px-10' : '';
   useEffect(() => {
-    if (hero_banner?.content_alignment === "Left") {
-      setAlignmentPosition("justify-start text-left");
-    } if (hero_banner?.content_alignment === "Right") {
-      setAlignmentPosition("justify-end text-right");
-    } if (hero_banner?.content_alignment === "Center") {
-      setAlignmentPosition("justify-center text-center");
+    const alignment = hero_banner?.content_alignment;
+    if (alignment && alignmentMap[alignment]) {
+      setAlignmentPosition(alignmentMap[alignment]);
     }
   }, [hero_banner?.content_alignment]);
 
@@ -60,7 +63,7 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
             </div>
           )}
           {hero_banner?.call_to_action && (
-            <CTA {...hero_banner?.call_to_action} variant="hero"/>
+            <CTA {...hero_banner?.call_to_action} variant="hero" />
           )}
         </div>
       </div>

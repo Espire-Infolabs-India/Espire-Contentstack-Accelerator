@@ -18,7 +18,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
 
   return (
     <div className="header-bg">
-      <header className="pt-8 pl-2 pr-2 pb-2 container m-auto">
+      <header className="py-8 pl-2 pr-2 container m-auto">
         <div className="flex justify-center gap-x-10 lg:block">
           {/* Quick Links */}
           <div className="hidden lg:flex items-center lg:justify-end mb-1">
@@ -46,7 +46,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                   height={70}
                   alt="Logo"
                   className="mr-4"
-                  style={{ width:'auto', height: "auto" }}
+                  style={{ width: "auto", height: "auto" }}
                   priority
                 />
               </Link>

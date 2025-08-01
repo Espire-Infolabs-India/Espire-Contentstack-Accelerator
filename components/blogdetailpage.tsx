@@ -33,12 +33,8 @@ export default function BlogDetailPage({ blog }: { blog: any }) {
             src={featured_image.url}
             alt={title}
             width={1600}
-            height={200}
-            // layout="fill"
-            // objectFit="cover"
+            height={200} 
             className="brightness-75 w-full h-auto"
-            // style={{ width: "auto", height: "auto" }}
-            // priority
           />
         )}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
