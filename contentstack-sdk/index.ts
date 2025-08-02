@@ -252,9 +252,9 @@ export async function resolveNestedEntry(
 
         visited.add(key);
         try {
-        
-          const resolved = await Stack.ContentType(obj._content_type_uid)
-            .Entry(obj.uid)
+
+          const resolved = await Stack.ContentType(obj._content_type_uid).Query().where("uid", obj.uid)
+            .where("site_configuration.site_section", `${siteName}`)  
             .language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
