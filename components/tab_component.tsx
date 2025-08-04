@@ -4,7 +4,6 @@ import { TabProps } from "../model/component-props/tabprops.model";
 
 export default function Tabcomponent(data: TabProps) {
 
-  console.log("Tab data: 2", data);
   const [activeTab, setActiveTab] = useState(0);
 
   return (
