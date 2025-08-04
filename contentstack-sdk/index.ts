@@ -195,37 +195,37 @@ export async function executeGraphQLQuery(graphQLQuery) {
   }
 }
 
-// export async function resolveNestedEntry(entry: any, locales?: string): Promise<any> {
-//   async function resolveDeep(obj: any): Promise<any> {
-//     if (Array.isArray(obj)) {
-//       return Promise.all(obj.map(resolveDeep));
-//     }
-//     if (obj && typeof obj === "object") {
-//       if (obj.uid && obj._content_type_uid) {
-//         try {
-//           const resolved = await Stack.ContentType(obj._content_type_uid)
-//             .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
-//             .toJSON()
-//             .fetch();
-//           return resolveDeep(resolved);
-//         } catch (err) {
-//           console.error(
-//             `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
-//             err
-//           );
-//           return obj;
-//         }
-//       }
-//       const resolvedObj: any = {};
-//       for (const key of Object.keys(obj)) {
-//         resolvedObj[key] = await resolveDeep(obj[key]);
-//       }
-//       return resolvedObj;
-//     }
-//     return obj;
-//   }
-//   return await resolveDeep(entry);
-// }
+export async function resolveNestedEntryNavigation(entry: any, locales?: string): Promise<any> {
+  async function resolveDeep(obj: any): Promise<any> {
+    if (Array.isArray(obj)) {
+      return Promise.all(obj.map(resolveDeep));
+    }
+    if (obj && typeof obj === "object") {
+      if (obj.uid && obj._content_type_uid) {
+        try {
+          const resolved = await Stack.ContentType(obj._content_type_uid)
+            .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
+            .toJSON()
+            .fetch();
+          return resolveDeep(resolved);
+        } catch (err) {
+          console.error(
+            `❌ Failed to resolve entry for ${obj._content_type_uid}/${obj.uid}:`,
+            err
+          );
+          return obj;
+        }
+      }
+      const resolvedObj: any = {};
+      for (const key of Object.keys(obj)) {
+        resolvedObj[key] = await resolveDeep(obj[key]);
+      }
+      return resolvedObj;
+    }
+    return obj;
+  }
+  return await resolveDeep(entry);
+}
 
 export async function resolveNestedEntry(
   entry: any,
@@ -309,7 +309,7 @@ export async function getAllEntriesByContentType(
     const [entries] = await Query.where("global_field.site_section", `${siteName}`).find();  //"global_field":{"site_section":"Site-2"}    
     const resolvedEntries = await Promise.all(
       entries.map((entry) =>
-        resolveNestedEntry(entry, locales?.toLowerCase() || "en-us")
+        resolveNestedEntryNavigation(entry, locales?.toLowerCase() || "en-us")
       )
     );
     return resolvedEntries;
