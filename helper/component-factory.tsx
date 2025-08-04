@@ -12,6 +12,7 @@ import PlainHtmlComponent from "../components/plainhtml";
 import Search from "../components/Search";
 import FeatureHighlightComponent from "../components/featurehighlights";
 import Map from "../components/map";
+import RichTextComponent from "../components/richtext";
 import Accordion from "../components/accordion";
 
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
@@ -30,4 +31,5 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   feature_highlights: (data) => <FeatureHighlightComponent {...data} />,
   google_map: (data) => <Map {...data} />,
   accordion: (data) => <Accordion {...data} />,
+  rich_text: (data) => <RichTextComponent {...data} />,
 };
