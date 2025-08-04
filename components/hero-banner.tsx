@@ -4,6 +4,7 @@ import { HeroBanner } from "../model/component-props/hero-banner.model";
 import Head from "next/head";
 import parse from "html-react-parser";
 export default function HeroBannerComponent(hero_banner: HeroBanner) {
+  // console.log("hero_banner",hero_banner);
   const cloudinaryImage =
     Array.isArray(hero_banner?.images) && hero_banner?.images?.length > 0
       ? hero_banner?.images[0]
@@ -42,8 +43,9 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
               {parse(hero_banner?.banner_description)}
             </div>
           )}
-
-          <CTA cta={hero_banner?.call_to_action} />
+          {hero_banner?.call_to_action && (
+            <CTA {...hero_banner?.call_to_action} variant="hero"/>
+          )}
         </div>
       </div>
     </section>

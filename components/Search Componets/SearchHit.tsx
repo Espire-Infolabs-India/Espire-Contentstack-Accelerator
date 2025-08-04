@@ -7,7 +7,7 @@ import { Highlight } from 'react-instantsearch';
 export const SearchHit = ({ hit }: any) => {
 
   const { locale, defaultLocale } = useRouter();
-  const localizedUrl = locale === defaultLocale ? hit.url : `/${locale}${hit.url}`;
+  const localizedUrl = locale === defaultLocale ? hit?.url : `/${locale}${hit?.url}`;
 
   const formattedDate = hit.created_at
     ? new Date(hit.created_at).toLocaleDateString(locale, {
@@ -20,9 +20,9 @@ export const SearchHit = ({ hit }: any) => {
   return (
     <div className="grid gap-4">
     <div className="border rounded-xl p-4 shadow-sm hover:shadow-md transition flex gap-4 bg-white">
-     {(hit.image || hit.featured_image) && (
+     {(hit.image ) && (
   <img
-    src={hit.content_type === "blog_post" ? hit.featured_image?.url : hit.image?.url}
+    src={hit.image}
     alt={hit.title}
     className="w-32 h-20 object-cover rounded-md flex-shrink-0"
   />

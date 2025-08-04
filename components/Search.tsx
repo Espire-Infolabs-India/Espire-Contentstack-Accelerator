@@ -51,7 +51,8 @@ const Search = (data: SearchContentType) => {
         {isReady && (            
           <Configure
             query={searchQuery}
-            filters={`language:"${locale}"`}
+            // filters={`language:"${locale}"`}
+            filters={`language:"${locale}" AND sitename:"${getSiteName()}"`}
             {...(contentType != "All" ? { facetFilters: [[`content_type:${contentType}`]] } : {})}
             hitsPerPage={10}
           />
@@ -70,6 +71,10 @@ const Search = (data: SearchContentType) => {
       </InstantSearch>
     </div>
   );
+}
+
+export function getSiteName(): string { 
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
 }
 
 export default Search;

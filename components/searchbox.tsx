@@ -8,8 +8,7 @@ export default function SearchBox() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const currentUrl = `${router.asPath.split("?")[0]}`;
-    console.log("Current URL:", currentUrl);
+    const currentUrl = `${router.asPath.split("?")[0]}`; 
 
      router.push({
         pathname: (currentUrl === "/technical-offerings" || currentUrl === "/case-study") ? currentUrl : "/search",
