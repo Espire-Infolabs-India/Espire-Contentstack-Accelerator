@@ -12,7 +12,6 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
     Center: "justify-center text-center",
   };
 
-  // const numberslides = hero_banner?.key > 0 ? 'px-10' : '';
   useEffect(() => {
     const alignment = hero_banner?.content_alignment;
     if (alignment && alignmentMap[alignment]) {

@@ -7,6 +7,7 @@ import Script from "next/script";
 import { Poppins } from "next/font/google";
 import { SEOProps } from "../model/common.model";
 import SEO from "./seo";
+import { PersonalizeProvider } from "./context/PersonalizeContext";
 export const PoppinFont = Poppins({
   weight: "400",
   subsets: ["latin"],
@@ -38,8 +39,10 @@ export default function Layout({ children, page, header, footer, seo }: Props) {
         strategy={"beforeInteractive"}
       ></Script>
       <div className={`${PoppinFont.variable} font-poppin`}>
-        <Header data={header} />
+       <Header data={header} />
+      <PersonalizeProvider> 
         {children}
+        </PersonalizeProvider> 
         <Footer data={footer} />
       </div>
     </>

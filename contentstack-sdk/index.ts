@@ -24,6 +24,10 @@ type GetEntryByUrl = {
   referenceFieldPath: string[] | undefined;
   locale?: string;
   siteName?: string; // Site name for multi-site support
+  params?: {
+    include_variants?: boolean;
+    personalize_variants?: string;
+  };
   // jsonRtePath: string[] | undefined;
 };
 
@@ -109,17 +113,29 @@ export default {
     entryUrl,
     referenceFieldPath,
     locale = "en-us",
-    siteName = "Site-1"
-  }: // jsonRTEPath,
+    params,
+    siteName = "Site-1",
+  }: // jsonRtePath,
   GetEntryByUrl) {
     return new Promise((resolve, reject) => {
       const blogQuery = Stack.ContentType(contentTypeUid)
         .Query()
         .language(locale.toLowerCase() || "en-us");
+      // ✅ Enable variant resolution if requested
+      console.log("params blog",params);
+      if (params?.include_variants) {
+  blogQuery.addParam("include_variants", "true");
+
+  if (params?.personalize_variants) {
+    blogQuery.addParam("personalize_variants", params.personalize_variants);
+  }
+}
+
       if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
       blogQuery.toJSON();
-      
+      console.log(" blogQuery.toJSON()",  blogQuery.toJSON());
       const data = blogQuery.where("url", `${entryUrl}`).where("site_configuration.site_section", `${siteName}`).find();
+      console.log(" blogQuery data",  data);
       data.then(
         (result) => {
           // jsonRtePath &&
@@ -131,6 +147,7 @@ export default {
 
         
           resolve(result[0]);
+          console.log("resolve12",result[0]);
         },
         (error) => {
            console.error("GetEntryByUrl fetching entry:", error);
@@ -252,9 +269,9 @@ export async function resolveNestedEntry(
 
         visited.add(key);
         try {
-        
-          const resolved = await Stack.ContentType(obj._content_type_uid)
-            .Entry(obj.uid)
+
+          const resolved = await Stack.ContentType(obj._content_type_uid).Query().where("uid", obj.uid)
+            .where("site_configuration.site_section", `${siteName}`)  
             .language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
@@ -501,8 +518,8 @@ export function buildAlgoliaRecords(
       : "Site-1",
     tags: Array.isArray(entry.tags)
       ? entry.tags
-        .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
-        .filter(Boolean)
+          .map((t: any) => (typeof t === "string" ? t : t.uid ?? t.title))
+          .filter(Boolean)
       : [],
     created_at: entry.created_at,
     updated_at: entry.updated_at,
