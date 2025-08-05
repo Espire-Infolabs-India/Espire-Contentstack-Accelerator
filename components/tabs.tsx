@@ -3,11 +3,8 @@ import Image from "next/image";
 import { TabProps } from "../model/component-props/tabprops.model";
 import parse from "html-react-parser";
 //export default function TabComponent({ title, tabs, tab_orientation = "vertical" }: TabProps) {
-export default function Tabcomponent(data: TabProps) {
-  console.log("Tab data:", data);
-  const [activeTab, setActiveTab] = useState(0);
-
-console.log("Tab data.tab_orientation Data:", data.tab_orientation);
+export default function Tabs(data: TabProps) { 
+  const [activeTab, setActiveTab] = useState(0); 
 
   const isVertical = data.tab_orientation === "Vertical";
 

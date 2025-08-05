@@ -13,7 +13,7 @@ import Search from "../components/Search";
 import FeatureHighlightComponent from "../components/featurehighlights";
 import Map from "../components/map";
 import RichTextComponent from "../components/richtext";
-import TabComponent from "../components/tab_component";
+import Tabs from "../components/tabs";
 
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   hero_banner: (data) => <HeroBanner {...data} />,
@@ -31,5 +31,5 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   feature_highlights: (data) => <FeatureHighlightComponent {...data} />,
   google_map: (data) => <Map {...data} />,
   rich_text: (data) => <RichTextComponent {...data} />,
-  tab_component: (data) => <TabComponent {...data} />,
+  tabs: (data) => <Tabs {...data} />,
 };
