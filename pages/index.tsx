@@ -42,7 +42,7 @@ const Home: NextPage<PageProps> = ({
       const personalize_variants =
         new URLSearchParams(window.location.search).get(
           "personalize_variants"
-        ) || "0_0";
+        ) || "0_3";
 
       const entryRes = await getPageRes("/", "page", activeLocale,getSiteName(), {
         include_variants: true,
