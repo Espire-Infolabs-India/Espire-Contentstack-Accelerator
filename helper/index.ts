@@ -37,7 +37,7 @@ export const getPageRes = async (
     personalize_variants?: string;
   }
 ): Promise<Page> => {
-  const defaultVariant = "0_0";
+  const defaultVariant = "0_3";
 
   const options = {
     contentTypeUid,
