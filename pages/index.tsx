@@ -9,7 +9,13 @@ import {
 } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
-import { useRouter } from "next/router";
+
+import Globalcards from "../components/globalcards";
+import ContactUsForm from "../components/contactusform";
+import FeaturesTabs from "../components/featuresTabs";
+import MissionVision from "../components/missionvision";
+
+import { useRouter } from "next/router";  
 import { SEOProps } from "../model/common.model";
 
 interface PageProps {
@@ -56,12 +62,27 @@ const Home: NextPage<PageProps> = ({
   return (
     <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
-        <RenderComponents
-          pageComponents={getEntry}
-          entryUid={getEntry?.uid}
-          contentTypeUid="page"
-          locale={getEntry?.locale}
-        />
+        <main>
+          <RenderComponents
+            pageComponents={getEntry}
+            entryUid={getEntry?.uid}
+            contentTypeUid="page"
+            locale={getEntry?.locale}
+          />
+
+          {/* Our Global location card design as per figma design */}
+          <Globalcards /> 
+
+           {/* Contact us form design as per figma design */}
+          <ContactUsForm /> 
+
+         {/* features section design as per figma design */}
+          <FeaturesTabs /> 
+
+        {/* our Mission section design as per figma design */}
+          <MissionVision /> 
+          
+        </main>
       ) : (
         <Skeleton />
       )}

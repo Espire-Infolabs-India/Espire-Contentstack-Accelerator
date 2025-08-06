@@ -38,7 +38,6 @@ export default function Layout({ children, page, header, footer, seo }: Props) {
         data-settings-id="WsB9MfwJE5J5uE"
         strategy={"beforeInteractive"}
       ></Script>
-
       <div className={`${PoppinFont.variable} font-poppin`}>
        <Header data={header} />
       <PersonalizeProvider> 
