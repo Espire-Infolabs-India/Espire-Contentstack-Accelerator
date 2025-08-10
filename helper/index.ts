@@ -56,8 +56,10 @@ export const getPageRes = async (
 
   if (!response?.length) throw new Error("Page not found");
 
-  const resolved = await resolveNestedEntry(response[0],siteName);
+  //const resolved = await resolveNestedEntry(response[0],siteName);
+  const resolved = await resolveNestedEntryNavigation(response[0],siteName);
 
+  
   console.log("✅ Final Resolved Entry:", resolved?.title, "Variant ID:", resolved?.variant_id);
 
   if (liveEdit) {
