@@ -8,7 +8,7 @@ const FeatureHighlightComponent = (data: FeatureHighlights) => {
     <div className="container mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-center mb-4">{data?.title}</h2>
       <div className="text-center text-gray-600 max-w-2xl mx-auto mb-10">
-         {parse(data?.description)}
+        {parse(data?.description)}
       </div>
 
       {isSingle ? (
