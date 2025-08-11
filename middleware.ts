@@ -2,61 +2,53 @@ import { NextRequest, NextResponse } from "next/server";
 import { fetchRedirectEntry } from "./lib/contentstack-redirects";
 import Personalize from "@contentstack/personalize-edge-sdk";
 
-// 🧹 Ignore unnecessary paths
 const ignoreRouteList = [
   "/favicon.ico",
   "/robots.txt",
   "/manifest.json",
   "/service-worker.js",
-  "/_next", // Next.js static files
+  "/_next",
   "/.well-known",
 ];
 
 export async function middleware(request: NextRequest) {
-  console.log("🔥 Middleware executing:", request.nextUrl.href);
+  const { pathname, search, locale } = request.nextUrl;
+  let path = pathname;
+  let url = pathname + search;
 
-  const { pathname, search } = request.nextUrl;
-  const fullPath = pathname + search;
-
-  // ⛔ Ignore static/internal paths
-  if (ignoreRouteList.some((route) => pathname.startsWith(route))) {
+  if (ignoreRouteList.some((route) => url.endsWith(route))) {
     return NextResponse.next();
   }
 
-  // 📦 Handle redirects from Contentstack
-  let checkPath = pathname;
-  if (pathname.endsWith("/")) {
-    checkPath = pathname.slice(0, -1);
-  }
+  const path2 = path.endsWith("/") ? path.slice(0, -1) : path + "/";
   if (search.includes("gh_id=")) {
-    checkPath = fullPath;
+    path = url;
   }
-
-  const redirectEntry = await fetchRedirectEntry(
-    checkPath,
+  const middlewarereredirectresponse = await fetchRedirectEntry(
+    path,
     request.nextUrl.locale || "en-us"
   );
+  const data = middlewarereredirectresponse;
 
-  if (redirectEntry?.title) {
-    const status = redirectEntry.status_code ? 302 : 301;
-    return NextResponse.redirect(new URL(redirectEntry.to_url, request.url), status);
+  if (data && data.title != undefined) {
+    const entry = data;
+    const status = entry.status_code ? 302 : 301;
+    return NextResponse.redirect(
+      new URL(`${entry.to_url}`, request.url),
+      status
+    );
   }
 
-  // 🧪 Personalization
-  const projectUid = process.env.NEXT_PUBLIC_PERSONALIZATION_PROJECT_UID as string;
+  const projectUid = process.env
+    .NEXT_PUBLIC_PERSONALIZATION_PROJECT_UID as string;
   if (process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL) {
-    Personalize.setEdgeApiUrl(process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL);
+    Personalize.setEdgeApiUrl(
+      process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL
+    );
   }
-
   const personalizeSdk = await Personalize.init(projectUid, { request });
   const variantParam = personalizeSdk.getVariantParam();
 
-  // 📄 Path filter for logging clarity
-  console.log("📱 User Agent:", request.headers.get("user-agent"));
-  console.log("🧪 Variant Query Param:", variantParam);
-  console.log("📦 Manifest:", personalizeSdk);
-
-  // 🎯 Rewrite URL with personalization param
   const parsedUrl = new URL(request.url);
   parsedUrl.searchParams.set(personalizeSdk.VARIANT_QUERY_PARAM, variantParam);
 
@@ -67,6 +59,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*"], // match all routes
+  matcher: ["/:path*"],
   runtime: "nodejs",
 };

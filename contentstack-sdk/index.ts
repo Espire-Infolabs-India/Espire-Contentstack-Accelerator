@@ -24,10 +24,6 @@ type GetEntryByUrl = {
   referenceFieldPath: string[] | undefined;
   locale?: string;
   siteName?: string; // Site name for multi-site support
-  params?: {
-    include_variants?: boolean;
-    personalize_variants?: string;
-  };
   // jsonRtePath: string[] | undefined;
 };
 
@@ -72,14 +68,21 @@ export default {
    *
    */
 
-  // Utility to get reference fields from content type schema  
+  // Utility to get reference fields from content type schema
 
-  getEntry({ contentTypeUid, referenceFieldPath, jsonRtePath,locale,siteName }: GetEntry) {
+  getEntry({
+    contentTypeUid,
+    referenceFieldPath,
+    jsonRtePath,
+    locale,
+    siteName,
+  }: GetEntry) {
     return new Promise((resolve, reject) => {
       const query = Stack.ContentType(contentTypeUid).Query();
       if (referenceFieldPath) query.includeReference(referenceFieldPath);
       query
-        .toJSON().where("site_configuration.site_section", `${siteName}`)
+        .toJSON()
+        .where("site_configuration.site_section", `${siteName}`)
         .find()
         .then(
           (result) => {
@@ -113,7 +116,6 @@ export default {
     entryUrl,
     referenceFieldPath,
     locale = "en-us",
-    params,
     siteName = "Site-1",
   }: // jsonRtePath,
   GetEntryByUrl) {
@@ -121,36 +123,20 @@ export default {
       const blogQuery = Stack.ContentType(contentTypeUid)
         .Query()
         .language(locale.toLowerCase() || "en-us");
-      // ✅ Enable variant resolution if requested
-      console.log("params blog",params);
-      if (params?.include_variants) {
-  blogQuery.addParam("include_variants", "true");
-
-  if (params?.personalize_variants) {
-    blogQuery.addParam("personalize_variants", params.personalize_variants);
-  }
-}
 
       if (referenceFieldPath) blogQuery.includeReference(referenceFieldPath);
       blogQuery.toJSON();
-      console.log(" blogQuery.toJSON()",  blogQuery.toJSON());
-      const data = blogQuery.where("url", `${entryUrl}`).where("site_configuration.site_section", `${siteName}`).find();
-      console.log(" blogQuery data",  data);
+      const data = blogQuery
+        .where("url", `${entryUrl}`)
+        .where("site_configuration.site_section", `${siteName}`)
+        .find();
+
       data.then(
         (result) => {
-          // jsonRtePath &&
-          //   Utils.jsonToHTML({
-          //     entry: result,
-          //     paths: jsonRtePath,
-          //     renderOption,
-          //   });
-
-        
           resolve(result[0]);
-          console.log("resolve12",result[0]);
         },
         (error) => {
-           console.error("GetEntryByUrl fetching entry:", error);
+          console.error("GetEntryByUrl fetching entry:", error);
           reject(error);
         }
       );
@@ -212,7 +198,10 @@ export async function executeGraphQLQuery(graphQLQuery) {
   }
 }
 
-export async function resolveNestedEntryNavigation(entry: any, locales?: string): Promise<any> {
+export async function resolveNestedEntryNavigation(
+  entry: any,
+  locales?: string
+): Promise<any> {
   async function resolveDeep(obj: any): Promise<any> {
     if (Array.isArray(obj)) {
       return Promise.all(obj.map(resolveDeep));
@@ -221,7 +210,8 @@ export async function resolveNestedEntryNavigation(entry: any, locales?: string)
       if (obj.uid && obj._content_type_uid) {
         try {
           const resolved = await Stack.ContentType(obj._content_type_uid)
-            .Entry(obj.uid).language(locales?.toLowerCase() || "en-us")
+            .Entry(obj.uid)
+            .language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
           return resolveDeep(resolved);
@@ -250,14 +240,12 @@ export async function resolveNestedEntry(
   siteName?: string
 ): Promise<any> {
   const visited = new Set<string>();
-    
+
   async function resolveDeep(obj: any): Promise<any> {
     if (Array.isArray(obj)) {
       const resolvedItems = await Promise.all(obj.map(resolveDeep));
       // Remove nulls or deleted entries
-      return resolvedItems.filter(
-        (item) => item && !item.__deleted
-      );
+      return resolvedItems.filter((item) => item && !item.__deleted);
     }
 
     if (obj && typeof obj === "object") {
@@ -269,9 +257,10 @@ export async function resolveNestedEntry(
 
         visited.add(key);
         try {
-
-          const resolved = await Stack.ContentType(obj._content_type_uid).Query().where("uid", obj.uid)
-            .where("site_configuration.site_section", `${siteName}`)  
+          const resolved = await Stack.ContentType(obj._content_type_uid)
+            .Query()
+            .where("uid", obj.uid)
+            .where("site_configuration.site_section", `${siteName}`)
             .language(locales?.toLowerCase() || "en-us")
             .toJSON()
             .fetch();
@@ -312,7 +301,6 @@ export async function resolveNestedEntry(
   return await resolveDeep(entry);
 }
 
-
 export async function getAllEntriesByContentType(
   contentTypeUid,
   locales?: string
@@ -323,7 +311,10 @@ export async function getAllEntriesByContentType(
   Query.toJSON().includeCount();
   try {
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
-    const [entries] = await Query.where("global_field.site_section", `${siteName}`).find();  //"global_field":{"site_section":"Site-2"}    
+    const [entries] = await Query.where(
+      "global_field.site_section",
+      `${siteName}`
+    ).find(); //"global_field":{"site_section":"Site-2"}
     const resolvedEntries = await Promise.all(
       entries.map((entry) =>
         resolveNestedEntryNavigation(entry, locales?.toLowerCase() || "en-us")
@@ -510,8 +501,8 @@ export function buildAlgoliaRecords(
     // short snippet
     image:
       contentType === "blog"
-      ? entry.featured_image?.url ?? null
-      : entry.image?.url ?? null,
+        ? entry.featured_image?.url ?? null
+        : entry.image?.url ?? null,
 
     sitename: entry?.site_configuration?.site_section
       ? entry?.site_configuration?.site_section
