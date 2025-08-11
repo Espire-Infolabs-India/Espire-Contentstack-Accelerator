@@ -1,15 +1,15 @@
 import React from "react";
 import { FeatureHighlights } from "../model/component-props/featurehighlights.models";
-
+import parse from "html-react-parser";
 const FeatureHighlightComponent = (data: FeatureHighlights) => {
   const isSingle = data?.featured_post?.length === 1;
 
   return (
     <div className="container mx-auto px-4 py-10">
       <h2 className="text-3xl font-bold text-center mb-4">{data?.title}</h2>
-      <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10">
-        {data?.description}
-      </p>
+      <div className="text-center text-gray-600 max-w-2xl mx-auto mb-10">
+         {parse(data?.description)}
+      </div>
 
       {isSingle ? (
         <div className="max-w-2xl mx-auto">
