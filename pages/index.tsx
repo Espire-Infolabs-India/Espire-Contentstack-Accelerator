@@ -17,7 +17,7 @@ import { SEOProps } from "../model/common.model";
 import {
   fetchPageEntryByUid,
   getVariantShortUidFromCookie,
-  toXCsVariantUid,
+  setVariantUID,
 } from "../helper/personalize";
 
 interface PageProps {
@@ -48,8 +48,8 @@ const Home: NextPage<PageProps> = ({
         getSiteName()
       );
       const uid = entryRes.uid;
-      const short = getVariantShortUidFromCookie();
-      const xUid = toXCsVariantUid(short);
+      const variantUID = getVariantShortUidFromCookie();
+      const xUid = setVariantUID(variantUID);
       const entry = await fetchPageEntryByUid("page", uid, xUid);
       setEntry(entry);
     } catch (error) {

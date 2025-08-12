@@ -30,8 +30,8 @@ export function getVariantShortUidFromCookie(): string | null {
   }
 }
 
-export function toXCsVariantUid(short: string | null): string | null {
-  return short ? `cs_personalize_${short}` : null;
+export function setVariantUID(variantUID: string | null): string | null {
+  return variantUID ? `cs_personalize_${variantUID}` : null;
 }
 
 export async function fetchPageEntryByUid(
