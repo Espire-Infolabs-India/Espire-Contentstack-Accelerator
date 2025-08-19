@@ -58,6 +58,5 @@ export async function fetchPageEntryByUid(
   }
 
   const res = await axios.get(url, { headers });
-  console.log("Response from Contentstack:", res.data);
   return res.data.entry;
 }
