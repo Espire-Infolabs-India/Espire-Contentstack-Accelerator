@@ -4,6 +4,20 @@ const withPWA = require("next-pwa")({
   dest: "public",
 });
 
+// detect current site from env
+const currentSite = process.env.NEXT_PUBLIC_SITE_NAME;
+
+const siteI18nConfig = {
+  "Site-1": {
+    locales: ["en-us", "fr-us", "zh-cn"],
+    defaultLocale: "en-us",
+  },
+  "Site-2": {
+    locales: ["en-us"],
+    defaultLocale: "en-us",
+  },
+};
+
 const nextConfig = {
   reactStrictMode: true,
   siteUrl: process.env.SITE_URL || "https://localhost:3000",
@@ -47,10 +61,11 @@ const nextConfig = {
       },
     ];
   },
-  i18n: {
-    locales: ["en-us", "fr-us", "zh-cn"],
-    defaultLocale: "en-us",
-  },
+  // i18n: {
+  //   locales: ["en-us", "fr-us", "zh-cn"],
+  //   defaultLocale: "en-us",
+  // },
+  i18n: siteI18nConfig[currentSite] || siteI18nConfig["site-1"],
   experimental: { largePageDataBytes: 128 * 100000 } 
 };
 

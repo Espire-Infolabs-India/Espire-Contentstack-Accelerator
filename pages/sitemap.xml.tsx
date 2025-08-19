@@ -7,12 +7,13 @@ const Sitemap = () => {
 
 export const getServerSideProps = async ({ res }) => {
   const baseUrl = process.env.NEXT_PUBLIC_HOSTED_URL || "http://localhost:3000";
+  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
   const pageContentTypes = await isPage();
   const allPages: string[] = [];
 
   for (const contentType of pageContentTypes) {
     //@ts-ignore
-    const entries: AllEntries[] = await getAllEntries(contentType);
+    const entries: AllEntries[] = await getAllEntries(contentType,locale, siteName);
     const urls = entries.map((entry) => {
       const fullUrl = `${baseUrl}${entry.url}`;
       return fullUrl;

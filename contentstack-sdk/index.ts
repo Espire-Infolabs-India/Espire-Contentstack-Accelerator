@@ -257,14 +257,15 @@ export async function resolveNestedEntry(
 
         visited.add(key);
         try {
-          const resolved = await Stack.ContentType(obj._content_type_uid)
+         /* const resolved = await Stack.ContentType(obj._content_type_uid)
             .Query()
             .where("uid", obj.uid)
             .where("site_configuration.site_section", `${siteName}`)
             .language(locales?.toLowerCase() || "en-us")
             .toJSON()
-            .fetch();
-
+            .fetch();*/
+	    
+	  var resolved = await getNestedData(obj,locales?.toLowerCase() || "en-us",siteName) 
           return resolveDeep(resolved);
         } catch (err) {
           const error = err as {
@@ -300,6 +301,32 @@ export async function resolveNestedEntry(
 
   return await resolveDeep(entry);
 }
+
+
+async function getNestedData(obj, locales, siteName) {
+  try {
+
+    
+    const blogQuery = Stack.ContentType(obj._content_type_uid)
+      .Query()
+      .language(locales?.toLowerCase() || "en-us");
+
+    blogQuery.toJSON();
+
+    const result = await blogQuery
+      .where("uid", obj.uid)
+      .where("site_configuration.site_section", siteName)
+      .find();
+
+    // result is usually an array: [entries, schema/metadata]
+    const [entries] = result;
+    return entries[0]; // actual entries
+  } catch (error) {
+    console.error("Error fetching blog data:", error);
+    return null;
+  }
+}
+
 
 export async function getAllEntriesByContentType(
   contentTypeUid,

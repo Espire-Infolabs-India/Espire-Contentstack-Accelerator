@@ -30,7 +30,7 @@ export default function BlogDetail({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const Query = Stack.ContentType("blog_post").Query().toJSON();
+    const Query = Stack.ContentType("blog_post").Query().language("en-us").where("site_configuration.site_section", getSiteName()).toJSON();
     const [entries] = await Query.find();
 
     const paths = entries.map((entry: any) => {
@@ -64,6 +64,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       .Query()
       .language(locale?.toLowerCase() || "en-us")
       .where("url", fullPath)
+      .where("site_configuration.site_section", getSiteName())
       .toJSON();
 
     const [entries] = await Query.find();
@@ -96,3 +97,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     };
   }
 };
+
+export function getSiteName(): string { 
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}
