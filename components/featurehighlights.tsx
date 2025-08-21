@@ -10,7 +10,6 @@ const FeatureHighlightComponent = (data: FeatureHighlights) => {
       <div className="text-center text-gray-600 max-w-2xl mx-auto mb-10">
         {parse(data?.description)}
       </div>
-
       {isSingle ? (
         <div className="max-w-2xl mx-auto">
           <div className="rounded-lg shadow-md p-6 bg-blue-900 text-white">
@@ -24,7 +23,7 @@ const FeatureHighlightComponent = (data: FeatureHighlights) => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {data?.featured_post?.map((post, index) => (
             <div
               key={index}
