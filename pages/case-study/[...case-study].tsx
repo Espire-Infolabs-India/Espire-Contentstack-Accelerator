@@ -67,9 +67,9 @@ const CaseStudyPage: NextPage<PageProps> = ({
 
 export default CaseStudyPage;
 
-export const getStaticPaths: GetStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async (context) => {
   //@ts-ignore
-  const entryPaths: AllEntries[] = await getAllEntries("_case_study");
+  const entryPaths: AllEntries[] = await getAllEntries("_case_study",context.locale,getSiteName());
   const paths: { params: { "case-study": string[] } }[] = [];
 
   entryPaths.forEach((entry) => {
@@ -106,7 +106,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
       Array.isArray(slugParts) ? slugParts.join("/") : slugParts
     }`;
 
-    const res: Page = await getPageRes(pageUrl, "_case_study", locale);
+    const res: Page = await getPageRes(pageUrl, "_case_study", locale, getSiteName());
     if (!res) throw "Page not found";
 
     return {
@@ -125,3 +125,7 @@ export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
     };
   }
 };
+
+export function getSiteName(): string { 
+  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+}

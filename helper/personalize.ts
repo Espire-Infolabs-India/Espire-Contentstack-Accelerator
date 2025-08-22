@@ -39,8 +39,13 @@ export async function fetchPageEntryByUid(
   entryUid: string,
   variantUid?: string | null
 ) {
+
+  // console.log("Fetching page entry by UID:", {
+  //   contentTypeUid, 
+  //   entryUid,
+  //   variantUid});
   const base = `https://cdn.contentstack.io/v3/content_types/${contentTypeUid}/entries`;
-  const url = `${base}/${entryUid}`;
+  const url = `${base}/${entryUid}?include_all=true`;
 
   const headers: Record<string, string> = {
     api_key: process.env.NEXT_PUBLIC_CONTENTSTACK_API_KEY as string,
