@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { GET_ALL_BLOG_POSTS_QUERY } from "../utils/graphql/query";
 import { executeGraphQLQuery } from "../contentstack-sdk";
 import BlogCards, { BlogEntry } from "./blogcards";
-
-export default function BlogListing() {
+type Props = {
+  title: string;
+};
+export default function BlogListing(data:Props) {
+  const title = data?.title;
   const [entries, setEntries] = useState<BlogEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -46,5 +48,5 @@ export default function BlogListing() {
   if (error) return <p className="text-red-600">Error: {error}</p>;
   if (entries.length === 0) return <p>No blog posts found.</p>;
 
-  return <BlogCards blogs={entries} />;
+  return <BlogCards blogs={entries} title={title}/>;
 }
