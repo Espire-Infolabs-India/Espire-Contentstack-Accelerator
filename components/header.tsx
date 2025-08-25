@@ -18,7 +18,7 @@ export default function Header({ data }: { data?: HeaderContentType }) {
 
   return (
     <div className="header-bg">
-      <header className="pt-4 pl-2 pr-2 pb-2 container m-auto">
+      <header className="py-8 pl-2 pr-2 container m-auto">
         <div className="flex justify-center gap-x-10 lg:block">
           {/* Quick Links */}
           <div className="hidden lg:flex items-center lg:justify-end mb-1">
@@ -46,27 +46,29 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                   height={70}
                   alt="Logo"
                   className="mr-4"
-                  priority 
+                  style={{ width: "auto", height: "auto" }}
+                  priority
                 />
               </Link>
             )}
 
-             <SearchBox />
+            <SearchBox />
 
-              
             <div className="flex items-center justify-evenly gap-12">
-              
               <nav className="hidden relative lg:block header-menu-font-size top-menu">
                 <ul className="flex [&_a]:px-6">
                   <Navigation navigation_menu={data?.navigation_menu} />
                 </ul>
               </nav>
 
-
               {/* Mobile menu placeholder (not active) */}
-             <div className="flex lg:hidden relative">
+              <div className="flex lg:hidden relative">
                 <button onClick={HumbargarOpen}>
-                  <Image src={HumbargarBG} className="w-[20] h-[20]" alt="Menu Icon" />
+                  <Image
+                    src={HumbargarBG}
+                    className="w-[20] h-[20]"
+                    alt="Menu Icon"
+                  />
                 </button>
                 {ActiveValue == true ? (
                   <div className="bg-[var(--royalblue)] w-full h-full shadow fixed top-0 right-0 z-30 p-4 overflow-y-auto">
@@ -89,14 +91,13 @@ export default function Header({ data }: { data?: HeaderContentType }) {
                       </button>
                     </div>
                     <ul className="flex flex-col">
-                       <Navigation navigation_menu={data?.navigation_menu} />
+                      <Navigation navigation_menu={data?.navigation_menu} />
                     </ul>
                   </div>
                 ) : (
                   ""
                 )}
               </div>
-
             </div>
           </div>
         </div>

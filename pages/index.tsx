@@ -3,14 +3,22 @@ import type { GetStaticProps, NextPage } from "next";
 import { getPageRes } from "../helper";
 import RenderComponents from "../components/render-components";
 import { Page } from "../model/page.model";
-import {
-  getAllEntriesByContentType,
-  onEntryChange,
-} from "../contentstack-sdk";
+import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
+
+import Globalcards from "../components/globalcards";
+import ContactUsForm from "../components/contactusform";
+import FeaturesTabs from "../components/featuresTabs";
+import MissionVision from "../components/missionvision";
+
 import { useRouter } from "next/router";
 import { SEOProps } from "../model/common.model";
+import {
+  fetchPageEntryByUid,
+  getVariantShortUidFromCookie,
+  setVariantUID,
+} from "../helper/personalize";
 
 interface PageProps {
   page: Page;
@@ -33,17 +41,17 @@ const Home: NextPage<PageProps> = ({
 
   async function fetchData() {
     try {
-      const personalize_variants =
-        new URLSearchParams(window.location.search).get(
-          "personalize_variants"
-        ) || "0_0";
-
-      const entryRes = await getPageRes("/", "page", activeLocale,getSiteName(), {
-        include_variants: true,
-        personalize_variants,
-      });
-      console.log("🔥 Live Preview Entry:", entryRes);
-      setEntry(entryRes);
+      const entryRes = await getPageRes(
+        "/",
+        "page",
+        activeLocale,
+        getSiteName()
+      );
+      const uid = entryRes.uid;
+      const variantUID = getVariantShortUidFromCookie();
+      const xUid = setVariantUID(variantUID);
+      const entry = await fetchPageEntryByUid("page", uid, xUid);
+      setEntry(entry);
     } catch (error) {
       console.error(error);
     }
@@ -56,12 +64,18 @@ const Home: NextPage<PageProps> = ({
   return (
     <Layout page={page} header={header} footer={footer} seo={page?.seo}>
       {getEntry ? (
-        <RenderComponents
-          pageComponents={getEntry}
-          entryUid={getEntry?.uid}
-          contentTypeUid="page"
-          locale={getEntry?.locale}
-        />
+        <main>
+          <RenderComponents
+            pageComponents={getEntry}
+            entryUid={getEntry?.uid}
+            contentTypeUid="page"
+            locale={getEntry?.locale}
+          />
+          <Globalcards />
+          <ContactUsForm />
+          <FeaturesTabs />
+          <MissionVision />
+        </main>
       ) : (
         <Skeleton />
       )}
@@ -71,27 +85,20 @@ const Home: NextPage<PageProps> = ({
 
 export default Home;
 
-export function getSiteName(): string { 
-  return process.env.NEXT_PUBLIC_SITE_NAME   || "Site-1";
+export function getSiteName(): string {
+  return process.env.NEXT_PUBLIC_SITE_NAME || "Site-1";
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  try { 
+  try {
     const { locale } = context;
-    console.log("context", context);
-    const personalize_variants = "0_3";
-console.log("personalize_variants value", personalize_variants);
     const entries = await getAllEntriesByContentType("header", locale);
     const header = entries?.[0] || null;
 
     const footerentries = await getAllEntriesByContentType("footer", locale);
     const footer = footerentries?.[0] || null;
 
-    const res: Page = await getPageRes("/", "page", locale, getSiteName(), {
-      include_variants: true,
-      personalize_variants,
-    });
-    console.log("static res",res)
+    const res: Page = await getPageRes("/", "page", locale, getSiteName());
 
     if (!res) throw new Error("Page not found");
 
@@ -103,10 +110,10 @@ console.log("personalize_variants value", personalize_variants);
         footer,
         locale,
       },
-      revalidate: 1000, // ISR interval
+      revalidate: 1000,
     };
   } catch (error) {
-      console.error(error);
+    console.error(error);
     return {
       notFound: true,
     };

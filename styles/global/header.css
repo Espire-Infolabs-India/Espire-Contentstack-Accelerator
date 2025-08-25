@@ -10,4 +10,8 @@
   header .sub-menu {
     @apply text-white;
   }
+
+  header .link-list-link{
+    @apply flex-col sm:flex-row justify-center flex-wrap gap-10 mx-5 md:mx-0 my-0;
+  }
 }

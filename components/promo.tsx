@@ -10,7 +10,7 @@ export default function Promo(data: PromoProps) {
   const renderTitleAndDescription = () => (
     <>
       <h2 className="text-3xl font-semibold mb-4 font-poppins">
-        {data?.title}
+        <span>{data?.title}</span>
       </h2>
       {data?.description && (
         <div
@@ -27,8 +27,8 @@ export default function Promo(data: PromoProps) {
     const isRight = variant === "right";
     return (
 
-      <div className="bg-gray-100">
-      <div className="container m-auto flex flex-col md:flex-row items-center py-2 md:pt-6 md:pb-2 px-0 md:px-4 ">
+      <div className="bg-gray-100 cart-img">
+      <div className="container m-auto flex flex-col md:flex-row items-center py-2 md:py-10 px-0 md:px-0 ">
         <div
           className={`md:w-1/2 flex justify-center ${
             isRight ? "order-2" : "order-1"
@@ -40,15 +40,16 @@ export default function Promo(data: PromoProps) {
               width={600}
               height={400}
               alt={altText}
-              style={{ width: "auto", height: "auto" }}
+              className="rounded-2xl w-full h-auto"
+              // style={{ width: "auto", height: "auto" }}
               priority
             />
           )}
         </div>
 
         <div
-          className={`md:w-1/2 p-4 md:p-6 ${
-             isRight ? "order-1" : "order-2"
+          className={`md:w-1/2 box-border ${
+             isRight ? "order-1 ml-5 sm:ml-0 sm:mr-10 py-4 sm:py-0" : "order-2 ml-5 sm:ml-10 py-4 sm:py-0"
           }`}
         >
           {renderTitleAndDescription()}
@@ -73,7 +74,7 @@ export default function Promo(data: PromoProps) {
               priority
             />
           )}
-          <h2 className="text-2xl sm:text-5xl mb-4 font-poppin">
+          <h2 className="text-2xl sm:text-4xl mb-4 font-poppin">
             {data?.title}
           </h2>
           {data?.description && (

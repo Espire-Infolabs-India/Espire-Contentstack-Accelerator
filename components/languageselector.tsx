@@ -12,7 +12,7 @@ const LanguageSelector = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { locale: currentLocale, asPath } = router;
+  const { locale: currentLocale, asPath, locales: enabledLocales = [] } = router;
 
   useEffect(() => {
     const fetchLocales = async () => {
@@ -23,7 +23,10 @@ const LanguageSelector = () => {
           code: loc.code.toLowerCase(), // consistent lower-case
           name: loc.name,
         }));
-        setLocales(normalizedLocales);
+        const filteredLocales = normalizedLocales.filter((loc) =>
+          enabledLocales.map((l) => l.toLowerCase()).includes(loc.code)
+        );
+        setLocales(filteredLocales);
       } catch (err) {
         setError("Failed to load languages.");
         console.error(err);
@@ -33,13 +36,16 @@ const LanguageSelector = () => {
     };
 
     fetchLocales();
-  }, []);
+  }, [enabledLocales]);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedLocale = e.target.value;
     router.push(asPath, asPath, { locale: selectedLocale });
   };
-
+  if (!loading && locales.length <= 1) {
+    return null;
+  }
   return (
     <div className="LanguageSelector">
       <div className="language-selector">

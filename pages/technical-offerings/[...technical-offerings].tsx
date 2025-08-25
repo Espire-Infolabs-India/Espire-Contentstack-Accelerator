@@ -74,9 +74,9 @@ export default TechnicalOfferingsPage;
 
 export const getStaticPaths: GetStaticPaths = async () => {
   //@ts-ignore
-  
-  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution",getSiteName());
-  const paths: { params: { "technical-offerings": string[] } }[] = []; 
+
+  const entryPaths: AllEntries[] = await getAllEntries("_technical_solution","en-us",getSiteName());
+  const paths: { params: { "technical-offerings": string[] } }[] = [];
   entryPaths.forEach((entry) => {
     if (entry?.url && entry?.url.startsWith("/technical_offerings/")) {
       const slug = entry?.url.replace("/technical_offerings/", "");
