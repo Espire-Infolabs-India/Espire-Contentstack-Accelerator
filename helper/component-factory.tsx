@@ -20,7 +20,7 @@ export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   hero_banner: (data) => <HeroBanner {...data} />,
   promo: (data) => <Promo {...data} />,
   cta: (data) => <CTA {...data} />,
-  blog_listing: () => <BlogListing />,
+  blog_listing: (data) => <BlogListing {...data}/>,
   carousel: (data) => <Carousel {...data} />,
   seperator: () => <Seperator />,
   social_media_share: (data) => <SocialMediaShare {...data} />,
