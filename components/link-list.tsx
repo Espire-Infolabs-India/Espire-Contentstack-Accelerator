@@ -6,7 +6,7 @@ export default function LinkList(data: LinkListProps) {
   if (!data?.link_list || data?.link_list?.length === 0) return null;
 
   return (
-    <div className="flex link-list-link">
+    <div className="flex link-list-link container m-auto justify-start">
       {data?.link_list.map((item, index) => {
         const page = item.links.page_reference?.[0];
         if (!page || !page.url || !page.title) return null;
