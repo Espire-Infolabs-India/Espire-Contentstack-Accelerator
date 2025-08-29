@@ -57,9 +57,9 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
             {hero_banner?.banner_title}
           </h2>
           {hero_banner?.banner_description && (
-            <p className="mb-6 font-semibold px-4">
+            <h5 className="mb-6 font-semibold px-4">
               {parse(hero_banner?.banner_description)}
-            </p>
+            </h5>
           )}
           {hero_banner?.call_to_action && (
             <CTA {...hero_banner?.call_to_action} variant="hero" />

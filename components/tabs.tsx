@@ -19,7 +19,7 @@ export default function Tabs(data: TabProps) {
             <button
               key={index}
               onClick={() => setActiveTab(index)}
-              className={`py-2 px-4 text-left ${
+              className={`py-2 px-4 text-center ${
                 activeTab === index
                   ? "font-bold text-blue-600 border-b-2 border-blue-600"
                   : "text-gray-600 hover:text-black"

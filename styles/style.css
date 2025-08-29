@@ -422,3 +422,13 @@ body {
 .max-w-3xl{
   max-width: 48rem;
 }
+
+/* Link List */
+@media screen and (max-width: 767px){
+.link-list-link{
+  margin-left:1rem;
+  } 
+  .social-media-cover{
+    margin-bottom: 1rem;
+  }
+}
