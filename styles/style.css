@@ -417,3 +417,8 @@ body {
     max-width: 1536px;
   }
 }
+
+/* Hero Banner */
+.max-w-3xl{
+  max-width: 48rem;
+}

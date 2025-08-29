@@ -51,15 +51,15 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
         className={`absolute inset-0 bg-black bg-opacity-60 flex items-center px-4 md:px-0 z-10`}
       >
         <div
-          className={`container m-auto flex flex-col ${alignmentPosition} text-white`}
+          className={`max-w-3xl m-auto flex flex-col ${alignmentPosition} text-white`}
         >
           <h2 className="mb-4 text-2xl sm:text-4xl font-semibold">
             {hero_banner?.banner_title}
           </h2>
           {hero_banner?.banner_description && (
-            <div className="mb-6 text-lg sm:text-xl font-semibold">
+            <p className="mb-6 font-semibold px-4">
               {parse(hero_banner?.banner_description)}
-            </div>
+            </p>
           )}
           {hero_banner?.call_to_action && (
             <CTA {...hero_banner?.call_to_action} variant="hero" />
