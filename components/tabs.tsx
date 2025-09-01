@@ -14,7 +14,7 @@ export default function Tabs(data: TabProps) {
 
       <div className={`flex ${isVertical ? "flex-row" : "flex-col"} gap-6`}>
         {/* Tab Headers */}
-        <div className={`${isVertical ? "flex flex-col w-1/4" : "flex space-x-4 border-b"}`}>
+        <div className={`${isVertical ? "flex flex-col w-1/4" : "tab-main-container flex space-x-4 border-b"}`}>
           {data.tabs.map((tab, index) => (
             <button
               key={index}
