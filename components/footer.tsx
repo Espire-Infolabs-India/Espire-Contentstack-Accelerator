@@ -10,7 +10,7 @@ export default function Footer({ data }: { data?: FooterContentType }) {
   if (!data) return null;
 
   return (
-    <footer className="bg-[var(--royalblue)] text-white pt-[30px] pb-[0]">
+    <footer className="bg-[var(--royalblue)] text-white pt-[30px] pb-[0] mt-4">
       <div className="container mx-auto px-2">
         {data.address && (
           <div className="flex flex-col sm:flex-row justify-between sm:text-left mb-6">

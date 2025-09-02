@@ -15,7 +15,7 @@ const SocialMediaShare = (items: SocialMediaProps) => {
   return (
     
 
-    <div className="flex social-media-cover pl-0 w-full">
+    <div className="flex social-media-cover pl-0 w-fullfooter">
       {items?.social_media_share.map((item, index) => {
         const imageUrl = item?.icon?.url;
         const altText = item?.title || "Social Media";

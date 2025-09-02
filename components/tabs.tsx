@@ -14,12 +14,12 @@ export default function Tabs(data: TabProps) {
 
       <div className={`flex ${isVertical ? "flex-row" : "flex-col"} gap-6`}>
         {/* Tab Headers */}
-        <div className={`${isVertical ? "flex flex-col w-1/4" : "flex space-x-4 border-b"}`}>
+        <div className={`${isVertical ? "flex flex-col w-1/4" : "tab-main-container flex space-x-4 border-b"}`}>
           {data.tabs.map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(index)}
-              className={`py-2 px-4 text-left ${
+              className={`py-2 px-4 text-center max-w-sm ${
                 activeTab === index
                   ? "font-bold text-blue-600 border-b-2 border-blue-600"
                   : "text-gray-600 hover:text-black"
