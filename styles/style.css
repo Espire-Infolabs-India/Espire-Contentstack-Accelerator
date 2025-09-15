@@ -291,11 +291,12 @@ body {
 
 @layer components {
 
-   .heading-bottom-line{
-     @apply mb-10;
+  .heading-bottom-line {
+    @apply mb-10;
   }
-  .heading-bottom-line span{
-     @apply relative;
+
+  .heading-bottom-line span {
+    @apply relative;
   }
 
   .heading-bottom-line span:after {
@@ -390,7 +391,7 @@ body {
     @apply mb-0;
   }
 
-  .mission-vision{
+  .mission-vision {
     @apply bg-[var(--bg-gray)];
   }
 
@@ -419,47 +420,54 @@ body {
 }
 
 /* Hero Banner */
-.max-w-3xl{
-  max-width: 48rem;
+.hero-bannr-wrapper {
+  margin-left: 5rem;
+}
+@media screen and (max-width: 767px) {
+  .hero-bannr-wrapper {
+     margin-left: 2rem;
+  }
 }
 
 /* Link List */
-@media screen and (max-width: 767px){
-.link-list-link{
-  margin-left:1rem;
-  } 
-  .social-media-cover{
+@media screen and (max-width: 767px) {
+  .link-list-link {
+    margin-left: 1rem;
+  }
+
+  .social-media-cover {
     margin-bottom: 1rem;
   }
 }
 
 /* Tab Component  */
-.tab-component .prose{
-  padding:1.5rem;
+.tab-component .prose {
+  padding: 1.5rem;
 }
-.tab-component .tab-main-container{
-    display: inline-block;
-    flex: 1 1 auto;
-    white-space: nowrap;
-    scrollbar-width: none;
-    overflow: auto hidden;
-  }
 
-  .tab-component .tab-main-container button{
-    border: 0px;
-    margin: 0px;
-    border-radius: 0px;
-    cursor: pointer;
-    vertical-align: middle;
-    appearance: none;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.875rem;
-    line-height: 1.25;
-    letter-spacing: 0.02857em;
-    text-transform: uppercase;
-    padding: 12px 16px;
-    overflow: hidden;
-    white-space: normal;
-    text-align: center;
-  }
+.tab-component .tab-main-container {
+  display: inline-block;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+  overflow: auto hidden;
+}
+
+.tab-component .tab-main-container button {
+  border: 0px;
+  margin: 0px;
+  border-radius: 0px;
+  cursor: pointer;
+  vertical-align: middle;
+  appearance: none;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  overflow: hidden;
+  white-space: normal;
+  text-align: center;
+}
