@@ -7,11 +7,6 @@ import { getAllEntriesByContentType, onEntryChange } from "../contentstack-sdk";
 import Skeleton from "react-loading-skeleton";
 import Layout from "../components/layout";
 
-import Globalcards from "../components/globalcards";
-import ContactUsForm from "../components/contactusform";
-import FeaturesTabs from "../components/featuresTabs";
-import MissionVision from "../components/missionvision";
-
 import { useRouter } from "next/router";
 import { SEOProps } from "../model/common.model";
 import {
@@ -71,10 +66,6 @@ const Home: NextPage<PageProps> = ({
             contentTypeUid="page"
             locale={getEntry?.locale}
           />
-          <Globalcards />
-          <ContactUsForm />
-          <FeaturesTabs />
-          <MissionVision />
         </main>
       ) : (
         <Skeleton />
