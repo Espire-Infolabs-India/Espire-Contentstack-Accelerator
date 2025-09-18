@@ -40,7 +40,7 @@ const Accordion = ({
       )}
 
       <div className="bg-transparent">
-        {accordion.map((item, i) => {
+        {accordion?.map((item, i) => {
           const isOpen = openIndex === i;
           const contentId = `acc-panel-${item._metadata.uid}`;
           const btnId = `acc-btn-${item._metadata.uid}`;
