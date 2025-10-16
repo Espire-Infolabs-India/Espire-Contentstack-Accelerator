@@ -33,7 +33,7 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
     hero_banner?.banner_image?.title ||
     "Hero Banner";
   return (
-    <section className="relative w-full bg-black overflow-hidden">
+    <section className="relative w-full bg-black overflow-hidden ">
       <Head>
         <link rel="preload" as="image" href={finalImageUrl} type="image/webp" />
       </Head>
@@ -51,7 +51,7 @@ export default function HeroBannerComponent(hero_banner: HeroBanner) {
         className={`absolute inset-0 bg-black bg-opacity-60 flex items-center px-4 md:px-0 z-10`}
       >
         <div
-          className={`hero-bannr-wrapper flex flex-col ${alignmentPosition} text-white`}
+          className={`hero-banner-wrapper flex flex-col ${alignmentPosition} text-white`}
         >
           <h2 className="mb-4 text-2xl sm:text-4xl font-semibold">
             {hero_banner?.banner_title}

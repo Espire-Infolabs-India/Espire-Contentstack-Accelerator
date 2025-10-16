@@ -26,35 +26,34 @@ export default function Promo(data: PromoProps) {
   if (variant === "left" || variant === "right") {
     const isRight = variant === "right";
     return (
+      <div className="sans-promo">
+        <div className="bg-gray-100 cart-img">
+          <div className="container m-auto flex flex-col md:flex-row items-center py-2 md:py-10 px-0 md:px-0 ">
+            <div
+              className={`md:w-1/2 flex justify-center ${isRight ? "order-2" : "order-1"
+                }`}
+            >
+              {imageUrl && (
+                <Image
+                  src={imageUrl}
+                  width={600}
+                  height={400}
+                  alt={altText}
+                  className="rounded-2xl w-full h-auto"
+                  // style={{ width: "auto", height: "auto" }}
+                  priority
+                />
+              )}
+            </div>
 
-      <div className="bg-gray-100 cart-img">
-      <div className="container m-auto flex flex-col md:flex-row items-center py-2 md:py-10 px-0 md:px-0 ">
-        <div
-          className={`md:w-1/2 flex justify-center ${
-            isRight ? "order-2" : "order-1"
-          }`}
-        >
-          {imageUrl && (
-            <Image
-              src={imageUrl}
-              width={600}
-              height={400}
-              alt={altText}
-              className="rounded-2xl w-full h-auto"
-              // style={{ width: "auto", height: "auto" }}
-              priority
-            />
-          )}
+            <div
+              className={`md:w-1/2 box-border ${isRight ? "order-1 ml-5 sm:ml-0 sm:mr-10 py-4 sm:py-0" : "order-2 ml-5 sm:ml-10 py-4 sm:py-0"
+                }`}
+            >
+              {renderTitleAndDescription()}
+            </div>
+          </div>
         </div>
-
-        <div
-          className={`md:w-1/2 box-border ${
-             isRight ? "order-1 ml-5 sm:ml-0 sm:mr-10 py-4 sm:py-0" : "order-2 ml-5 sm:ml-10 py-4 sm:py-0"
-          }`}
-        >
-          {renderTitleAndDescription()}
-        </div>
-      </div>
       </div>
     );
   }

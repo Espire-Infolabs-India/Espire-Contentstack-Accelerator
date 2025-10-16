@@ -55,6 +55,7 @@ const SansPage: NextPage<PageProps> = ({
   }, [pageUrl, activeLocale]);
 
   return (
+    <div className="sans-theme">
     <Layout page={getEntry} header={header} footer={footer} seo={getEntry?.seo}>
       {getEntry ? (
         <RenderComponents
@@ -67,6 +68,7 @@ const SansPage: NextPage<PageProps> = ({
         <Skeleton height={300} count={3} />
       )}
     </Layout>
+    </div>
   );
 };
 

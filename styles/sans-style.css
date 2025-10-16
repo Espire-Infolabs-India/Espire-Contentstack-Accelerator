@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sans-theme{
+    .hero-bannr-wrapper{
+        width: 39rem;
+    }
+}
