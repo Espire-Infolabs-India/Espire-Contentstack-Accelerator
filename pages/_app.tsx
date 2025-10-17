@@ -4,6 +4,7 @@ import Head from "next/head";
 import { AllEntries } from "../model/entries.model";
 import { getAllEntries } from "../helper";
 import "../styles/style.css";
+import "../styles/sans-style.css";
 import "../styles/global/footer.css";
 import "../styles/global/header.css";
 import "react-loading-skeleton/dist/skeleton.css";

@@ -420,11 +420,11 @@ body {
 }
 
 /* Hero Banner */
-.hero-bannr-wrapper {
+.hero-banner-wrapper {
   margin-left: 5rem;
 }
 @media screen and (max-width: 767px) {
-  .hero-bannr-wrapper {
+  .hero-banner-wrapper {
      margin-left: 2rem;
   }
 }
@@ -471,3 +471,4 @@ body {
   white-space: normal;
   text-align: center;
 }
+

@@ -32,7 +32,9 @@ const Home: NextPage<PageProps> = ({
 }) => {
   getSiteName();
   const [getEntry, setEntry] = useState(page);
+    const router = useRouter();
   const { locale: activeLocale } = useRouter();
+
   async function fetchData() {
     try {
       const entryRes = await getPageRes(
@@ -50,8 +52,10 @@ const Home: NextPage<PageProps> = ({
     onEntryChange(fetchData);
   }, [activeLocale, pageUrl]);
 
+
+
   return (
-    <Layout page={page} header={header} footer={footer} seo={page?.seo}>
+    <Layout page={page} header={header} footer={footer} seo={page?.seo} >
       {getEntry ? (
         <RenderComponents
           pageComponents={getEntry}
