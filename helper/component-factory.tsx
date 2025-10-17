@@ -20,6 +20,7 @@ import SocialMediaFeeds from "../components/socialmediafeed";
 export const ComponentMap: Record<string, (data: any) => JSX.Element> = {
   hero_banner: (data) => <HeroBanner {...data} />,
   promo: (data) => <Promo {...data} />,
+  promo2: (data) => <Promo {...data} />,
   cta: (data) => <CTA {...data} />,
   blog_listing: (data) => <BlogListing {...data}/>,
   carousel: (data) => <Carousel {...data} />,
